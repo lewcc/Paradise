@@ -58,6 +58,7 @@
 		input_data.desired_move_dir_add = NONE
 		input_data.desired_move_dir_sub = NONE
 	var/old_move_delay = move_delay
+	var/old_dir = mob.dir
 	move_delay = world.time + world.tick_lag //this is here because Move() can now be called multiple times per tick
 	if(!mob || !mob.loc)
 		return 0
@@ -177,6 +178,20 @@
 		mob.setDir(get_dir(mob, mob.pulling)) // Face welding tanks and stuff when pulling
 	else
 		mob.setDir(direct)
+		if(old_dir != direct && iscarbon(mob))
+			var/mob/living/carbon/C = mob
+			if(C.m_intent == MOVE_INTENT_RUN)
+				if(prob(5))
+					var/static/list/slip_messages = list("catch the ground in a funny way", "lose balance", "stub a toe on something", "have a sudden dizzy spell")
+					var/static/list/fall_phrases = list("eat shit", "taste the ground", "trip", "fall", "faceplant", "stumble and fall", "epic fail")
+					var/picked_fall_phrase = pick(fall_phrases)
+					var/picked_slip_msg = pick(slip_messages)
+					C.visible_message(
+						"<span class='warning'>[C] seems to [picked_slip_msg] as they [picked_fall_phrase]!</span>",
+						"<span class='danger'>You [picked_slip_msg] and [picked_fall_phrase]!</span>",
+						"<span class='notice'>You hear someone [picked_fall_phrase].</span>")
+					playsound(mob, 'sound/misc/slip.ogg', 50, 1, -3)
+					C.KnockDown(2 SECONDS)
 
 	moving = 0
 	if(mob && .)
