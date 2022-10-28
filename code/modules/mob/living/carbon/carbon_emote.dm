@@ -151,15 +151,15 @@
 	message_param = "laughs at %t."
 	muzzled_noises = list("happy", "joyful")
 	emote_type = EMOTE_AUDIBLE | EMOTE_MOUTH
-	var/male_laugh_noises = list("sound/effects/mob_effects/manlaugh1.ogg", "sound/effects/mob_effects/manlaugh2.ogg")
-	var/female_laugh_noises = list("sound/effects/mob_effects/womanlaugh.ogg")
 
 /datum/emote/living/carbon/laugh/get_sound(mob/living/user)
-	. = ..()
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
-		if(H.gender)
-		H.gender
+		switch(H.gender)
+			if(FEMALE)
+				return pick(H.dna?.species.female_laugh_sounds)
+			if(MALE)
+				return pick(H.dna?.species.male_laugh_sounds)
 
 /datum/emote/living/carbon/scowl
 	key = "scowl"
