@@ -112,9 +112,9 @@
 			return O.relaymove(mob, direct)
 	else
 		if(mob.buckled)
-x			return mob.buckled.relaymove(mob, direct)
+			return mob.buckled.relaymove(mob, direct)
 
-d	if(!mobile)
+	if(!mobile)
 		return
 
 	if(!mob.Process_Spacemove(direct))
