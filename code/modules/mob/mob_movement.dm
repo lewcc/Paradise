@@ -101,18 +101,21 @@
 	if(Process_Grab())
 		return
 
-	if(mob.buckled) //if we're buckled to something, tell it we moved.
-		return mob.buckled.relaymove(mob, direct)
-
-	if(living_mob && !(living_mob.mobility_flags & MOBILITY_MOVE))
-		return
-
 	if(!mob.lastarea)
 		mob.lastarea = get_area(mob.loc)
 
-	if(isobj(mob.loc) || ismob(mob.loc)) //Inside an object, tell it we moved
-		var/atom/O = mob.loc
-		return O.relaymove(mob, direct)
+	var/mobile = living_mob && (living_mob.mobility_flags & MOBILITY_MOVE)
+
+	if((isobj(mob.loc) || ismob(mob.loc))) //Inside an object, tell it we moved
+		if(mobile)
+			var/atom/O = mob.loc
+			return O.relaymove(mob, direct)
+	else
+		if(mob.buckled)
+x			return mob.buckled.relaymove(mob, direct)
+
+d	if(!mobile)
+		return
 
 	if(!mob.Process_Spacemove(direct))
 		return 0
