@@ -106,8 +106,7 @@
 
 	var/mobile = living_mob && (living_mob.mobility_flags & MOBILITY_MOVE)
 
-	if((isobj(mob.loc) || ismob(mob.loc))) //Inside an object, tell it we moved
-		if(mobile)
+	if((isobj(mob.loc) || ismob(mob.loc)) && mobile) //Inside an object, tell it we moved
 			var/atom/O = mob.loc
 			return O.relaymove(mob, direct)
 	else
