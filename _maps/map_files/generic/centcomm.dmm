@@ -7227,7 +7227,9 @@
 /turf/simulated/floor/mineral/titanium/blue,
 /area/shuttle/supply)
 "BR" = (
-/obj/structure/kitchenspike,
+/obj/structure/kitchenspike{
+	ghost_interaction = 1
+	},
 /turf/simulated/floor/wood,
 /area/wizard_station)
 "BT" = (

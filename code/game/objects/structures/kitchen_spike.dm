@@ -42,6 +42,8 @@
 	buckle_lying = FALSE
 	can_buckle = TRUE
 	max_integrity = 250
+	/// Whether or not ghosts can toy with this one
+	var/ghost_interaction = FALSE
 
 //ATTACK HAND IGNORING PARENT RETURN VALUE
 /obj/structure/kitchenspike/attack_hand(mob/user)
@@ -72,6 +74,14 @@
 		return
 	if(isanimal(user) && victim != user)
 		return // animals cannot put mobs other than themselves onto spikes
+	if(isobserver(user))
+		if(ghost_interaction)
+			// little easter egg: it was originally discovered in the wizard's den that you could Do This
+			victim.visible_message(
+				"<span class='danger'>[user] tries to slam [victim] onto the meat spike!</span>",
+				"<span class='userdanger'>[user] tries to slam you onto the meat spike!</span>"
+			)
+		return
 	add_fingerprint(user)
 	start_spike(victim, user)
 
