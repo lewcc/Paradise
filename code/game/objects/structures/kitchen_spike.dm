@@ -171,14 +171,21 @@
 /// Little easter egg version only found in the wizard's den
 /// Commemorating the fact this was discovered in the wizard's den and it gives something silly for ghosts to do
 /obj/structure/kitchenspike/wizard
+	var/last_ghost_interaction = 0
+	var/interaction_cooldown = 4 SECONDS
 
 /obj/structure/kitchenspike/wizard/MouseDrop_T(mob/living/victim, mob/living/user)
 	if(!isobserver(user))
 		return ..()
 
+	for(var/mob/living/M in oview(victim))
+		to_chat(M, "<span class='warning'>An ethereal force seems to pull [victim] towards [src]!</span>")
+	to_chat(M, "<span class='warning'>You feel an ethereal force pulling you towards [src]!</span>")
 
-	victim.visible_message(
-		"<span class='danger'>[user] tries to slam [victim] onto the meat spike!</span>",
-		"<span class='userdanger'>[user] tries to slam you onto the meat spike!</span>"
+
+	// user visible message, only visible to ghosts
+	user.visible_message(
+		"<span class='danger'>[user] tries to slam [victim] onto [src]!</span>",
+		"<span class='userdanger'>You try to slam [victim] onto [src]!</span>"
 	)
 
