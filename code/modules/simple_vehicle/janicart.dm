@@ -41,14 +41,14 @@
 /obj/item/janiupgrade
 	name = "floor buffer upgrade"
 	desc = "An upgrade for mobile janicarts."
-	icon = 'icons/obj/simple_vehicles.dmi'
+	icon = 'icons/obj/vehicles.dmi'
 	icon_state = "upgrade"
 	origin_tech = "materials=3;engineering=4"
 
 /datum/action/floor_buffer
 	name = "Toggle Floor Buffer"
 	desc = "Movement speed is decreased while active."
-	icon_icon = 'icons/obj/simple_vehicles.dmi'
+	icon_icon = 'icons/obj/vehicles.dmi'
 	button_icon_state = "upgrade"
 
 /datum/action/floor_buffer/Trigger()

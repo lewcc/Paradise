@@ -379,7 +379,7 @@
 /obj/item/borg/upgrade/floorbuffer
 	name = "janitor cyborg floor buffer upgrade"
 	desc = "A floor buffer upgrade kit that can be attached to janitor cyborgs."
-	icon = 'icons/obj/simple_vehicles.dmi'
+	icon = 'icons/obj/vehicles.dmi'
 	icon_state = "upgrade"
 	require_module = TRUE
 	module_type = /obj/item/robot_module/janitor
