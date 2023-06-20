@@ -2571,7 +2571,7 @@
 /area/maintenance/fsmaint)
 "aqd" = (
 /obj/effect/turf_decal/bot,
-/obj/vehicle/secway,
+/obj/simple_vehicle/secway,
 /obj/structure/cable/yellow{
 	d1 = 4;
 	d2 = 8;
@@ -21784,7 +21784,7 @@
 /area/engine/break_room)
 "bsE" = (
 /obj/machinery/light/small,
-/obj/vehicle/janicart,
+/obj/simple_vehicle/janicart,
 /turf/simulated/floor/plating,
 /area/janitor)
 "bsG" = (
@@ -35829,7 +35829,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/starboard)
 "cfz" = (
-/obj/vehicle/ambulance{
+/obj/simple_vehicle/ambulance{
 	dir = 1
 	},
 /obj/effect/turf_decal/stripes/end{

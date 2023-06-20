@@ -1,4 +1,4 @@
-/obj/vehicle/atv
+/obj/simple_vehicle/atv
 	name = "all-terrain vehicle"
 	desc = "An all-terrain vehicle built for traversing rough terrain with ease. One of the few old-earth technologies that are still relevant on most planet-bound outposts."
 	icon = 'icons/vehicles/4wheeler.dmi'
@@ -12,27 +12,27 @@
 	vehicle_move_delay = 1
 	var/static/mutable_appearance/atvcover
 
-/obj/vehicle/atv/Initialize(mapload)
+/obj/simple_vehicle/atv/Initialize(mapload)
 	. = ..()
 	atvcover = mutable_appearance(icon, atvcover, ABOVE_MOB_LAYER)
 
-/obj/vehicle/atv/post_buckle_mob(mob/living/M)
+/obj/simple_vehicle/atv/post_buckle_mob(mob/living/M)
 	add_overlay(atvcover)
 	return ..()
 
-/obj/vehicle/atv/post_unbuckle_mob(mob/living/M)
+/obj/simple_vehicle/atv/post_unbuckle_mob(mob/living/M)
 	if(!has_buckled_mobs())
 		cut_overlay(atvcover)
 	return ..()
 
-/obj/vehicle/atv/handle_vehicle_layer()
+/obj/simple_vehicle/atv/handle_vehicle_layer()
 	if(dir == SOUTH)
 		layer = ABOVE_MOB_LAYER
 	else
 		layer = OBJ_LAYER
 
 //TURRETS!
-/obj/vehicle/atv/turret
+/obj/simple_vehicle/atv/turret
 	var/obj/machinery/porta_turret/syndicate/vehicle_turret/turret = null
 
 /obj/machinery/porta_turret/syndicate/vehicle_turret
@@ -41,12 +41,12 @@
 	emp_vulnerable = 1
 	density = FALSE
 
-/obj/vehicle/atv/turret/Initialize(mapload)
+/obj/simple_vehicle/atv/turret/Initialize(mapload)
 	. = ..()
 	turret = new(loc)
 	//turret.base = src
 
-/obj/vehicle/atv/turret/handle_vehicle_layer()
+/obj/simple_vehicle/atv/turret/handle_vehicle_layer()
 	if(dir == SOUTH)
 		layer = ABOVE_MOB_LAYER
 	else
@@ -58,7 +58,7 @@
 		else
 			turret.layer = OBJ_LAYER
 
-/obj/vehicle/atv/turret/handle_vehicle_offsets()
+/obj/simple_vehicle/atv/turret/handle_vehicle_offsets()
 	..()
 	if(turret)
 		turret.loc = loc

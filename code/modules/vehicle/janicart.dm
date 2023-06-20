@@ -1,5 +1,5 @@
 //PIMP-CART
-/obj/vehicle/janicart
+/obj/simple_vehicle/janicart
 	name = "janicart (pimpin' ride)"
 	desc = "A brave janitor cyborg gave its life to produce such an amazing combination of speed and utility."
 	icon_state = "pussywagon"
@@ -11,11 +11,11 @@
 	/// Does it clean the tile under it?
 	var/floorbuffer = FALSE
 
-/obj/vehicle/janicart/Destroy()
+/obj/simple_vehicle/janicart/Destroy()
 	QDEL_NULL(mybag)
 	return ..()
 
-/obj/vehicle/janicart/handle_vehicle_offsets()
+/obj/simple_vehicle/janicart/handle_vehicle_offsets()
 	..()
 	if(has_buckled_mobs())
 		for(var/m in buckled_mobs)
@@ -41,19 +41,19 @@
 /obj/item/janiupgrade
 	name = "floor buffer upgrade"
 	desc = "An upgrade for mobile janicarts."
-	icon = 'icons/obj/vehicles.dmi'
+	icon = 'icons/obj/simple_vehicles.dmi'
 	icon_state = "upgrade"
 	origin_tech = "materials=3;engineering=4"
 
 /datum/action/floor_buffer
 	name = "Toggle Floor Buffer"
 	desc = "Movement speed is decreased while active."
-	icon_icon = 'icons/obj/vehicles.dmi'
+	icon_icon = 'icons/obj/simple_vehicles.dmi'
 	button_icon_state = "upgrade"
 
 /datum/action/floor_buffer/Trigger()
 	. = ..()
-	var/obj/vehicle/janicart/J = target
+	var/obj/simple_vehicle/janicart/J = target
 	if(!J.floorbuffer)
 		J.floorbuffer = TRUE
 		J.vehicle_move_delay += J.buffer_delay
@@ -62,7 +62,7 @@
 		J.vehicle_move_delay -= J.buffer_delay
 	to_chat(usr, "<span class='notice'>The floor buffer is now [J.floorbuffer ? "active" : "deactivated"].</span>")
 
-/obj/vehicle/janicart/post_buckle_mob(mob/living/M)
+/obj/simple_vehicle/janicart/post_buckle_mob(mob/living/M)
 	. = ..()
 	if(!buffer_installed)
 		return
@@ -72,12 +72,12 @@
 	else
 		floorbuffer_action.Remove(M)
 
-/obj/vehicle/janicart/post_unbuckle_mob(mob/living/M)
+/obj/simple_vehicle/janicart/post_unbuckle_mob(mob/living/M)
 	for(var/datum/action/floor_buffer/floorbuffer_action in M.actions)
 		floorbuffer_action.Remove(M)
 	return ..()
 
-/obj/vehicle/janicart/Move(atom/OldLoc, Dir)
+/obj/simple_vehicle/janicart/Move(atom/OldLoc, Dir)
 	. = ..()
 	if(floorbuffer && has_buckled_mobs())
 		var/turf/tile = loc
@@ -87,12 +87,12 @@
 				if(E.is_cleanable())
 					qdel(E)
 
-/obj/vehicle/janicart/examine(mob/user)
+/obj/simple_vehicle/janicart/examine(mob/user)
 	. = ..()
 	if(buffer_installed)
 		. += "It has been upgraded with a floor buffer."
 
-/obj/vehicle/janicart/attackby(obj/item/I, mob/user, params)
+/obj/simple_vehicle/janicart/attackby(obj/item/I, mob/user, params)
 	var/fail_msg = "<span class='notice'>There is already one of those in [src].</span>"
 
 	if(istype(I, /obj/item/storage/bag/trash))
@@ -120,14 +120,14 @@
 	else
 		return ..()
 
-/obj/vehicle/janicart/update_overlays()
+/obj/simple_vehicle/janicart/update_overlays()
 	. = ..()
 	if(mybag)
 		. += "cart_garbage"
 	if(buffer_installed)
 		. += "cart_buffer"
 
-/obj/vehicle/janicart/attack_hand(mob/user)
+/obj/simple_vehicle/janicart/attack_hand(mob/user)
 	if(..())
 		return TRUE
 	else if(mybag)

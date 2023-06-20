@@ -1,4 +1,4 @@
-/obj/vehicle/ambulance
+/obj/simple_vehicle/ambulance
 	name = "ambulance"
 	desc = "This is what the paramedic uses to run over people they need to take to medbay."
 	icon_state = "docwagon2"
@@ -7,19 +7,19 @@
 	var/datum/action/ambulance_alarm/AA
 	var/datum/looping_sound/ambulance_alarm/soundloop
 
-/obj/vehicle/ambulance/Initialize(mapload)
+/obj/simple_vehicle/ambulance/Initialize(mapload)
 	. = ..()
 	AA = new(src)
 	soundloop = new(list(src), FALSE)
 
-/obj/vehicle/ambulance/Destroy()
+/obj/simple_vehicle/ambulance/Destroy()
 	QDEL_NULL(AA)
 	QDEL_NULL(soundloop)
 	return ..()
 
 /datum/action/ambulance_alarm
 	name = "Toggle Sirens"
-	icon_icon = 'icons/obj/vehicles.dmi'
+	icon_icon = 'icons/obj/simple_vehicles.dmi'
 	button_icon_state = "docwagon2"
 	check_flags = AB_CHECK_RESTRAINED | AB_CHECK_STUNNED | AB_CHECK_LYING | AB_CHECK_CONSCIOUS
 	var/toggle_cooldown = 40
@@ -30,7 +30,7 @@
 	if(!..())
 		return FALSE
 
-	var/obj/vehicle/ambulance/A = target
+	var/obj/simple_vehicle/ambulance/A = target
 
 	if(!istype(A) || !A.soundloop)
 		return FALSE
@@ -55,14 +55,14 @@
 	volume = 100
 
 
-/obj/vehicle/ambulance/post_buckle_mob(mob/living/M)
+/obj/simple_vehicle/ambulance/post_buckle_mob(mob/living/M)
 	. = ..()
 	if(has_buckled_mobs())
 		AA.Grant(M)
 	else
 		AA.Remove(M)
 
-/obj/vehicle/ambulance/post_unbuckle_mob(mob/living/M)
+/obj/simple_vehicle/ambulance/post_unbuckle_mob(mob/living/M)
 	AA.Remove(M)
 	return ..()
 
@@ -72,7 +72,7 @@
 	icon_state = "keydoc"
 
 
-/obj/vehicle/ambulance/handle_vehicle_offsets()
+/obj/simple_vehicle/ambulance/handle_vehicle_offsets()
 	..()
 	if(has_buckled_mobs())
 		for(var/m in buckled_mobs)
@@ -91,7 +91,7 @@
 					buckled_mob.pixel_x = -13
 					buckled_mob.pixel_y = 7
 
-/obj/vehicle/ambulance/Move(newloc, Dir)
+/obj/simple_vehicle/ambulance/Move(newloc, Dir)
 	var/oldloc = loc
 	if(bed && !Adjacent(bed))
 		bed = null
@@ -116,8 +116,8 @@
 
 /obj/structure/bed/amb_trolley/MouseDrop(obj/over_object as obj)
 	..()
-	if(istype(over_object, /obj/vehicle/ambulance))
-		var/obj/vehicle/ambulance/amb = over_object
+	if(istype(over_object, /obj/simple_vehicle/ambulance))
+		var/obj/simple_vehicle/ambulance/amb = over_object
 		if(amb.bed)
 			amb.bed = null
 			to_chat(usr, "You unhook the bed to the ambulance.")

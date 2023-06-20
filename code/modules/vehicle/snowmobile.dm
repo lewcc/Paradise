@@ -1,13 +1,13 @@
-/obj/vehicle/snowmobile
+/obj/simple_vehicle/snowmobile
 	name = "red snowmobile"
 	desc = "Wheeeeeeeeeeee."
-	icon = 'icons/obj/vehicles.dmi'
+	icon = 'icons/obj/simple_vehicles.dmi'
 	icon_state = "snowmobile"
 	key_type = /obj/item/key/snowmobile
 	generic_pixel_x = 0
 	generic_pixel_y = 4
 
-/obj/vehicle/snowmobile/blue
+/obj/simple_vehicle/snowmobile/blue
 	name = "blue snowmobile"
 	icon_state = "bluesnowmobile"
 

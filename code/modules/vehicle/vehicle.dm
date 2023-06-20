@@ -1,8 +1,8 @@
 
-/obj/vehicle
+/obj/simple_vehicle
 	name = "vehicle"
 	desc = "A basic vehicle, vroom"
-	icon = 'icons/obj/vehicles.dmi'
+	icon = 'icons/obj/simple_vehicles.dmi'
 	icon_state = "scooter"
 	density = TRUE
 	anchored = FALSE
@@ -25,22 +25,22 @@
 	var/spaceworthy = FALSE
 
 
-/obj/vehicle/Initialize(mapload)
+/obj/simple_vehicle/Initialize(mapload)
 	. = ..()
 	handle_vehicle_layer()
 
-/obj/vehicle/Destroy()
+/obj/simple_vehicle/Destroy()
 	QDEL_NULL(inserted_key)
 	return ..()
 
 // So that beepsky can't push the janicart
-/obj/vehicle/CanPass(atom/movable/mover, turf/target, height)
+/obj/simple_vehicle/CanPass(atom/movable/mover, turf/target, height)
 	if(istype(mover) && mover.checkpass(PASSMOB))
 		return TRUE
 	else
 		return ..()
 
-/obj/vehicle/examine(mob/user)
+/obj/simple_vehicle/examine(mob/user)
 	. = ..()
 	if(key_type)
 		if(!inserted_key)
@@ -58,7 +58,7 @@
 		if(0 to 25)
 			. += "<span class='warning'>It's falling apart!</span>"
 
-/obj/vehicle/attackby(obj/item/I, mob/user, params)
+/obj/simple_vehicle/attackby(obj/item/I, mob/user, params)
 	if(key_type && !is_key(inserted_key) && is_key(I))
 		if(user.drop_item())
 			I.forceMove(src)
@@ -76,7 +76,7 @@
 		return
 	return ..()
 
-/obj/vehicle/AltClick(mob/user)
+/obj/simple_vehicle/AltClick(mob/user)
 	if(inserted_key && user.Adjacent(user))
 		if(!(user in buckled_mobs))
 			to_chat(user, "<span class='warning'>You must be riding [src] to remove [src]'s key!</span>")
@@ -87,10 +87,10 @@
 		inserted_key = null
 	return ..()
 
-/obj/vehicle/proc/is_key(obj/item/I)
+/obj/simple_vehicle/proc/is_key(obj/item/I)
 	return I ? (key_type_exact ? (I.type == key_type) : istype(I, key_type)) : FALSE
 
-/obj/vehicle/proc/held_keycheck(mob/user)
+/obj/simple_vehicle/proc/held_keycheck(mob/user)
 	if(held_key_type)
 		if(istype(user.l_hand, held_key_type) || istype(user.r_hand, held_key_type))
 			return TRUE
@@ -99,7 +99,7 @@
 	return FALSE
 
 //APPEARANCE
-/obj/vehicle/proc/handle_vehicle_layer()
+/obj/simple_vehicle/proc/handle_vehicle_layer()
 	if(dir != NORTH)
 		layer = MOB_LAYER+0.1
 	else
@@ -109,7 +109,7 @@
 //Override this to set your vehicle's various pixel offsets
 //if they differ between directions, otherwise use the
 //generic variables
-/obj/vehicle/proc/handle_vehicle_offsets()
+/obj/simple_vehicle/proc/handle_vehicle_offsets()
 	if(has_buckled_mobs())
 		for(var/m in buckled_mobs)
 			var/mob/living/buckled_mob = m
@@ -118,26 +118,26 @@
 			buckled_mob.pixel_y = generic_pixel_y
 
 
-/obj/vehicle/update_icon_state()
+/obj/simple_vehicle/update_icon_state()
 	return
 
 /obj/item/key
 	name = "key"
 	desc = "A small grey key."
-	icon = 'icons/obj/vehicles.dmi'
+	icon = 'icons/obj/simple_vehicles.dmi'
 	icon_state = "key"
 	w_class = WEIGHT_CLASS_TINY
 
 
 //BUCKLE HOOKS
-/obj/vehicle/unbuckle_mob(mob/living/buckled_mob, force = FALSE)
+/obj/simple_vehicle/unbuckle_mob(mob/living/buckled_mob, force = FALSE)
 	if(istype(buckled_mob))
 		buckled_mob.pixel_x = 0
 		buckled_mob.pixel_y = 0
 	. = ..()
 
 
-/obj/vehicle/user_buckle_mob(mob/living/M, mob/user)
+/obj/simple_vehicle/user_buckle_mob(mob/living/M, mob/user)
 	if(user.incapacitated())
 		return
 	for(var/atom/movable/A in get_turf(src))
@@ -148,14 +148,14 @@
 	..()
 	handle_vehicle_offsets()
 
-/obj/vehicle/bullet_act(obj/item/projectile/Proj)
+/obj/simple_vehicle/bullet_act(obj/item/projectile/Proj)
 	if(has_buckled_mobs())
 		for(var/m in buckled_mobs)
 			var/mob/living/buckled_mob = m
 			buckled_mob.bullet_act(Proj)
 
 //MOVEMENT
-/obj/vehicle/relaymove(mob/user, direction)
+/obj/simple_vehicle/relaymove(mob/user, direction)
 	if(key_type && !is_key(inserted_key))
 		to_chat(user, "<span class='warning'>[src] has no key inserted!</span>")
 		return
@@ -197,13 +197,13 @@
 		to_chat(user, "<span class='warning'>You'll need the keys in one of your hands to drive [src].</span>")
 
 
-/obj/vehicle/Move(NewLoc, Dir = 0, movetime)
+/obj/simple_vehicle/Move(NewLoc, Dir = 0, movetime)
 	. = ..()
 	handle_vehicle_layer()
 	handle_vehicle_offsets()
 
 
-/obj/vehicle/Bump(atom/movable/M)
+/obj/simple_vehicle/Bump(atom/movable/M)
 	if(!spaceworthy && isspaceturf(get_turf(src)))
 		return FALSE
 	. = ..()
@@ -212,11 +212,11 @@
 			for(var/m in buckled_mobs)
 				M.Bumped(m)
 
-/obj/vehicle/proc/RunOver(mob/living/carbon/human/H)
+/obj/simple_vehicle/proc/RunOver(mob/living/carbon/human/H)
 	return		//write specifics for different vehicles
 
 
-/obj/vehicle/Process_Spacemove(direction)
+/obj/simple_vehicle/Process_Spacemove(direction)
 	if(has_gravity(src))
 		return TRUE
 
@@ -228,13 +228,13 @@
 
 	return FALSE
 
-/obj/vehicle/space
+/obj/simple_vehicle/space
 	pressure_resistance = INFINITY
 	spaceworthy = TRUE
 
-/obj/vehicle/space/Process_Spacemove(direction)
+/obj/simple_vehicle/space/Process_Spacemove(direction)
 	return TRUE
 
-/obj/vehicle/zap_act(power, zap_flags)
+/obj/simple_vehicle/zap_act(power, zap_flags)
 	zap_buckle_check(power)
 	return ..()

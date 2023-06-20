@@ -159,7 +159,7 @@
 
 //Boat
 
-/obj/vehicle/lavaboat
+/obj/simple_vehicle/lavaboat
 	name = "lava boat"
 	desc = "A boat used for traversing lava."
 	icon_state = "goliath_boat"
@@ -169,7 +169,7 @@
 	/// The last time we told the user that they can't drive on land, so we don't spam them
 	var/last_message_time = 0
 
-/obj/vehicle/lavaboat/relaymove(mob/user, direction)
+/obj/simple_vehicle/lavaboat/relaymove(mob/user, direction)
 	var/turf/next = get_step(src, direction)
 	var/turf/current = get_turf(src)
 
@@ -181,22 +181,22 @@
 			last_message_time = world.time
 		return FALSE
 
-/obj/vehicle/lavaboat/Destroy()
+/obj/simple_vehicle/lavaboat/Destroy()
 	for(var/mob/living/M in buckled_mobs)
 		M.weather_immunities -= "lava"
 	return ..()
 
-/obj/vehicle/lavaboat/user_buckle_mob(mob/living/M, mob/user)
+/obj/simple_vehicle/lavaboat/user_buckle_mob(mob/living/M, mob/user)
 	M.weather_immunities |= "lava"
 	return ..()
 
-/obj/vehicle/lavaboat/unbuckle_mob(mob/living/buckled_mob, force)
+/obj/simple_vehicle/lavaboat/unbuckle_mob(mob/living/buckled_mob, force)
 	. = ..()
 	buckled_mob.weather_immunities -= "lava"
 
 /obj/item/oar
 	name = "oar"
-	icon = 'icons/obj/vehicles.dmi'
+	icon = 'icons/obj/simple_vehicles.dmi'
 	icon_state = "oar"
 	item_state = "rods"
 	desc = "Not to be confused with the kind Research hassles you for."
@@ -213,7 +213,7 @@
 
 /datum/crafting_recipe/boat
 	name = "goliath hide boat"
-	result = list(/obj/vehicle/lavaboat)
+	result = list(/obj/simple_vehicle/lavaboat)
 	reqs = list(/obj/item/stack/sheet/animalhide/goliath_hide = 3)
 	time = 50
 	category = CAT_PRIMAL
@@ -229,10 +229,10 @@
 /obj/item/ship_in_a_bottle/attack_self(mob/user)
 	to_chat(user, "You're not sure how they get the ships in these things, but you're pretty sure you know how to get it out.")
 	playsound(user.loc, 'sound/effects/glassbr1.ogg', 100, 1)
-	new /obj/vehicle/lavaboat/dragon(get_turf(src))
+	new /obj/simple_vehicle/lavaboat/dragon(get_turf(src))
 	qdel(src)
 
-/obj/vehicle/lavaboat/dragon
+/obj/simple_vehicle/lavaboat/dragon
 	name = "mysterious boat"
 	desc = "This boat moves where you will it, without the need for an oar."
 	held_key_type = null

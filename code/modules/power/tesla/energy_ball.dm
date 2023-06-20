@@ -225,7 +225,7 @@
 	*/
 	var/atom/closest_atom
 	var/closest_type = 0
-	var/static/things_to_shock = typecacheof(list(/obj/machinery, /mob/living, /obj/structure, /obj/vehicle))
+	var/static/things_to_shock = typecacheof(list(/obj/machinery, /mob/living, /obj/structure, /obj/simple_vehicle))
 	var/static/blacklisted_tesla_types = typecacheof(list(/obj/machinery/atmospherics,
 										/obj/machinery/atmospherics/portable,
 										/obj/machinery/power/emitter,
@@ -280,8 +280,8 @@
 		else if(closest_type >= RIDE)
 			continue
 
-		else if(istype(A, /obj/vehicle))
-			var/obj/vehicle/R = A
+		else if(istype(A, /obj/simple_vehicle))
+			var/obj/simple_vehicle/R = A
 			if(R.can_buckle && !R.being_shocked)
 				closest_type = RIDE
 				closest_atom = A

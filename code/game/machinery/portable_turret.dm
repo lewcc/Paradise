@@ -507,7 +507,7 @@ GLOBAL_LIST_EMPTY(turret_icons)
 
 	var/list/targets = list()			//list of primary targets
 	var/list/secondarytargets = list()	//targets that are least important
-	var/static/things_to_scan = typecacheof(list(/obj/mecha, /obj/vehicle, /mob/living))
+	var/static/things_to_scan = typecacheof(list(/obj/mecha, /obj/simple_vehicle, /mob/living))
 
 	for(var/A in typecache_filter_list(view(scan_range, src), things_to_scan))
 		var/atom/AA = A
@@ -519,8 +519,8 @@ GLOBAL_LIST_EMPTY(turret_icons)
 			var/obj/mecha/ME = A
 			assess_and_assign(ME.occupant, targets, secondarytargets)
 
-		if(istype(A, /obj/vehicle))
-			var/obj/vehicle/T = A
+		if(istype(A, /obj/simple_vehicle))
+			var/obj/simple_vehicle/T = A
 			if(T.has_buckled_mobs())
 				for(var/m in T.buckled_mobs)
 					var/mob/living/buckled_mob = m

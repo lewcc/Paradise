@@ -1007,7 +1007,7 @@
 	var/turf/new_item_loc = get_step(current_item_loc, user.dir)
 	var/obj/machinery/disposal/target_bin = locate(/obj/machinery/disposal) in new_item_loc.contents
 	var/obj/structure/janitorialcart/jani_cart = locate(/obj/structure/janitorialcart) in new_item_loc.contents
-	var/obj/vehicle/janicart/jani_vehicle = locate(/obj/vehicle/janicart) in new_item_loc.contents
+	var/obj/simple_vehicle/janicart/jani_vehicle = locate(/obj/simple_vehicle/janicart) in new_item_loc.contents
 	var/trash_amount = 1
 	for(var/obj/item/garbage in current_item_loc.contents)
 		if(!garbage.anchored)

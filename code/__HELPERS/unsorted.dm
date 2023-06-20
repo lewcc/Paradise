@@ -1748,7 +1748,7 @@ GLOBAL_DATUM_INIT(dview_mob, /mob/dview, new)
 			/obj/structure/chair/stool = "STOOL",
 			/obj/structure/table = "TABLE",
 			/obj/structure = "STRUCTURE",
-			/obj/vehicle = "VEHICLE",
+			/obj/simple_vehicle = "VEHICLE",
 			/obj = "O",
 			/datum = "D",
 			/turf/simulated/floor = "SIM_FLOOR",

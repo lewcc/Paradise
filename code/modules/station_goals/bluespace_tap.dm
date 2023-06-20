@@ -84,7 +84,7 @@
 /obj/effect/spawner/lootdrop/bluespace_tap/cultural
 	name = "cultural artifacts"
 	loot = list(
-		/obj/vehicle/space/speedbike/red = 10,
+		/obj/simple_vehicle/space/speedbike/red = 10,
 		/obj/item/grenade/clusterbuster/honk = 10,
 		/obj/item/toy/katana = 10,
 		/obj/item/stack/tile/brass/fifty = 20,

@@ -1,4 +1,4 @@
-/obj/vehicle/car
+/obj/simple_vehicle/car
 	name = "sports car"
 	desc = "A very luxurious vehicle."
 	icon = 'icons/vehicles/sportscar.dmi'
@@ -8,20 +8,20 @@
 	vehicle_move_delay = 1
 	var/mutable_appearance/carcover
 
-/obj/vehicle/car/Initialize(mapload)
+/obj/simple_vehicle/car/Initialize(mapload)
 	. = ..()
 	carcover = mutable_appearance(icon, "sportscar_cover", ABOVE_MOB_LAYER)
 
-/obj/vehicle/car/post_buckle_mob(mob/living/M)
+/obj/simple_vehicle/car/post_buckle_mob(mob/living/M)
 	add_overlay(carcover)
 	return ..()
 
-/obj/vehicle/car/post_unbuckle_mob(mob/living/M)
+/obj/simple_vehicle/car/post_unbuckle_mob(mob/living/M)
 	if(!has_buckled_mobs())
 		cut_overlay(carcover)
 	return ..()
 
-/obj/vehicle/car/handle_vehicle_offsets()
+/obj/simple_vehicle/car/handle_vehicle_offsets()
 	..()
 	if(has_buckled_mobs())
 		for(var/m in buckled_mobs)
@@ -41,7 +41,7 @@
 					buckled_mob.pixel_y = 10
 
 
-/obj/vehicle/car/handle_vehicle_layer()
+/obj/simple_vehicle/car/handle_vehicle_layer()
 	if(dir == SOUTH)
 		layer = ABOVE_MOB_LAYER
 	else

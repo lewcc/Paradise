@@ -345,17 +345,17 @@
 /obj/effect/spawner/lootdrop/trade_sol/vehicle
 	name = "9. vehicle"
 	loot = list(
-				/obj/vehicle/motorcycle = 50,
-				/obj/vehicle/snowmobile = 50,
-				/obj/vehicle/snowmobile/blue = 50,
-				/obj/vehicle/space/speedbike/red = 50,
-				/obj/vehicle/space/speedbike = 50
+				/obj/simple_vehicle/motorcycle = 50,
+				/obj/simple_vehicle/snowmobile = 50,
+				/obj/simple_vehicle/snowmobile/blue = 50,
+				/obj/simple_vehicle/space/speedbike/red = 50,
+				/obj/simple_vehicle/space/speedbike = 50
 				)
 
 /obj/effect/spawner/lootdrop/trade_sol/vehicle/Initialize(mapload)
 	while(lootcount)
 		var/lootspawn = pickweight(loot)
-		var/obj/vehicle/V = new lootspawn(get_turf(src))
+		var/obj/simple_vehicle/V = new lootspawn(get_turf(src))
 		if(V.key_type)
 			V.inserted_key = new V.key_type(V)
 		lootcount--

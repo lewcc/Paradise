@@ -113,7 +113,7 @@
 
 		var/direction = get_dir(src,target)
 
-		if(usr.buckled && isobj(usr.buckled) && !usr.buckled.anchored && !istype(usr.buckled, /obj/vehicle))
+		if(usr.buckled && isobj(usr.buckled) && !usr.buckled.anchored && !istype(usr.buckled, /obj/simple_vehicle))
 			spawn(0)
 				var/obj/structure/chair/C = null
 				if(istype(usr.buckled, /obj/structure/chair))

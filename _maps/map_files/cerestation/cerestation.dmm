@@ -35192,7 +35192,7 @@
 	},
 /area/security/evidence)
 "dvH" = (
-/obj/vehicle/secway,
+/obj/simple_vehicle/secway,
 /obj/effect/turf_decal/delivery/red,
 /turf/simulated/floor/plasteel{
 	icon_state = "dark"
@@ -44673,7 +44673,7 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 4
 	},
-/obj/vehicle/janicart,
+/obj/simple_vehicle/janicart,
 /obj/machinery/alarm{
 	pixel_y = 24;
 	name = "north bump"
@@ -44691,7 +44691,7 @@
 /turf/simulated/floor/plating,
 /area/storage/tech)
 "gJx" = (
-/obj/vehicle/janicart,
+/obj/simple_vehicle/janicart,
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
 	dir = 4
 	},
@@ -87979,7 +87979,7 @@
 /area/crew_quarters/kitchen)
 "vRQ" = (
 /obj/effect/turf_decal/delivery/red,
-/obj/vehicle/secway,
+/obj/simple_vehicle/secway,
 /obj/machinery/light{
 	dir = 8
 	},
@@ -92573,7 +92573,7 @@
 /area/medical/paramedic)
 "xvr" = (
 /obj/effect/decal/warning_stripes/northeastsouth,
-/obj/vehicle/ambulance{
+/obj/simple_vehicle/ambulance{
 	dir = 4
 	},
 /obj/machinery/light{

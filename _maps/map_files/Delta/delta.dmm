@@ -6489,7 +6489,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/fore)
 "azo" = (
-/obj/vehicle/janicart,
+/obj/simple_vehicle/janicart,
 /obj/item/storage/bag/trash,
 /obj/item/key/janitor,
 /obj/machinery/status_display{
@@ -25576,7 +25576,7 @@
 	pixel_y = -24
 	},
 /obj/structure/cable,
-/obj/vehicle/secway,
+/obj/simple_vehicle/secway,
 /obj/item/key/security,
 /turf/simulated/floor/plasteel,
 /area/security/securearmoury)
@@ -68177,7 +68177,7 @@
 /turf/simulated/floor/plasteel,
 /area/medical/paramedic)
 "dnJ" = (
-/obj/vehicle/ambulance{
+/obj/simple_vehicle/ambulance{
 	dir = 8
 	},
 /obj/machinery/camera{
