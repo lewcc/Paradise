@@ -1,0 +1,7 @@
+/// Defines for vehicles
+
+#define VEHICLE_SPEED_STOPPED 0
+#define VEHICLE_SPEED_LOW 1
+#define VEHICLE_SPEED_MID 2
+#define VEHICLE_SPEED_HIGH 3
+#define VEHICLE_SPEED_LUDICROUS 4
