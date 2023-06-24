@@ -1017,8 +1017,6 @@
 	var/datum/status_effect/incapacitating/slowed/S = IsSlowed()
 	if(S)
 		. += S.slowdown_value
-	if(forced_look)
-		. += 3
 	if(ignorewalk)
 		. += GLOB.configuration.movement.base_run_speed
 	else

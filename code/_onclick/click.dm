@@ -249,41 +249,6 @@
 	else
 		..()
 
-
-/*
-	Middle shift-click
-	Makes the mob face the direction of the clicked thing
-*/
-/mob/proc/MiddleShiftClickOn(atom/A)
-	return
-
-/mob/living/MiddleShiftClickOn(atom/A)
-	if(incapacitated())
-		return
-	var/face_dir = get_cardinal_dir(src, A)
-	if(!face_dir || forced_look == face_dir || A == src)
-		forced_look = null
-		to_chat(src, "<span class='notice'>Cancelled direction lock.</span>")
-		return
-	forced_look = face_dir
-	to_chat(src, "<span class='userdanger'>You are now facing [dir2text(forced_look)]. To cancel this, shift-middleclick yourself.</span>")
-
-/*
-	Middle shift-control-click
-	Makes the mob constantly face the object (until it's out of sight)
-*/
-/mob/proc/MiddleShiftControlClickOn(atom/A)
-	return
-
-/mob/living/MiddleShiftControlClickOn(atom/A)
-	var/face_uid = A.UID()
-	if(forced_look == face_uid || A == src)
-		forced_look = null
-		to_chat(src, "<span class='notice'>Cancelled direction lock.</span>")
-		return
-	forced_look = face_uid
-	to_chat(src, "<span class='userdanger'>You are now facing [A]. To cancel this, shift-middleclick yourself.</span>")
-
 // In case of use break glass
 /*
 /atom/proc/MiddleClick(mob/M as mob)
