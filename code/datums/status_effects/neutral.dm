@@ -82,7 +82,7 @@
 			C.status_flags |= GODMODE
 			explosion(get_turf(user), 5, 2, 1, 3, cause = id)
 			// explosions have a spawn so this makes sure that we don't get gibbed
-			addtimer(CALLBACK(src, PROC_REF(wiz_cleanup), user, C), 1)
+			addtimer(CALLBACK(src, PROC_REF(wiz_cleanup), user, C), 1 SECONDS)
 			add_attack_logs(user, C, "caused a wizard [id] explosion")
 			user.remove_status_effect(type)
 			C.remove_status_effect(type)
