@@ -325,10 +325,11 @@ GLOBAL_LIST_EMPTY(gravity_generators)
 	playsound(src, "sparks", 75, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
 	ADD_TRAIT(src, TRAIT_CMAGGED, CLOWN_EMAG)
 	add_attack_logs(user, src, "cmagged, making everyone flippery.")
+	add_fingerprint(user)
+	addtimer(CALLBACK(src, PROC_REF(do_cmagging)), 10 SECONDS)
 
-	addtimer(CALLBACK(src, PROC_REF(do_cmagging), user), 10 SECONDS)
 
-/obj/machinery/gravity_generator/main/proc/do_cmagging(mob/user)
+/obj/machinery/gravity_generator/main/proc/do_cmagging()
 	// give the perp a moment to get away, even though it will be incredibly obvious who did it.
 	if(on)
 		// if it was already off, then we'll have a fun surprise when it wakes up
@@ -337,7 +338,7 @@ GLOBAL_LIST_EMPTY(gravity_generators)
 				continue
 			A.cmag_grav_change(TRUE, A)
 		shake_everyone()
-	add_fingerprint(user)
+
 	on_cmag_cooldown = TRUE
 	addtimer(VARSET_CALLBACK(src, on_cmag_cooldown, FALSE), 5 MINUTES)
 

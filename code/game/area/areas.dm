@@ -455,13 +455,13 @@
 	else if(L && L.client && !(L.client.prefs.sound & SOUND_BUZZ))
 		L.client.ambience_playing = FALSE
 
-/area/proc/cmag_grav_change(cmag_gravity = FALSE, area/A)
+/area/proc/cmag_grav_change(new_cmag_gravity = FALSE, area/A)
 	var/existing_grav = A.has_cmagged_gravity
-	A.has_cmagged_gravity = cmag_gravity
+	A.has_cmagged_gravity = new_cmag_gravity
 
-	for(var/mob/living/M in A)
-		if(cmag_gravity != existing_grav)
-			clown_thunk(M, cmag_gravity)
+	if(new_cmag_gravity != existing_grav)
+		for(var/mob/living/M in A)
+			clown_thunk(M, new_cmag_gravity)
 
 
 /area/proc/clown_thunk(mob/living/M, clown_gravity_enabled)
