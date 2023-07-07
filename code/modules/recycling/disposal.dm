@@ -697,13 +697,13 @@
 	if(U.stat || world.time <= U.last_special)
 		return
 
-	U.last_special = world.time + 100
+	U.last_special = world.time + 2 SECONDS
 
 	if(loc)
-		for(var/mob/M in hearers(loc.loc))
-			to_chat(M, "<FONT size=[max(0, 5 - get_dist(src, M))]>CLONG, clong!</FONT>")
+		for(var/mob/M in range(5, get_turf(src)))
+			M.show_message("<font size=[max(0, 5 - get_dist(src, M))]>CLONG, clong!</font>", EMOTE_AUDIBLE)
 
-	playsound(loc, 'sound/effects/clang.ogg', 50, 0, 0)
+	playsound(get_turf(src), 'sound/effects/clang.ogg', 50, 0, 0)
 
 	// called to vent all gas in holder to a location
 /obj/structure/disposalholder/proc/vent_gas(atom/location)
