@@ -32,7 +32,7 @@
 
 /obj/vehicle/Initialize(mapload)
 	. = ..()
-	initial_components = list()
+	additional_components = list()
 
 /obj/vehicle/Destroy()
 	. = ..()
@@ -41,6 +41,7 @@
 		QDEL_NULL(active_chassis)
 		QDEL_NULL(active_propulsion)
 		QDEL_NULL(active_engine)
+	additional_components.Cut()
 
 // These getters will get their values from the underlying components
 /obj/vehicle/proc/acceleration_rate()
