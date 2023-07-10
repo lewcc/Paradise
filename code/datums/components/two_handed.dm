@@ -32,6 +32,8 @@
 	var/datum/callback/wield_callback
 	/// A callback on the parent to be called when the item is unwielded
 	var/datum/callback/unwield_callback
+	/// Whether or not the object is only sharp when wielded. If it's never sharp, ignore this.
+	var/only_sharp_when_wielded = FALSE
 
 /**
 
@@ -192,7 +194,7 @@
 		parent_item.force *= force_multiplier
 	else if(force_wielded)
 		parent_item.force = force_wielded
-	if(sharpened_increase)
+	if(sharpened_increase && only_sharp_when_wielded)
 		parent_item.force += sharpened_increase
 	parent_item.name = "[parent_item.name] (Wielded)"
 	parent_item.update_appearance()
@@ -236,7 +238,7 @@
 
 	// update item stats
 	var/obj/item/parent_item = parent
-	if(sharpened_increase)
+	if(sharpened_increase && only_sharp_when_wielded)
 		parent_item.force -= sharpened_increase
 	if(force_multiplier)
 		parent_item.force /= force_multiplier
@@ -336,6 +338,8 @@
 		return COMPONENT_BLOCK_SHARPEN_BLOCKED
 	if(sharpened_increase)
 		return COMPONENT_BLOCK_SHARPEN_ALREADY
+	if(force_wielded >= max)
+		return COMPONENT_BLOCK_SHARPEN_MAXED
 	var/wielded_val = 0
 	if(force_multiplier)
 		var/obj/item/parent_item = parent
@@ -348,7 +352,13 @@
 	if(wielded_val > max_amount)
 		return COMPONENT_BLOCK_SHARPEN_MAXED
 	sharpened_increase = min(amount, (max_amount - wielded_val))
-	return COMPONENT_BLOCK_SHARPEN_APPLIED
+	if(!only_sharp_when_wielded)
+		// wielded force gets applied on wield
+		force_unwielded += sharpened_increase
+		parent.force += sharpened_increase  // todo double check this logic is correct
+	else if(wielded)
+		parent.force += sharpened_increase
+	return  // don't return the "sharpened applied" signal since we probably wanna sharpen the base form too
 
 /**
  * The offhand dummy item for two handed items
