@@ -3285,7 +3285,7 @@
 	},
 /area/ruin/unpowered/syndicate_space_base/medbay)
 "Ji" = (
-/obj/item/twohanded/required/kirbyplants{
+/obj/item/kirbyplants{
 	icon_state = "plant-22"
 	},
 /turf/simulated/floor/plasteel{
@@ -3365,7 +3365,7 @@
 	},
 /area/ruin/unpowered/syndicate_space_base/main)
 "Ki" = (
-/obj/item/twohanded/required/kirbyplants{
+/obj/item/kirbyplants{
 	icon_state = "plant-22"
 	},
 /obj/structure/cable{

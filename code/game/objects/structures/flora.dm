@@ -254,7 +254,7 @@
 	icon_state = "fullgrass_[rand(1, 3)]"
 
 
-/obj/item/twohanded/required/kirbyplants
+/obj/item/kirbyplants
 	name = "potted plant"
 	icon = 'icons/obj/flora/plants.dmi'
 	icon_state = "plant-1"
@@ -269,39 +269,41 @@
 	/// Method to track plant overlay on mob for later removal
 	var/mutable_appearance/mob_overlay
 
-/obj/item/twohanded/required/kirbyplants/Initialize(mapload)
+/obj/item/kirbyplants/Initialize(mapload)
 	. = ..()
 	icon_state = "plant-[rand(1,35)]"
 	if(prob(1))
 		icon_state = "plant-36"
 
-/obj/item/twohanded/required/kirbyplants/Destroy()
+	AddComponent(/datum/component/two_handed, require_twohands=TRUE)
+
+/obj/item/kirbyplants/Destroy()
 	if(isliving(loc))
 		unhide_user(loc)
 
 	QDEL_NULL(mob_overlay)
 	return ..()
 
-/obj/item/twohanded/required/kirbyplants/equipped(mob/living/user)
+/obj/item/kirbyplants/equipped(mob/living/user)
 	. = ..()
 	if(wielded)
 		hide_user(user)
 
-/obj/item/twohanded/required/kirbyplants/proc/hide_user(mob/living/user)
+/obj/item/kirbyplants/proc/hide_user(mob/living/user)
 	mob_overlay = mutable_appearance(icon, icon_state, user.layer, user.plane, 255, appearance_flags = RESET_COLOR | RESET_TRANSFORM | RESET_ALPHA | KEEP_APART)
 	user.add_overlay(mob_overlay)
 	user.alpha = 0
 
-/obj/item/twohanded/required/kirbyplants/proc/unhide_user(mob/living/user)
+/obj/item/kirbyplants/proc/unhide_user(mob/living/user)
 	user.cut_overlay(mob_overlay)
 	user.alpha = initial(user.alpha)
 	QDEL_NULL(mob_overlay)
 
-/obj/item/twohanded/required/kirbyplants/dropped(mob/living/user)
+/obj/item/kirbyplants/dropped(mob/living/user)
 	..()
 	unhide_user(user)
 
-/obj/item/twohanded/required/kirbyplants/dead
+/obj/item/kirbyplants/dead
 	name = "\improper RD's potted plant"
 	desc = "A gift from the botanical staff, presented after the RD's reassignment. There's a tag on it that says \"Y'all come back now, y'hear?\"\nIt doesn't look very healthy..."
 	icon_state = "plant-dead"
