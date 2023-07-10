@@ -262,7 +262,6 @@
 	layer = ABOVE_MOB_LAYER
 	w_class = WEIGHT_CLASS_HUGE
 	force = 10
-	force_wielded = 10
 	throwforce = 13
 	throw_speed = 2
 	throw_range = 4
@@ -286,7 +285,7 @@
 
 /obj/item/kirbyplants/equipped(mob/living/user)
 	. = ..()
-	if(wielded)
+	if(HAS_TRAIT(src, TRAIT_WIELDED))
 		hide_user(user)
 
 /obj/item/kirbyplants/proc/hide_user(mob/living/user)

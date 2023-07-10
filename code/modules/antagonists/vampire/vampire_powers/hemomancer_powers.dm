@@ -44,7 +44,6 @@
 	w_class = WEIGHT_CLASS_BULKY
 	flags = ABSTRACT | NODROP | DROPDEL
 	force = 10
-	force_wielded = 10
 	armour_penetration_flat = 20
 	sharp = TRUE
 	attack_effect_override = ATTACK_EFFECT_CLAW
@@ -94,7 +93,7 @@
 
 /obj/item/vamp_claws/melee_attack_chain(mob/user, atom/target, params)
 	..()
-	if(wielded)
+	if(HAS_TRAIT(src, TRAIT_WIELDED))
 		user.changeNext_move(CLICK_CD_MELEE * 0.5)
 
 /obj/item/vamp_claws/attack_self(mob/user)
