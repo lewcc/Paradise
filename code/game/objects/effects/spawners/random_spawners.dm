@@ -320,7 +320,7 @@
 		/obj/item/gun/energy/kinetic_accelerator/crossbow = 1,
 		/obj/item/gun/projectile/revolver = 1,
 		/obj/item/clothing/gloves/color/yellow/power = 1,
-		/obj/item/twohanded/chainsaw = 1,
+		/obj/item/butcher_chainsaw = 1,
 		/obj/item/bee_briefcase = 1,
 		/obj/item/fireaxe/energized = 1,
 		/obj/item/clothing/glasses/thermal = 1,

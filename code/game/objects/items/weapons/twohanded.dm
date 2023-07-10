@@ -565,7 +565,7 @@
 	desc = "A spear brought over from the Kidan homeworld."
 
 // DIY CHAINSAW
-/obj/item/twohanded/required/chainsaw
+/obj/item/chainsaw
 	name = "chainsaw"
 	desc = "A versatile power tool. Useful for limbing trees and delimbing humans."
 	icon_state = "gchainsaw_off"
@@ -584,7 +584,12 @@
 	actions_types = list(/datum/action/item_action/startchainsaw)
 	var/on = FALSE
 
-/obj/item/twohanded/required/chainsaw/attack_self(mob/user)
+/obj/item/chainsaw/Initialize(mapload)
+	. = ..()
+	AddComponent(/datum/component/two_handed, require_twohands=TRUE)
+
+
+/obj/item/chainsaw/attack_self(mob/user)
 	on = !on
 	to_chat(user, "As you pull the starting cord dangling from [src], [on ? "it begins to whirr." : "the chain stops moving."]")
 	if(on)
@@ -605,23 +610,23 @@
 		var/datum/action/A = X
 		A.UpdateButtonIcon()
 
-/obj/item/twohanded/required/chainsaw/attack_hand(mob/user)
+/obj/item/chainsaw/attack_hand(mob/user)
 	. = ..()
 	force = on ? force_on : initial(force)
 	throwforce = on ? force_on : initial(throwforce)
 
-/obj/item/twohanded/required/chainsaw/on_give(mob/living/carbon/giver, mob/living/carbon/receiver)
+/obj/item/chainsaw/on_give(mob/living/carbon/giver, mob/living/carbon/receiver)
 	. = ..()
 	force = on ? force_on : initial(force)
 	throwforce = on ? force_on : initial(throwforce)
 
-/obj/item/twohanded/required/chainsaw/doomslayer
+/obj/item/chainsaw/doomslayer
 	name = "OOOH BABY"
 	desc = "<span class='warning'>VRRRRRRR!!!</span>"
 	armour_penetration_percentage = 100
 	force_on = 30
 
-/obj/item/twohanded/required/chainsaw/doomslayer/hit_reaction(mob/living/carbon/human/owner, atom/movable/hitby, attack_text = "the attack", final_block_chance = 0, damage = 0, attack_type = MELEE_ATTACK)
+/obj/item/chainsaw/doomslayer/hit_reaction(mob/living/carbon/human/owner, atom/movable/hitby, attack_text = "the attack", final_block_chance = 0, damage = 0, attack_type = MELEE_ATTACK)
 	if(attack_type == PROJECTILE_ATTACK)
 		owner.visible_message("<span class='danger'>Ranged attacks just make [owner] angrier!</span>")
 		playsound(src, pick('sound/weapons/bulletflyby.ogg','sound/weapons/bulletflyby2.ogg','sound/weapons/bulletflyby3.ogg'), 75, 1)
@@ -630,7 +635,8 @@
 
 
 ///CHAINSAW///
-/obj/item/twohanded/chainsaw
+/obj/item/butcher_chainsaw
+	base_icon_state = "chainsaw"
 	icon_state = "chainsaw0"
 	name = "chainsaw"
 	desc = "Perfect for felling trees or fellow spacemen."
@@ -639,11 +645,7 @@
 	throw_speed = 1
 	throw_range = 5
 	w_class = WEIGHT_CLASS_BULKY // can't fit in backpacks
-	force_unwielded = 15 //still pretty robust
-	force_wielded = 40  //you'll gouge their eye out! Or a limb...maybe even their entire body!
 	hitsound = null // Handled in the snowflaked attack proc
-	wieldsound = 'sound/weapons/chainsawstart.ogg'
-	hitsound = null
 	armour_penetration_percentage = 50
 	armour_penetration_flat = 10
 	origin_tech = "materials=6;syndicate=4"
@@ -651,23 +653,31 @@
 	sharp = TRUE
 	flags_2 = RANDOM_BLOCKER_2
 
-/obj/item/twohanded/chainsaw/update_icon_state()
-	if(wielded)
-		icon_state = "chainsaw[wielded]"
-	else
-		icon_state = "chainsaw0"
-
-/obj/item/twohanded/chainsaw/attack(mob/living/target, mob/living/user)
+/obj/item/butcher_chainsaw/Initialize(mapload)
 	. = ..()
-	if(wielded)
+	ADD_TRAIT(src, TRAIT_BUTCHERS_HUMANS, ROUNDSTART_TRAIT)
+	AddComponent(/datum/component/two_handed, \
+		force_wielded=40, \
+		force_unwielded=force, \
+		icon_wielded="[base_icon_state]1", \
+		wieldsound = 'sound/weapons/chainsawstart.ogg', \
+		wield_callback=CALLBACK(src, PROC_REF(wield)), \
+		unwield_callback=CALLBACK(src, PROC_REF(unwield)))
+
+/obj/item/butcher_chainsaw/update_icon_state()
+	icon_state = "[base_icon_state]0"
+
+/obj/item/butcher_chainsaw/attack(mob/living/target, mob/living/user)
+	. = ..()
+	if(HAS_TRAIT(src, TRAIT_WIELDED))
 		playsound(loc, 'sound/weapons/chainsaw.ogg', 100, 1, -1) //incredibly loud; you ain't goin' for stealth with this thing. Credit to Lonemonk of Freesound for this sound.
 		if(isnull(.)) //necessary check, successful attacks return null, without it target will drop any shields they may have before they get a chance to block
 			target.KnockDown(8 SECONDS)
 
-/obj/item/twohanded/chainsaw/afterattack(mob/living/target, mob/living/user, proximity)
+/obj/item/butcher_chainsaw/afterattack(mob/living/target, mob/living/user, proximity)
 	if(!proximity) //only works on adjacent targets, no telekinetic chainsaws
 		return
-	if(!wielded)
+	if(!HAS_TRAIT(src, TRAIT_WIELDED))
 		return
 	if(isrobot(target)) //no buff from attacking robots
 		return
@@ -676,26 +686,18 @@
 	if(target.stat != DEAD) //no buff from attacking dead targets
 		user.apply_status_effect(STATUS_EFFECT_CHAINSAW_SLAYING)
 
-/obj/item/twohanded/chainsaw/hit_reaction(mob/living/carbon/human/owner, atom/movable/hitby, attack_text = "the attack", final_block_chance = 0, damage = 0, attack_type = MELEE_ATTACK)
+/obj/item/butcher_chainsaw/hit_reaction(mob/living/carbon/human/owner, atom/movable/hitby, attack_text = "the attack", final_block_chance = 0, damage = 0, attack_type = MELEE_ATTACK)
 	if(attack_type == PROJECTILE_ATTACK)
 		final_block_chance = 0 //It's a chainsaw, you try blocking bullets with it
 	else if(owner.has_status_effect(STATUS_EFFECT_CHAINSAW_SLAYING))
 		final_block_chance = 80 //Need to be ready to ruuuummbllleeee
 	return ..()
 
-/obj/item/twohanded/chainsaw/wield() //you can't disarm an active chainsaw, you crazy person.
-	. = ..()
-	if(.)
-		flags |= NODROP
+/obj/item/butcher_chainsaw/proc/wield() //you can't disarm an active chainsaw, you crazy person.
+	flags |= NODROP
 
-/obj/item/twohanded/chainsaw/unwield()
-	. = ..()
-	if(.)
-		flags &= ~NODROP
-
-/obj/item/twohanded/chainsaw/Initialize(mapload)
-	. = ..()
-	ADD_TRAIT(src, TRAIT_BUTCHERS_HUMANS, ROUNDSTART_TRAIT)
+/obj/item/butcher_chainsaw/proc/unwield()
+	flags &= ~NODROP
 
 // SINGULOHAMMER
 /obj/item/twohanded/singularityhammer

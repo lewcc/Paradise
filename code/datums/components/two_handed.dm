@@ -338,7 +338,7 @@
 		return COMPONENT_BLOCK_SHARPEN_BLOCKED
 	if(sharpened_increase)
 		return COMPONENT_BLOCK_SHARPEN_ALREADY
-	if(force_wielded >= max)
+	if(force_wielded >= max_amount)
 		return COMPONENT_BLOCK_SHARPEN_MAXED
 	var/wielded_val = 0
 	if(force_multiplier)
@@ -352,12 +352,13 @@
 	if(wielded_val > max_amount)
 		return COMPONENT_BLOCK_SHARPEN_MAXED
 	sharpened_increase = min(amount, (max_amount - wielded_val))
+	var/obj/item/I = parent
 	if(!only_sharp_when_wielded)
 		// wielded force gets applied on wield
 		force_unwielded += sharpened_increase
-		parent.force += sharpened_increase  // todo double check this logic is correct
+		I.force += sharpened_increase  // todo double check this logic is correct
 	else if(wielded)
-		parent.force += sharpened_increase
+		I.force += sharpened_increase
 	return  // don't return the "sharpened applied" signal since we probably wanna sharpen the base form too
 
 /**

@@ -205,7 +205,7 @@ GLOBAL_LIST_INIT(uplink_items, subtypesof(/datum/uplink_item))
 	name = "Chainsaw"
 	desc = "A high powered chainsaw for cutting up ...you know...."
 	reference = "CH"
-	item = /obj/item/twohanded/chainsaw
+	item = /obj/item/butcher_chainsaw
 	cost = 13
 
 /datum/uplink_item/dangerous/universal_gun_kit

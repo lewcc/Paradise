@@ -26,10 +26,10 @@
 		to_chat(user, "<span class='warning'>[I] is much too powerful to sharpen further!</span>")
 		return
 	if(signal_out & COMPONENT_BLOCK_SHARPEN_BLOCKED)
-		to_chat(user, span_warning("[I] is not able to be sharpened right now!"))
+		to_chat(user, "<span class='warning'>[I] is not able to be sharpened right now!</span>")
 		return
 	if((signal_out & COMPONENT_BLOCK_SHARPEN_ALREADY) || (I.force > initial(I.force) && !signal_out)) //No sharpening stuff twice
-		to_chat(user, span_warning("[I] has already been refined before. It cannot be sharpened further!"))
+		to_chat(user, "<span class='warning'>[I] has already been refined before. It cannot be sharpened further!</span>")
 		return
 	if(!(signal_out & COMPONENT_BLOCK_SHARPEN_APPLIED)) //If the item has a relevant component and COMPONENT_BLOCK_SHARPEN_APPLIED is returned, the item only gets the throw force increase
 		I.force = clamp(I.force + increment, 0, max)

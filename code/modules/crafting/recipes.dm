@@ -438,7 +438,7 @@
 
 /datum/crafting_recipe/chainsaw
 	name = "Chainsaw"
-	result = list(/obj/item/twohanded/required/chainsaw)
+	result = list(/obj/item/chainsaw)
 	reqs = list(/obj/item/circular_saw = 1,
 				/obj/item/stack/cable_coil = 1,
 				/obj/item/stack/sheet/plasteel = 1)
