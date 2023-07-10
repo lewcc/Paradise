@@ -103,6 +103,7 @@
 	RegisterSignal(parent, COMSIG_ATOM_UPDATE_ICON, PROC_REF(on_update_icon))
 	RegisterSignal(parent, COMSIG_MOVABLE_MOVED, PROC_REF(on_moved))
 	RegisterSignal(parent, COMSIG_ITEM_SHARPEN_ACT, PROC_REF(on_sharpen))
+	RegisterSignal(parent, COMSIG_CARBON_UPDATE_HANDCUFFED, PROC_REF(on_handcuff_user))
 
 // Remove all siginals registered to the parent item
 /datum/component/two_handed/UnregisterFromParent()
@@ -362,9 +363,13 @@
 	return  // don't return the "sharpened applied" signal since we probably wanna sharpen the base form too
 
 /datum/component/two_handed/proc/on_handcuff_user(mob/user, handcuff_status)
-	SIGNAL_HANDLER
+	SIGNAL_HANDLER  // COMSIG_CARBON_UPDATE_HANDCUFFED
 	if(handcuff_status)
-		INVOKE_ASYNC(src, PROC_REF(unwield), user)
+		if(require_twohands && user.unEquip(parent))
+			user.visible_message("<span class='notice'>[user] loses [user.p_their()] grip on [parent]!</span>")
+		else
+			user.visible_message("<span class='notice'>[user] unwields [parent] as the handcuffs make it too hard to hold properly.</span>")
+			INVOKE_ASYNC(src, PROC_REF(unwield), user)
 
 /**
  * The offhand dummy item for two handed items
