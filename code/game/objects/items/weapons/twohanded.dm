@@ -1036,14 +1036,12 @@
 	icon_state = "broom0"
 
 /obj/item/push_broom/proc/wield(obj/item/source, mob/user)
-	. = ..()
 	if(!.)
 		return
 	to_chat(user, "<span class='notice'>You brace [src] against the ground in a firm sweeping stance.</span>")
 	RegisterSignal(user, COMSIG_MOVABLE_MOVED, PROC_REF(sweep))
 
 /obj/item/push_broom/proc/unwield(obj/item/source, mob/user)
-	. = ..()
 	UnregisterSignal(user, COMSIG_MOVABLE_MOVED)
 
 /obj/item/push_broom/afterattack(atom/A, mob/user, proximity)
