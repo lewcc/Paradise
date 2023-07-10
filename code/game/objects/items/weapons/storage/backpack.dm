@@ -621,10 +621,10 @@
 			new /obj/item/organ/internal/cyberimp/arm/katana(src)
 			value += 1
 		if(3)
-			new /obj/item/twohanded/mjollnir(src)
+			new /obj/item/mjollnir(src)
 			value += 2
 		if(4)
-			new /obj/item/twohanded/singularityhammer(src)
+			new /obj/item/singularityhammer(src)
 			value += 2
 		if(5)
 			new /obj/item/katana(src)

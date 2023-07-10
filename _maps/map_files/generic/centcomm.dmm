@@ -6417,12 +6417,12 @@
 /area/tdome/tdomeobserve)
 "wH" = (
 /obj/structure/rack,
-/obj/item/twohanded/knighthammer{
+/obj/item/knighthammer{
 	pixel_x = -3;
 	pixel_y = 3
 	},
-/obj/item/twohanded/mjollnir,
-/obj/item/twohanded/singularityhammer{
+/obj/item/mjollnir,
+/obj/item/singularityhammer{
 	pixel_x = 3;
 	pixel_y = -3
 	},

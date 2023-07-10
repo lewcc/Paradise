@@ -700,15 +700,14 @@
 	flags &= ~NODROP
 
 // SINGULOHAMMER
-/obj/item/twohanded/singularityhammer
+/obj/item/singularityhammer
 	name = "singularity hammer"
 	desc = "The pinnacle of close combat technology, the hammer harnesses the power of a miniaturized singularity to deal crushing blows."
 	icon_state = "singulohammer0"
+	base_icon_state = "singulohammer"
 	flags = CONDUCT
 	slot_flags = SLOT_BACK
 	force = 5
-	force_unwielded = 5
-	force_wielded = 40
 	throwforce = 15
 	throw_range = 1
 	w_class = WEIGHT_CLASS_HUGE
@@ -717,22 +716,26 @@
 	var/charged = 2
 	origin_tech = "combat=4;bluespace=4;plasmatech=7"
 
-/obj/item/twohanded/singularityhammer/New()
+/obj/item/singularityhammer/Initialize(mapload)
 	..()
+	AddComponent(/datum/component/two_handed, \
+		force_wielded=40, \
+		force_unwielded=force, \
+		icon_wielded="[base_icon_state]1")
 	START_PROCESSING(SSobj, src)
 
-/obj/item/twohanded/singularityhammer/Destroy()
+/obj/item/singularityhammer/Destroy()
 	STOP_PROCESSING(SSobj, src)
 	return ..()
 
-/obj/item/twohanded/singularityhammer/process()
+/obj/item/singularityhammer/process()
 	if(charged < 2)
 		charged++
 
-/obj/item/twohanded/singularityhammer/update_icon_state()  //Currently only here to fuck with the on-mob icons.
-	icon_state = "singulohammer[wielded]"
+/obj/item/singularityhammer/update_icon_state()  //Currently only here to fuck with the on-mob icons.
+	icon_state = "singulohammer0"
 
-/obj/item/twohanded/singularityhammer/proc/vortex(turf/pull, mob/wielder)
+/obj/item/singularityhammer/proc/vortex(turf/pull, mob/wielder)
 	for(var/atom/movable/X in orange(5, pull))
 		if(X.move_resist == INFINITY)
 			continue
@@ -753,10 +756,10 @@
 			step_towards(H, pull)
 			step_towards(H, pull)
 
-/obj/item/twohanded/singularityhammer/afterattack(atom/A, mob/user, proximity)
+/obj/item/singularityhammer/afterattack(atom/A, mob/user, proximity)
 	if(!proximity)
 		return
-	if(wielded)
+	if(HAS_TRAIT(src, TRAIT_WIELDED))
 		if(charged == 2)
 			charged = 0
 			if(isliving(A))
@@ -766,22 +769,27 @@
 			var/turf/target = get_turf(A)
 			vortex(target, user)
 
-/obj/item/twohanded/mjollnir
+/obj/item/mjollnir
 	name = "Mjolnir"
 	desc = "A weapon worthy of a god, able to strike with the force of a lightning bolt. It crackles with barely contained energy."
 	icon_state = "mjollnir0"
+	base_icon_state = "mjollnir"
 	flags = CONDUCT
 	slot_flags = SLOT_BACK
 	force = 5
-	force_unwielded = 5
-	force_wielded = 25
 	throwforce = 30
 	throw_range = 7
 	w_class = WEIGHT_CLASS_HUGE
-	//var/charged = 5
 	origin_tech = "combat=4;powerstorage=7"
 
-/obj/item/twohanded/mjollnir/proc/shock(mob/living/target)
+/obj/item/mjollnir/Initialize(mapload)
+	..()
+	AddComponent(/datum/component/two_handed, \
+		force_wielded=25, \
+		force_unwielded=force, \
+		icon_wielded="[base_icon_state]1")
+
+/obj/item/mjollnir/proc/shock(mob/living/target)
 	do_sparks(5, 1, target.loc)
 	target.visible_message("<span class='danger'>[target] was shocked by [src]!</span>",
 		"<span class='userdanger'>You feel a powerful shock course through your body sending you flying!</span>",
@@ -789,56 +797,57 @@
 	var/atom/throw_target = get_edge_target_turf(target, get_dir(src, get_step_away(target, src)))
 	target.throw_at(throw_target, 200, 4)
 
-/obj/item/twohanded/mjollnir/attack(mob/living/M, mob/user)
+/obj/item/mjollnir/attack(mob/living/M, mob/user)
 	..()
-	if(wielded)
-		//if(charged == 5)
-		//charged = 0
+	if(HAS_TRAIT(src, TRAIT_WIELDED))
 		playsound(loc, "sparks", 50, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
 		M.Stun(6 SECONDS)
 		shock(M)
 
-/obj/item/twohanded/mjollnir/throw_impact(atom/target)
+/obj/item/mjollnir/throw_impact(atom/target)
 	. = ..()
 	if(isliving(target))
 		var/mob/living/L = target
 		L.Stun(6 SECONDS)
 		shock(L)
 
-/obj/item/twohanded/mjollnir/update_icon_state()  //Currently only here to fuck with the on-mob icons.
-	icon_state = "mjollnir[wielded]"
+/obj/item/mjollnir/update_icon_state()  //Currently only here to fuck with the on-mob icons.
+	icon_state = "mjollnir0"
 
-/obj/item/twohanded/knighthammer
+/obj/item/knighthammer
 	name = "singuloth knight's hammer"
 	desc = "A hammer made of sturdy metal with a golden skull adorned with wings on either side of the head. <br>This weapon causes devastating damage to those it hits due to a power field sustained by a mini-singularity inside of the hammer."
 	icon_state = "knighthammer0"
+	base_icon_state = "knighthammer"
 	flags = CONDUCT
 	slot_flags = SLOT_BACK
 	force = 5
-	force_unwielded = 5
-	force_wielded = 30
 	throwforce = 15
 	throw_range = 1
 	w_class = WEIGHT_CLASS_HUGE
 	var/charged = 5
 	origin_tech = "combat=5;bluespace=4"
 
-/obj/item/twohanded/knighthammer/New()
-	..()
+/obj/item/knighthammer/Initialize(mapload)
+	. = ..()
 	START_PROCESSING(SSobj, src)
+	AddComponent(/datum/component/two_handed, \
+		force_wielded=30, \
+		force_unwielded=force, \
+		icon_wielded="[base_icon_state]1")
 
-/obj/item/twohanded/knighthammer/Destroy()
+/obj/item/knighthammer/Destroy()
 	STOP_PROCESSING(SSobj, src)
 	return ..()
 
-/obj/item/twohanded/knighthammer/process()
+/obj/item/knighthammer/process()
 	if(charged < 5)
 		charged++
 
-/obj/item/twohanded/knighthammer/update_icon_state()  //Currently only here to fuck with the on-mob icons.
-	icon_state = "knighthammer[wielded]"
+/obj/item/knighthammer/update_icon_state()  //Currently only here to fuck with the on-mob icons.
+	icon_state = "knighthammer0"
 
-/obj/item/twohanded/knighthammer/afterattack(atom/A, mob/user, proximity)
+/obj/item/knighthammer/afterattack(atom/A, mob/user, proximity)
 	if(!proximity)
 		return
 	if(charged == 5)
@@ -852,13 +861,13 @@
 				var/atom/throw_target = get_edge_target_turf(Z, get_dir(src, get_step_away(Z, src)))
 				Z.throw_at(throw_target, 200, 4)
 				playsound(user, 'sound/weapons/marauder.ogg', 50, 1)
-			else if(wielded && Z.health < 1)
+			else if(HAS_TRAIT(src, TRAIT_WIELDED) && Z.health < 1)
 				Z.visible_message("<span class='danger'>[Z.name] was blown to pieces by the power of [src]!</span>",
 					"<span class='userdanger'>You feel a powerful blow rip you apart!</span>",
 					"<span class='danger'>You hear a heavy impact and the sound of ripping flesh!.</span>")
 				Z.gib()
 				playsound(user, 'sound/weapons/marauder.ogg', 50, 1)
-		if(wielded)
+		if(HAS_TRAIT(src, TRAIT_WIELDED))
 			if(iswallturf(A))
 				var/turf/simulated/wall/Z = A
 				Z.ex_act(2)
