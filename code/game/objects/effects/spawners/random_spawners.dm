@@ -322,7 +322,7 @@
 		/obj/item/clothing/gloves/color/yellow/power = 1,
 		/obj/item/twohanded/chainsaw = 1,
 		/obj/item/bee_briefcase = 1,
-		/obj/item/twohanded/fireaxe/energized = 1,
+		/obj/item/fireaxe/energized = 1,
 		/obj/item/clothing/glasses/thermal = 1,
 		/obj/item/chameleon = 1,
 		/obj/item/reagent_containers/hypospray/autoinjector/stimulants = 1,

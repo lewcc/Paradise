@@ -785,7 +785,7 @@
 
 /datum/crafting_recipe/boneaxe
 	name = "Bone Axe"
-	result = list(/obj/item/twohanded/fireaxe/boneaxe)
+	result = list(/obj/item/fireaxe/boneaxe)
 	time = 50
 	reqs = list(/obj/item/stack/sheet/bone = 6,
 				/obj/item/stack/sheet/sinew = 3)

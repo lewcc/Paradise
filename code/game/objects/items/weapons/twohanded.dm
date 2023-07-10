@@ -185,7 +185,8 @@
 /*
  * Fireaxe
  */
-/obj/item/twohanded/fireaxe  // DEM AXES MAN, marker -Agouri
+/obj/item/fireaxe  // DEM AXES MAN, marker -Agouri
+	base_icon_state = "fireaxe"
 	icon_state = "fireaxe0"
 	name = "fire axe"
 	desc = "Truly, the weapon of a madman. Who would think to fight fire with an axe?"
@@ -194,8 +195,6 @@
 	sharp = TRUE
 	w_class = WEIGHT_CLASS_BULKY
 	slot_flags = SLOT_BACK
-	force_unwielded = 5
-	force_wielded = 24
 	toolspeed = 0.25
 	attack_verb = list("attacked", "chopped", "cleaved", "torn", "cut")
 	hitsound = 'sound/weapons/bladeslice.ogg'
@@ -204,32 +203,39 @@
 	armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, RAD = 0, FIRE = 100, ACID = 30)
 	resistance_flags = FIRE_PROOF
 
-/obj/item/twohanded/fireaxe/Initialize(mapload)
+	var/force_unwielded = 5
+	var/force_wielded = 24
+
+/obj/item/fireaxe/Initialize(mapload)
 	. = ..()
 	ADD_TRAIT(src, TRAIT_FORCES_OPEN_DOORS_ITEM, ROUNDSTART_TRAIT)
+	AddComponent(/datum/component/two_handed, force_unwielded=force_unwielded, force_wielded=force_wielded, icon_wielded="[base_icon_state]1")
 
-/obj/item/twohanded/fireaxe/update_icon_state()  //Currently only here to fuck with the on-mob icons.
-	icon_state = "fireaxe[wielded]"
+/obj/item/fireaxe/update_icon_state()  //Currently only here to fuck with the on-mob icons.
+	icon_state = "[base_icon_state]0"
+	return ..()
 
-/obj/item/twohanded/fireaxe/afterattack(atom/A, mob/user, proximity)
+/obj/item/fireaxe/afterattack(atom/A, mob/user, proximity)
 	if(!proximity)
 		return
-	if(wielded) //destroys windows and grilles in one hit
+	if(HAS_TRAIT(src, TRAIT_WIELDED)) //destroys windows and grilles in one hit
 		if(istype(A, /obj/structure/window) || istype(A, /obj/structure/grille))
 			var/obj/structure/W = A
 			W.obj_destruction("fireaxe")
 
-/obj/item/twohanded/fireaxe/boneaxe  // Blatant imitation of the fireaxe, but made out of bone.
+/obj/item/fireaxe/boneaxe  // Blatant imitation of the fireaxe, but made out of bone.
 	icon_state = "bone_axe0"
+	base_icon_state = "bone_axe"
 	name = "bone axe"
 	desc = "A large, vicious axe crafted out of several sharpened bone plates and crudely tied together. Made of monsters, by killing monsters, for killing monsters."
 	force_wielded = 23
 	needs_permit = TRUE
 
-/obj/item/twohanded/fireaxe/boneaxe/update_icon_state()
-	icon_state = "bone_axe[wielded]"
+/obj/item/fireaxe/boneaxe/Initialize(mapload)
+	. = ..()
+	AddComponent(/datum/component/two_handed, force_wielded=force_wielded, icon_wielded="[base_icon_state]1")
 
-/obj/item/twohanded/fireaxe/energized
+/obj/item/fireaxe/energized
 	desc = "Someone with a love for fire axes decided to turn this one into a high-powered energy weapon. Seems excessive."
 	force_wielded = 35
 	armour_penetration_flat = 10
@@ -237,26 +243,25 @@
 	var/charge = 20
 	var/max_charge = 20
 
-/obj/item/twohanded/fireaxe/energized/update_icon_state()
-	if(wielded)
-		icon_state = "fireaxe2"
-	else
-		icon_state = "fireaxe0"
+/obj/item/fireaxe/energized/Initialize(mapload)
+	. = ..()
+	// only update the new args
+	AddComponent(/datum/component/two_handed, force_wielded=force_wielded, icon_wielded="[base_icon_state]2")
 
-/obj/item/twohanded/fireaxe/energized/New()
+/obj/item/fireaxe/energized/New()
 	..()
 	START_PROCESSING(SSobj, src)
 
-/obj/item/twohanded/fireaxe/energized/Destroy()
+/obj/item/fireaxe/energized/Destroy()
 	STOP_PROCESSING(SSobj, src)
 	return ..()
 
-/obj/item/twohanded/fireaxe/energized/process()
+/obj/item/fireaxe/energized/process()
 	charge = min(charge + 1, max_charge)
 
-/obj/item/twohanded/fireaxe/energized/attack(mob/M, mob/user)
+/obj/item/fireaxe/energized/attack(mob/M, mob/user)
 	. = ..()
-	if(wielded && charge == max_charge)
+	if(HAS_TRAIT(src, TRAIT_WIELDED) && charge == max_charge)
 		if(isliving(M))
 			var/mob/living/target = M
 			charge = 0

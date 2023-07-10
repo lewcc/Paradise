@@ -398,7 +398,7 @@
 	id = /obj/item/card/id
 	l_pocket = /obj/item/reagent_containers/food/snacks/grown/banana
 	r_pocket = /obj/item/bikehorn
-	r_hand = /obj/item/twohanded/fireaxe
+	r_hand = /obj/item/fireaxe
 	backpack_contents = list(
 		/obj/item/storage/box/survival = 1,
 		/obj/item/flashlight = 1,
@@ -1087,7 +1087,7 @@
 	id = /obj/item/card/id/syndicate
 	l_pocket = /obj/item/kitchen/knife
 	r_pocket = /obj/item/scalpel
-	r_hand = /obj/item/twohanded/fireaxe
+	r_hand = /obj/item/fireaxe
 	backpack_contents = list(
 		/obj/item/storage/box/survival = 1,
 		/obj/item/flashlight = 1
