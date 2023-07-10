@@ -139,49 +139,6 @@
 	if(!QDELETED(src))
 		qdel(src)
 
-///////////Two hand required objects///////////////
-//This is for objects that require two hands to even pick up
-/obj/item/twohanded/required
-	w_class = WEIGHT_CLASS_HUGE
-
-/obj/item/twohanded/required/attack_self()
-	return
-
-/obj/item/twohanded/required/mob_can_equip(mob/M, slot)
-	if(wielded && !slot_flags)
-		to_chat(M, "<span class='warning'>[src] is too cumbersome to carry with anything but your hands!</span>")
-		return FALSE
-	return ..()
-
-/obj/item/twohanded/required/attack_hand(mob/user)//Can't even pick it up without both hands empty
-	var/obj/item/twohanded/required/H = user.get_inactive_hand()
-	if(get_dist(src, user) > 1)
-		return FALSE
-	if(H != null)
-		to_chat(user, "<span class='notice'>[src] is too cumbersome to carry in one hand!</span>")
-		return
-	if(loc != user)
-		wield(user)
-	..()
-
-/obj/item/twohanded/required/on_give(mob/living/carbon/giver, mob/living/carbon/receiver)
-	var/obj/item/twohanded/required/H = receiver.get_inactive_hand()
-	if(H != null) //Check if he can wield it
-		receiver.drop_item() //Can't wear it so drop it
-		to_chat(receiver, "<span class='notice'>[src] is too cumbersome to carry in one hand!</span>")
-		return
-	equipped(receiver,receiver.hand ? slot_l_hand : slot_r_hand)
-
-/obj/item/twohanded/required/equipped(mob/user, slot)
-	..()
-	if(slot == slot_l_hand || slot == slot_r_hand)
-		wield(user)
-		if(!wielded) // Drop immediately if we couldn't wield
-			user.unEquip(src)
-			to_chat(user, "<span class='notice'>[src] is too cumbersome to carry in one hand!</span>")
-	else
-		unwield(user)
-
 /*
  * Fireaxe
  */

@@ -148,7 +148,7 @@
 	amount = 25
 	max_amount = 25
 	resistance_flags = FLAMMABLE
-	var/static/list/no_wrap = list(/obj/item/smallDelivery, /obj/structure/bigDelivery, /obj/item/evidencebag, /obj/structure/closet/body_bag, /obj/item/twohanded/required)
+	var/static/list/no_wrap = list(/obj/item/smallDelivery, /obj/structure/bigDelivery, /obj/item/evidencebag, /obj/structure/closet/body_bag, /obj/item/gibtonite)
 
 /obj/item/stack/packageWrap/pre_attack(atom/A, mob/living/user, params)
 	. = ..()
