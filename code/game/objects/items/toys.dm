@@ -188,7 +188,7 @@
 			to_chat(user, "<span class='notice'>\the [flags & NODROP ? src : W] is stuck to your hand, you can't attach it to \the [flags & NODROP ? W : src]!</span>")
 		else
 			to_chat(user, "<span class='notice'>You attach the ends of the two plastic swords, making a single double-bladed toy! You're fake-cool.</span>")
-			new /obj/item/twohanded/dualsaber/toy(user.loc)
+			new /obj/item/dualsaber/toy(user.loc)
 			user.unEquip(W)
 			user.unEquip(src)
 			qdel(W)
@@ -197,7 +197,7 @@
 /*
  * Subtype of Double-Bladed Energy Swords
  */
-/obj/item/twohanded/dualsaber/toy
+/obj/item/dualsaber/toy
 	name = "double-bladed toy sword"
 	desc = "A cheap, plastic replica of TWO energy swords.  Double the fun!"
 	force = 0
@@ -212,11 +212,15 @@
 	sharp_when_wielded = FALSE // It's a toy
 	needs_permit = FALSE
 
-/obj/item/twohanded/dualsaber/toy/hit_reaction(mob/living/carbon/human/owner, atom/movable/hitby, attack_text = "the attack", final_block_chance = 0, damage = 0, attack_type = MELEE_ATTACK)
+/obj/item/dualsaber/toy/Initialize(mapload)
+	. = ..()
+	AddComponent(/datum/component/two_handed, force_wielded=force_wielded, force_unwielded=force_unwielded)
+
+/obj/item/dualsaber/toy/hit_reaction(mob/living/carbon/human/owner, atom/movable/hitby, attack_text = "the attack", final_block_chance = 0, damage = 0, attack_type = MELEE_ATTACK)
 	return 0
 
-/obj/item/twohanded/dualsaber/toy/IsReflect()
-	if(wielded)
+/obj/item/dualsaber/toy/IsReflect()
+	if(HAS_TRAIT(src, TRAIT_WIELDED))
 		return 2
 
 /obj/item/toy/katana

@@ -1146,7 +1146,7 @@
 	shoes = /obj/item/clothing/shoes/chameleon/noslip
 	l_ear = /obj/item/radio/headset/syndicate
 	id = /obj/item/card/id/syndicate
-	l_hand = /obj/item/twohanded/dualsaber/red
+	l_hand = /obj/item/dualsaber/red
 	backpack_contents = list(
 		/obj/item/storage/box/survival = 1,
 		/obj/item/flashlight = 1,

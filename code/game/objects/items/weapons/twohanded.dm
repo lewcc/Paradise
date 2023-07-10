@@ -275,9 +275,8 @@
 /*
  * Double-Bladed Energy Swords - Cheridan
  */
-/obj/item/twohanded/dualsaber
-	var/hacked = FALSE
-	var/blade_color
+/obj/item/dualsaber
+
 	icon_state = "dualsaber0"
 	name = "double-bladed energy sword"
 	desc = "Handle with care."
@@ -287,101 +286,109 @@
 	throw_range = 5
 	w_class = WEIGHT_CLASS_SMALL
 	var/w_class_on = WEIGHT_CLASS_BULKY
-	force_unwielded = 3
-	force_wielded = 34
-	wieldsound = 'sound/weapons/saberon.ogg'
-	unwieldsound = 'sound/weapons/saberoff.ogg'
-	armour_penetration_percentage = 50
+
 	armour_penetration_flat = 10
 	origin_tech = "magnets=4;syndicate=5"
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
-	sharp_when_wielded = TRUE // only sharp when wielded
 	max_integrity = 200
 	armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, RAD = 0, FIRE = 100, ACID = 70)
 	resistance_flags = FIRE_PROOF
 	light_power = 2
 	needs_permit = TRUE
+	var/hacked = FALSE
+	var/blade_color
 	var/brightness_on = 2
 	var/colormap = list(red=LIGHT_COLOR_RED, blue=LIGHT_COLOR_LIGHTBLUE, green=LIGHT_COLOR_GREEN, purple=LIGHT_COLOR_PURPLE, rainbow=LIGHT_COLOR_WHITE)
 
-/obj/item/twohanded/dualsaber/New()
+	var/sharp_when_wielded = TRUE
+
+
+	var/force_unwielded = 3
+	var/force_wielded = 34
+	var/wieldsound = 'sound/weapons/saberon.ogg'
+	var/unwieldsound = 'sound/weapons/saberoff.ogg'
+
+/obj/item/dualsaber/New()
 	..()
 	if(!blade_color)
 		blade_color = pick("red", "blue", "green", "purple")
 	AddComponent(/datum/component/parry, _stamina_constant = 2, _stamina_coefficient = 0.25, _parryable_attack_types = ALL_ATTACK_TYPES, _parry_cooldown = (1 / 3) SECONDS) // 0.3333 seconds of cooldown for 75% uptime
+	AddComponent(/datum/component/two_handed, force_wielded=force_wielded, force_unwielded=force_unwielded, wieldsound=wieldsound, unwieldsound=unwieldsound, wield_callback=CALLBACK(src, PROC_REF(on_wield)), unwield_callback=CALLBACK(src, PROC_REF(on_unwield)))
 
-/obj/item/twohanded/dualsaber/update_icon_state()
-	if(wielded)
-		icon_state = "dualsaber[blade_color][wielded]"
+/obj/item/dualsaber/update_icon_state()
+	if(HAS_TRAIT(src, TRAIT_WIELDED))
+		icon_state = "dualsaber[blade_color]1"
 		set_light(brightness_on, l_color=colormap[blade_color])
 	else
 		icon_state = "dualsaber0"
 		set_light(0)
 
-/obj/item/twohanded/dualsaber/attack(mob/target, mob/living/user)
+/obj/item/dualsaber/attack(mob/target, mob/living/user)
 	if(HAS_TRAIT(user, TRAIT_HULK))
-		to_chat(user, "<span class='warning'>You grip the blade too hard and accidentally close it!</span>")
-		unwield()
-		return
+		to_chat(user, "<span class='warning'>You grip the blade too hard and accidentally drop it!</span>")
+		if(HAS_TRAIT(src, TRAIT_WIELDED))
+			user.unEquip(src)
+			return
 	..()
-	if(HAS_TRAIT(user, TRAIT_CLUMSY) && (wielded) && prob(40))
+	if(HAS_TRAIT(user, TRAIT_CLUMSY) && HAS_TRAIT(src, TRAIT_WIELDED) && prob(40))
 		to_chat(user, "<span class='warning'>You twirl around a bit before losing your balance and impaling yourself on [src].</span>")
 		user.take_organ_damage(20, 25)
 		return
-	if((wielded) && prob(50))
+	if((HAS_TRAIT(src, TRAIT_WIELDED)) && prob(50))
 		INVOKE_ASYNC(src, PROC_REF(jedi_spin), user)
 
-/obj/item/twohanded/dualsaber/proc/jedi_spin(mob/living/user)
+/obj/item/dualsaber/proc/jedi_spin(mob/living/user)
 	for(var/i in list(NORTH, SOUTH, EAST, WEST, EAST, SOUTH, NORTH, SOUTH, EAST, WEST, EAST, SOUTH))
 		user.setDir(i)
 		if(i == WEST)
 			user.SpinAnimation(7, 1)
 		sleep(1)
 
-/obj/item/twohanded/dualsaber/hit_reaction(mob/living/carbon/human/owner, atom/movable/hitby, attack_text = "the attack", final_block_chance = 0, damage = 0, attack_type = MELEE_ATTACK)
-	if(wielded)
+/obj/item/dualsaber/hit_reaction(mob/living/carbon/human/owner, atom/movable/hitby, attack_text = "the attack", final_block_chance = 0, damage = 0, attack_type = MELEE_ATTACK)
+	if(HAS_TRAIT(src, TRAIT_WIELDED))
 		return ..()
 	return FALSE
 
-/obj/item/twohanded/dualsaber/attack_hulk(mob/living/carbon/human/user, does_attack_animation = FALSE)  //In case thats just so happens that it is still activated on the groud, prevents hulk from picking it up
-	if(wielded)
+/obj/item/dualsaber/attack_hulk(mob/living/carbon/human/user, does_attack_animation = FALSE)  //In case thats just so happens that it is still activated on the groud, prevents hulk from picking it up
+	if(HAS_TRAIT(src, TRAIT_WIELDED))
 		to_chat(user, "<span class='warning'>You can't pick up such a dangerous item with your meaty hands without losing fingers, better not to!</span>")
 		return TRUE
 
-/obj/item/twohanded/dualsaber/green
+/obj/item/dualsaber/green
 	blade_color = "green"
 
-/obj/item/twohanded/dualsaber/red
+/obj/item/dualsaber/red
 	blade_color = "red"
 
-/obj/item/twohanded/dualsaber/purple
+/obj/item/dualsaber/purple
 	blade_color = "purple"
 
-/obj/item/twohanded/dualsaber/blue
+/obj/item/dualsaber/blue
 	blade_color = "blue"
 
-/obj/item/twohanded/dualsaber/unwield()
-	. = ..()
-	if(!.)
-		return
-	hitsound = "swing_hit"
-	w_class = initial(w_class)
 
-/obj/item/twohanded/dualsaber/IsReflect()
-	if(wielded)
-		return TRUE
+/obj/item/dualsaber/proc/on_wield(obj/item/source, mob/living/carbon/user)
+	if(user && HAS_TRAIT(user, TRAIT_HULK))
+		to_chat(user, "<span class='warning'>You lack the grace to wield this!</span>")
+		return COMPONENT_TWOHANDED_BLOCK_WIELD
 
-/obj/item/twohanded/dualsaber/wield(mob/living/carbon/M) //Specific wield () hulk checks due to reflection chance for balance issues and switches hitsounds.
-	if(HAS_TRAIT(M, TRAIT_HULK))
-		to_chat(M, "<span class='warning'>You lack the grace to wield this!</span>")
-		return
-	. = ..()
-	if(!.)
-		return
 	hitsound = 'sound/weapons/blade1.ogg'
 	w_class = w_class_on
+	if(sharp_when_wielded)
+		set_sharpness(TRUE)
 
-/obj/item/twohanded/dualsaber/multitool_act(mob/user, obj/item/I)
+
+/obj/item/dualsaber/proc/on_unwield()
+	hitsound = "swing_hit"
+	w_class = initial(w_class)
+	if(sharp_when_wielded)
+		set_sharpness(FALSE)
+
+/obj/item/dualsaber/IsReflect()
+	if(HAS_TRAIT(src, TRAIT_WIELDED))
+		return TRUE
+
+/obj/item/dualsaber/multitool_act(mob/user, obj/item/I)
 	. = TRUE
 	if(!I.use_tool(src, user, 0, volume = I.tool_volume))
 		return
