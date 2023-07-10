@@ -308,8 +308,8 @@
 	var/wieldsound = 'sound/weapons/saberon.ogg'
 	var/unwieldsound = 'sound/weapons/saberoff.ogg'
 
-/obj/item/dualsaber/New()
-	..()
+/obj/item/dualsaber/Initialize(mapload)
+	. = ..()
 	if(!blade_color)
 		blade_color = pick("red", "blue", "green", "purple")
 	AddComponent(/datum/component/parry, _stamina_constant = 2, _stamina_coefficient = 0.25, _parryable_attack_types = ALL_ATTACK_TYPES, _parry_cooldown = (1 / 3) SECONDS) // 0.3333 seconds of cooldown for 75% uptime
@@ -880,13 +880,12 @@
 				playsound(user, 'sound/weapons/marauder.ogg', 50, 1)
 
 // PYRO CLAWS
-/obj/item/twohanded/required/pyro_claws
+/obj/item/pyro_claws
 	name = "hardplasma energy claws"
 	desc = "The power of the sun, in the claws of your hand."
 	icon_state = "pyro_claws"
 	flags = ABSTRACT | NODROP | DROPDEL
 	force = 22
-	force_wielded = 22
 	damtype = BURN
 	armour_penetration_percentage = 50
 	sharp = TRUE
@@ -897,16 +896,17 @@
 	toolspeed = 0.5
 	var/lifetime = 60 SECONDS
 
-/obj/item/twohanded/required/pyro_claws/Initialize(mapload)
+/obj/item/pyro_claws/Initialize(mapload)
 	. = ..()
 	START_PROCESSING(SSobj, src)
 	AddComponent(/datum/component/parry, _stamina_constant = 2, _stamina_coefficient = 0.5, _parryable_attack_types = ALL_ATTACK_TYPES)
+	AddComponent(/datum/component/two_handed, require_twohands=TRUE)
 
-/obj/item/twohanded/required/pyro_claws/Destroy()
+/obj/item/pyro_claws/Destroy()
 	STOP_PROCESSING(SSobj, src)
 	return ..()
 
-/obj/item/twohanded/required/pyro_claws/process()
+/obj/item/pyro_claws/process()
 	lifetime -= 2 SECONDS
 	if(lifetime <= 0)
 		visible_message("<span class='warning'>[src] slides back into the depths of [loc]'s wrists.</span>")
@@ -916,7 +916,7 @@
 	if(prob(15))
 		do_sparks(rand(1,6), 1, loc)
 
-/obj/item/twohanded/required/pyro_claws/afterattack(atom/target, mob/user, proximity)
+/obj/item/pyro_claws/afterattack(atom/target, mob/user, proximity)
 	if(!proximity)
 		return
 	if(prob(60))
@@ -977,7 +977,7 @@
 	if(!user.drop_l_hand() || !user.drop_r_hand())
 		to_chat(user, "<span class='notice'>[src] are unable to deploy the blades with the items in your hands!</span>")
 		return
-	var/obj/item/W = new /obj/item/twohanded/required/pyro_claws
+	var/obj/item/W = new /obj/item/pyro_claws
 	user.visible_message("<span class='warning'>[user] deploys [W] from [user.p_their()] wrists in a shower of sparks!</span>", "<span class='notice'>You deploy [W] from your wrists!</span>", "<span class='warning'>You hear the shower of sparks!</span>")
 	user.put_in_hands(W)
 	on_cooldown = TRUE
@@ -1007,11 +1007,12 @@
 /// Max number of atoms a broom can sweep at once
 #define BROOM_PUSH_LIMIT 20
 
-/obj/item/twohanded/push_broom
+/obj/item/push_broom
 	name = "push broom"
 	desc = "This is my BROOMSTICK! It can be used manually or braced with two hands to sweep items as you move. It has a telescopic handle for compact storage."
 	icon = 'icons/obj/janitor.dmi'
-	icon_state = "broom0"
+	icon_state = "broom"
+	base_icon_state = "broom"
 	lefthand_file = 'icons/mob/inhands/equipment/custodial_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/equipment/custodial_righthand.dmi'
 	force = 8
@@ -1019,32 +1020,39 @@
 	throw_speed = 3
 	throw_range = 7
 	w_class = WEIGHT_CLASS_NORMAL
-	force_unwielded = 8
-	force_wielded = 12
 	attack_verb = list("swept", "brushed off", "bludgeoned", "whacked")
 	resistance_flags = FLAMMABLE
 
-/obj/item/twohanded/push_broom/update_icon_state()
-	icon_state = "broom[wielded]"
+/obj/item/push_broom/Initialize(mapload)
+	. = ..()
+	AddComponent(/datum/component/two_handed, \
+		force_wielded=12, \
+		force_unwielded=force, \
+		icon_wielded="[base_icon_state]1", \
+		wield_callback=CALLBACK(src, PROC_REF(wield)), \
+		unwield_callback=CALLBACK(src, PROC_REF(unwield)))
 
-/obj/item/twohanded/push_broom/wield(mob/user)
+/obj/item/push_broom/update_icon_state()
+	icon_state = "broom0"
+
+/obj/item/push_broom/proc/wield(obj/item/source, mob/user)
 	. = ..()
 	if(!.)
 		return
 	to_chat(user, "<span class='notice'>You brace [src] against the ground in a firm sweeping stance.</span>")
 	RegisterSignal(user, COMSIG_MOVABLE_MOVED, PROC_REF(sweep))
 
-/obj/item/twohanded/push_broom/unwield(mob/user)
+/obj/item/push_broom/proc/unwield(obj/item/source, mob/user)
 	. = ..()
 	UnregisterSignal(user, COMSIG_MOVABLE_MOVED)
 
-/obj/item/twohanded/push_broom/afterattack(atom/A, mob/user, proximity)
+/obj/item/push_broom/afterattack(atom/A, mob/user, proximity)
 	. = ..()
 	if(!proximity)
 		return
 	sweep(user, A, FALSE)
 
-/obj/item/twohanded/push_broom/proc/sweep(mob/user, atom/A, moving = TRUE)
+/obj/item/push_broom/proc/sweep(mob/user, atom/A, moving = TRUE)
 	SIGNAL_HANDLER
 	var/turf/current_item_loc = moving ? user.loc : (isturf(A) ? A : A.loc)
 	if(!isturf(current_item_loc))
@@ -1070,12 +1078,12 @@
 	if(trash_amount > 1)
 		playsound(loc, 'sound/weapons/sweeping.ogg', 70, TRUE, -1)
 
-/obj/item/twohanded/push_broom/proc/move_into_storage(mob/user, obj/storage, obj/trash)
+/obj/item/push_broom/proc/move_into_storage(mob/user, obj/storage, obj/trash)
 	trash.forceMove(storage)
 	storage.update_icon()
 	to_chat(user, "<span class='notice'>You sweep the pile of garbage into [storage].</span>")
 
-/obj/item/twohanded/push_broom/proc/janicart_insert(mob/user, obj/structure/janitorialcart/cart)
+/obj/item/push_broom/proc/janicart_insert(mob/user, obj/structure/janitorialcart/cart)
 	cart.mybroom = src
 	cart.put_in_cart(src, user)
 
