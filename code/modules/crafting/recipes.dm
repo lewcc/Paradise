@@ -450,7 +450,7 @@
 
 /datum/crafting_recipe/spear
 	name = "Spear"
-	result = list(/obj/item/twohanded/spear)
+	result = list(/obj/item/spear)
 	reqs = list(/obj/item/restraints/handcuffs/cable = 1,
 				/obj/item/shard = 1,
 				/obj/item/stack/rods = 1)
@@ -761,7 +761,7 @@
 
 /datum/crafting_recipe/bonespear
 	name = "Bone Spear"
-	result = list(/obj/item/twohanded/spear/bonespear)
+	result = list(/obj/item/spear/bonespear)
 	time = 30
 	reqs = list(/obj/item/stack/sheet/bone = 4,
 				/obj/item/stack/sheet/sinew = 1)

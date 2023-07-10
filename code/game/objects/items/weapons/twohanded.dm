@@ -401,15 +401,15 @@
 		to_chat(user, "<span class='warning'>It's starting to look like a triple rainbow - no, nevermind.</span>")
 
 //spears
-/obj/item/twohanded/spear
+/obj/item/spear
 	icon_state = "spearglass0"
 	name = "spear"
 	desc = "A haphazardly-constructed yet still deadly weapon of ancient design."
 	force = 10
 	w_class = WEIGHT_CLASS_BULKY
 	slot_flags = SLOT_BACK
-	force_unwielded = 10
-	force_wielded = 18
+	var/force_unwielded = 10
+	var/force_wielded = 18
 	throwforce = 20
 	throw_speed = 4
 	armour_penetration_flat = 5
@@ -422,40 +422,60 @@
 	max_integrity = 200
 	armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, RAD = 0, FIRE = 50, ACID = 30)
 	needs_permit = TRUE
-	var/icon_prefix = "spearglass"
+	base_icon_state = "spearglass"
 
-/obj/item/twohanded/spear/update_icon_state()
-	icon_state = "[icon_prefix][wielded]"
+/obj/item/spear/Initialize(mapload)
+	. = ..()
+	AddComponent(/datum/component/two_handed, \
+		force_wielded=force_wielded, \
+		force_unwielded=force_unwielded, \
+		icon_wielded="[base_icon_state]1")
 
-/obj/item/twohanded/spear/CheckParts(list/parts_list)
+/obj/item/spear/update_icon_state()
+	icon_state = "[base_icon_state]0"
+
+/obj/item/spear/proc/add_plasmaglass()
+	// re-add the component to reset the stats
+	force_wielded = 19
+	force_unwielded = 11
+	throwforce = 21
+	base_icon_state = "spearplasma"
+	AddComponent(/datum/component/two_handed, \
+		force_wielded=force_wielded, \
+		force_unwielded=force_unwielded, \
+		icon_wielded="[base_icon_state]1")
+
+	update_icon()
+
+/obj/item/spear/CheckParts(list/parts_list)
 	var/obj/item/shard/tip = locate() in parts_list
 	if(istype(tip, /obj/item/shard/plasma))
-		force_wielded = 19
-		force_unwielded = 11
-		throwforce = 21
-		icon_prefix = "spearplasma"
+		// re-add the component to reset the stats
+		add_plasmaglass()
+
 	update_icon()
 	qdel(tip)
 	..()
 
 
-/obj/item/twohanded/spear/afterattack(atom/movable/AM, mob/user, proximity)
+/obj/item/spear/afterattack(atom/movable/AM, mob/user, proximity)
 	if(!proximity)
 		return
 	if(isturf(AM)) //So you can actually melee with it
 		return
-	if(explosive && wielded)
+	if(explosive && HAS_TRAIT(src, TRAIT_WIELDED))
 		explosive.forceMove(AM)
 		explosive.prime()
 		qdel(src)
 
-/obj/item/twohanded/spear/throw_impact(atom/target)
+/obj/item/spear/throw_impact(atom/target)
 	. = ..()
 	if(explosive)
 		explosive.prime()
 		qdel(src)
 
-/obj/item/twohanded/spear/bonespear	//Blatant imitation of spear, but made out of bone. Not valid for explosive modification.
+/obj/item/spear/bonespear	//Blatant imitation of spear, but made out of bone. Not valid for explosive modification.
+	base_icon_state = "bone_spear"
 	icon_state = "bone_spear0"
 	name = "bone spear"
 	desc = "A haphazardly-constructed yet still deadly weapon. The pinnacle of modern technology."
@@ -464,10 +484,11 @@
 	force_wielded = 20					//I have no idea how to balance
 	throwforce = 22
 	armour_penetration_percentage = 15				//Enhanced armor piercing
-	icon_prefix = "bone_spear"
+
 
 //GREY TIDE
-/obj/item/twohanded/spear/grey_tide
+/obj/item/spear/grey_tide
+	base_icon_state = "spearglass"
 	icon_state = "spearglass0"
 	name = "\improper Grey Tide"
 	desc = "Recovered from the aftermath of a revolt aboard Defense Outpost Theta Aegis, in which a seemingly endless tide of Assistants caused heavy casualities among Nanotrasen military forces."
@@ -477,7 +498,7 @@
 	throw_speed = 4
 	attack_verb = list("gored")
 
-/obj/item/twohanded/spear/grey_tide/afterattack(atom/movable/AM, mob/living/user, proximity)
+/obj/item/spear/grey_tide/afterattack(atom/movable/AM, mob/living/user, proximity)
 	..()
 	if(!proximity)
 		return
@@ -494,7 +515,7 @@
 			M.GiveTarget(L)
 
 //Putting heads on spears
-/obj/item/twohanded/spear/attackby(obj/item/I, mob/living/user)
+/obj/item/spear/attackby(obj/item/I, mob/living/user)
 	if(istype(I, /obj/item/organ/external/head))
 		if(user.unEquip(src) && user.drop_item())
 			to_chat(user, "<span class='notice'>You stick [I] onto the spear and stand it upright on the ground.</span>")
@@ -518,7 +539,7 @@
 	density = FALSE
 	anchored = TRUE
 	var/obj/item/organ/external/head/mounted_head = null
-	var/obj/item/twohanded/spear/contained_spear = null
+	var/obj/item/spear/contained_spear = null
 
 /obj/structure/headspear/Destroy()
 	QDEL_NULL(mounted_head)
@@ -537,7 +558,8 @@
 		mounted_head = null
 	qdel(src)
 
-/obj/item/twohanded/spear/kidan
+/obj/item/spear/kidan
+	base_icon_state = "kindanspear"
 	icon_state = "kidanspear0"
 	name = "\improper Kidan spear"
 	desc = "A spear brought over from the Kidan homeworld."

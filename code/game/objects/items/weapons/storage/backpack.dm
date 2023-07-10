@@ -633,7 +633,7 @@
 			new /obj/item/claymore(src)
 			value += 2 //force 40 this is value 2
 		if(7)
-			new /obj/item/twohanded/spear/grey_tide(src)
+			new /obj/item/spear/grey_tide(src)
 			value += 2 //Value 2, clones are strong
 		if(8)
 			if(prob(50))
