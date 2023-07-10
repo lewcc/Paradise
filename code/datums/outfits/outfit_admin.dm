@@ -1221,7 +1221,7 @@
 	l_ear = /obj/item/radio/headset
 	id = /obj/item/card/id
 	r_pocket = /obj/item/teleportation_scroll
-	l_hand = /obj/item/twohanded/staff
+	l_hand = /obj/item/staff
 	r_hand = /obj/item/spellbook
 	backpack_contents = list(
 		/obj/item/storage/box/engineer = 1

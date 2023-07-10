@@ -509,7 +509,7 @@
 
 /datum/crafting_recipe/garrote
 	name = "Makeshift Garrote"
-	result = list(/obj/item/twohanded/garrote/improvised)
+	result = list(/obj/item/garrote/improvised)
 	time = 15
 	reqs = list(/obj/item/stack/sheet/wood = 1,
 				/obj/item/stack/cable_coil = 5)

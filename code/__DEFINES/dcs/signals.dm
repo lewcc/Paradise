@@ -483,6 +483,9 @@
 #define COMSIG_CARBON_THROWN_ITEM_CAUGHT "carbon_thrown_item_caught"
 /// From /mob/living/carbon/flash_eyes()
 #define COMSIG_CARBON_FLASH_EYES "carbon_flash_eyes"
+/// From /mob/living/carbon/update_handcuffed()
+#define COMSIG_CARBON_UPDATE_HANDCUFFED "carbon_update_handcuff"
+/// Sent from things that are generally wielded to unwield
 
 
 // /mob/living/simple_animal/hostile signals

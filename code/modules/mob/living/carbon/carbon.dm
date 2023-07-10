@@ -1008,13 +1008,8 @@ GLOBAL_LIST_INIT(ventcrawl_machinery, list(/obj/machinery/atmospherics/unary/ven
 
 //called when we get cuffed/uncuffed
 /mob/living/carbon/proc/update_handcuffed()
+	SEND_SIGNAL(src, COMSIG_CARBON_UPDATE_HANDCUFFED, handcuffed)
 	if(handcuffed)
-		//we don't want problems with nodrop shit if there ever is more than one nodrop twohanded
-		var/obj/item/I = get_active_hand()
-		if(istype(I, /obj/item/twohanded))
-			var/obj/item/twohanded/TH = I //FML
-			if(TH.wielded)
-				TH.unwield()
 		drop_r_hand()
 		drop_l_hand()
 		stop_pulling()

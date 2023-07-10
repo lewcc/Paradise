@@ -10,3 +10,8 @@
 /obj/item/twohanded/mjollnir : /obj/item/mjollnir
 /obj/item/twohanded/knighthammer : /obj/item/knighthammer
 /obj/item/twohanded/required/golden_record : /obj/item/golden_record
+/obj/item/twohanded/rcl : /obj/item/rcl
+/obj/item/twohanded/staff/@SUBTYPES : /obj/item/staff/@SUBTYPES
+/obj/item/twohanded/garrote/@SUBTYPES : /obj/item/garrote/@SUBTYPES
+/obj/item/twohanded/bostaff : /obj/item/bostaff
+/obj/item/twohanded/kinetic_crusher : /obj/item/kinetic_crusher

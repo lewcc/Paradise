@@ -361,6 +361,11 @@
 		I.force += sharpened_increase
 	return  // don't return the "sharpened applied" signal since we probably wanna sharpen the base form too
 
+/datum/component/two_handed/proc/on_handcuff_user(mob/user, handcuff_status)
+	SIGNAL_HANDLER
+	if(handcuff_status)
+		INVOKE_ASYNC(src, PROC_REF(unwield), user)
+
 /**
  * The offhand dummy item for two handed items
  *
