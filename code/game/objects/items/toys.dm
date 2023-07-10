@@ -1112,9 +1112,14 @@
 	wieldsound = 'sound/weapons/chainsawstart.ogg'
 	attack_verb = list("sawed", "cut", "hacked", "carved", "cleaved", "butchered", "felled", "timbered")
 
+/obj/item/toy/chainsaw/Initialize(mapload)
+	. = ..()
+	AddComponent(/datum/component/two_handed)
+
+
 /obj/item/twohanded/toy/chainsaw/update_icon_state()
 	if(wielded)
-		icon_state = "chainsaw[wielded]"
+		icon_state = "chainsaw1"
 	else
 		icon_state = "chainsaw0"
 
