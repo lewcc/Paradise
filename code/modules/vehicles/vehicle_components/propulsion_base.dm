@@ -2,6 +2,7 @@
 	name = "propulsion"
 	var/turning_radius
 	var/acceleration
+	var/spaceworthy
 
 /obj/vehicle_part/propulsion/proc/get_turning_radius()
 	return 1

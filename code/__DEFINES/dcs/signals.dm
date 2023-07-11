@@ -582,6 +582,17 @@
 /// Called when a defib's cooldown has run its course and it is once again ready. ()
 #define COMSIG_DEFIB_READY "defib_ready"
 
+// Vehicle-specific signals
+/// Called when someone is trying to create controls for a vehicle
+#define COMSIG_VEHICLE_GET_CONTROLS "vehicle_get_controls"
+	/// Someone else holds the handlebars.
+	#define COMPONENT_BLOCK_VEHICLE_CONTROLS_IN_USE (1<<0)
+	/// Invalid for some other reason
+	#define COMPONENT_BLOCK_VEHICLE_CONTROLS_INVALID (1<<1)
+/// Called when someone's grip on their controls changes
+#define COMSIG_VEHICLE_GRIP_CHANGE "vehicle_grip_change"
+
+
 // /obj/item signals for economy
 ///called when an item is sold by the exports subsystem
 #define COMSIG_ITEM_SOLD "item_sold"
