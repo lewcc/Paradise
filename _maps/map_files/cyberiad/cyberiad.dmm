@@ -13026,7 +13026,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint)
 "aJO" = (
-/obj/item/twohanded/garrote/improvised,
+/obj/item/garrote/improvised,
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint)
 "aJP" = (
@@ -76540,7 +76540,7 @@
 /area/maintenance/aft)
 "mba" = (
 /obj/effect/decal/cleanable/blood/splatter,
-/obj/item/twohanded/garrote/improvised,
+/obj/item/garrote/improvised,
 /turf/simulated/floor/plating,
 /area/maintenance/aft)
 "mcw" = (

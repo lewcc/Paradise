@@ -16865,7 +16865,7 @@
 /area/hallway/primary/fore)
 "aXB" = (
 /obj/structure/table/wood,
-/obj/item/twohanded/staff/broom,
+/obj/item/staff/broom,
 /obj/item/clothing/head/witchwig,
 /obj/machinery/newscaster{
 	dir = 4;

@@ -80588,7 +80588,7 @@
 /obj/structure/sign/poster/random{
 	pixel_y = 32
 	},
-/obj/item/twohanded/staff/broom,
+/obj/item/staff/broom,
 /obj/item/wrench,
 /obj/machinery/alarm{
 	dir = 8;
