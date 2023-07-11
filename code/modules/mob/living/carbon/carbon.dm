@@ -621,8 +621,8 @@ GLOBAL_LIST_INIT(ventcrawl_machinery, list(/obj/machinery/atmospherics/unary/ven
 	hit_atom.hit_by_thrown_carbon(src, throwingdatum, damage, FALSE, FALSE)
 
 /mob/living/carbon/hit_by_thrown_carbon(mob/living/carbon/human/C, datum/thrownthing/throwingdatum, damage, mob_hurt, self_hurt)
-	for(var/obj/item/twohanded/dualsaber/D in contents)
-		if(D.wielded && D.force)
+	for(var/obj/item/dualsaber/D in contents)
+		if(HAS_TRAIT(src, TRAIT_WIELDED) && D.force)
 			visible_message("<span class='danger'>[src] impales [C] with [D], before dropping them on the ground!</span>")
 			C.apply_damage(100, BRUTE, "chest", sharp = TRUE, used_weapon = "Impaled on [D].")
 			C.Stun(2 SECONDS) //Punishment. This could also be used by a traitor to throw someone into a dsword to kill them, but hey, teamwork!
