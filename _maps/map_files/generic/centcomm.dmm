@@ -7122,7 +7122,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/structure/table/wood,
-/obj/item/twohanded/bostaff,
+/obj/item/bostaff
 /turf/simulated/floor/plasteel/dark,
 /area/admin)
 "Br" = (

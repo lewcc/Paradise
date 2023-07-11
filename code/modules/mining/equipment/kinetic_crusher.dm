@@ -1,6 +1,7 @@
 /*********************Mining Hammer****************/
-/obj/item/twohanded/kinetic_crusher
+/obj/item/kinetic_crusher
 	icon = 'icons/obj/mining.dmi'
+	base_icon_state = "crusher"
 	icon_state = "crusher"
 	item_state = "crusher0"
 	name = "proto-kinetic crusher"
@@ -10,7 +11,6 @@
 	w_class = WEIGHT_CLASS_BULKY
 	slot_flags = SLOT_BACK
 	force_unwielded = 0
-	force_wielded = 20
 	throwforce = 5
 	throw_speed = 4
 	armour_penetration_flat = 10
@@ -27,16 +27,22 @@
 	var/light_on = FALSE
 	var/brightness_on = 5
 	var/adaptive_damage_bonus = 0
+	/// Amount of force typically assigned when wielded
+	var/base_force_wielded = 20
+	/// Tracker for the current amount of force used when the item is wielded.
+	/// Note that this isn't wired to anything, and must be updated with AddComponent to have value.
+	var/force_wielded = 20
 
-/obj/item/twohanded/kinetic_crusher/Initialize(mapload)
+/obj/item/kinetic_crusher/Initialize(mapload)
 	. = ..()
 	AddComponent(/datum/component/parry, _stamina_constant = 2, _stamina_coefficient = 0.7, _parryable_attack_types = MELEE_ATTACK, _parry_cooldown = (7 / 3) SECONDS ) // 2.3333 seconds of cooldown for 30% uptime
+	AddComponent(/datum/component/two_handed, force_wielded=force_wielded, force_unwielded=force)
 
-/obj/item/twohanded/kinetic_crusher/Destroy()
+/obj/item/kinetic_crusher/Destroy()
 	QDEL_LIST_CONTENTS(trophies)
 	return ..()
 
-/obj/item/twohanded/kinetic_crusher/examine(mob/living/user)
+/obj/item/kinetic_crusher/examine(mob/living/user)
 	. = ..()
 	. += "<span class='notice'>Mark a large creature with the destabilizing force, then hit them in melee to do <b>[force + detonation_damage]</b> damage.</span>"
 	. += "<span class='notice'>Does <b>[force + detonation_damage + backstab_bonus]</b> damage if the target is backstabbed, instead of <b>[force + detonation_damage]</b>.</span>"
@@ -44,14 +50,14 @@
 		var/obj/item/crusher_trophy/T = t
 		. += "<span class='notice'>It has \a [T] attached, which causes [T.effect_desc()].</span>"
 
-/obj/item/twohanded/kinetic_crusher/attackby(obj/item/I, mob/living/user)
+/obj/item/kinetic_crusher/attackby(obj/item/I, mob/living/user)
 	if(istype(I, /obj/item/crusher_trophy))
 		var/obj/item/crusher_trophy/T = I
 		T.add_to(src, user)
 	else
 		return ..()
 
-/obj/item/twohanded/kinetic_crusher/crowbar_act(mob/user, obj/item/I)
+/obj/item/kinetic_crusher/crowbar_act(mob/user, obj/item/I)
 	. = TRUE
 	if(!I.use_tool(src, user, 0, volume = I.tool_volume))
 		return
@@ -63,7 +69,7 @@
 	else
 		to_chat(user, "<span class='warning'>There are no trophies on [src].</span>")
 
-/obj/item/twohanded/kinetic_crusher/attack(mob/living/target, mob/living/carbon/user)
+/obj/item/kinetic_crusher/attack(mob/living/target, mob/living/carbon/user)
 	if(!wielded)
 		to_chat(user, "<span class='warning'>[src] is too heavy to use with one hand. You fumble and drop everything.")
 		user.drop_r_hand()
@@ -90,7 +96,7 @@
 	if(!QDELETED(C) && !QDELETED(target))
 		C.total_damage += target_health - target.health //we did some damage, but let's not assume how much we did
 
-/obj/item/twohanded/kinetic_crusher/afterattack(atom/target, mob/living/user, proximity_flag, clickparams)
+/obj/item/kinetic_crusher/afterattack(atom/target, mob/living/user, proximity_flag, clickparams)
 	. = ..()
 	if(!wielded)
 		return
@@ -148,28 +154,28 @@
 					C.total_damage += detonation_damage
 				L.apply_damage(detonation_damage, BRUTE, blocked = def_check)
 
-/obj/item/twohanded/kinetic_crusher/proc/Recharge()
+/obj/item/kinetic_crusher/proc/Recharge()
 	if(!charged)
 		charged = TRUE
 		update_icon()
 		playsound(src.loc, 'sound/weapons/kenetic_reload.ogg', 60, 1)
 
-/obj/item/twohanded/kinetic_crusher/ui_action_click(mob/user, actiontype)
+/obj/item/kinetic_crusher/ui_action_click(mob/user, actiontype)
 	light_on = !light_on
 	playsound(user, 'sound/weapons/empty.ogg', 100, TRUE)
 	update_brightness(user)
 	update_icon()
 
-/obj/item/twohanded/kinetic_crusher/proc/update_brightness(mob/user = null)
+/obj/item/kinetic_crusher/proc/update_brightness(mob/user = null)
 	if(light_on)
 		set_light(brightness_on)
 	else
 		set_light(0)
 
-/obj/item/twohanded/kinetic_crusher/update_icon_state()
-	item_state = "crusher[wielded]"
+/obj/item/kinetic_crusher/update_icon_state()
+	item_state = "crusher[HAS_TRAIT(src, TRAIT_WIELDED)]"
 
-/obj/item/twohanded/kinetic_crusher/update_overlays()
+/obj/item/kinetic_crusher/update_overlays()
 	. = ..()
 	if(!charged)
 		. += "[icon_state]_uncharged"
@@ -190,7 +196,7 @@
 	flag = BOMB
 	range = 6
 	log_override = TRUE
-	var/obj/item/twohanded/kinetic_crusher/hammer_synced
+	var/obj/item/kinetic_crusher/hammer_synced
 
 /obj/item/projectile/destabilizer/Destroy()
 	hammer_synced = null
@@ -232,7 +238,7 @@
 	return "errors"
 
 /obj/item/crusher_trophy/attackby(obj/item/A, mob/living/user)
-	if(istype(A, /obj/item/twohanded/kinetic_crusher))
+	if(istype(A, /obj/item/kinetic_crusher))
 		add_to(A, user)
 	else
 		..()
@@ -256,8 +262,8 @@
 	return TRUE
 
 /obj/item/crusher_trophy/Destroy()
-	if(istype(loc, /obj/item/twohanded/kinetic_crusher))
-		var/obj/item/twohanded/kinetic_crusher/crusher = loc
+	if(istype(loc, /obj/item/kinetic_crusher))
+		var/obj/item/kinetic_crusher/crusher = loc
 		crusher.trophies -= src
 	return ..()
 
@@ -429,16 +435,17 @@
 	. = ..()
 	if(.)
 		H.force += bonus_value * 0.2
-		H.force_unwielded += bonus_value * 0.2
 		H.force_wielded += bonus_value * 0.2
+		// don't update force since KCs have 0 force by default
+		AddComponent(/datum/component/two_handed, force_wielded = H.force_wielded, force_unwielded = H.force)
 		H.detonation_damage += bonus_value * 0.8
 
 /obj/item/crusher_trophy/demon_claws/remove_from(obj/item/twohanded/kinetic_crusher/H, mob/living/user)
 	. = ..()
 	if(.)
 		H.force -= bonus_value * 0.2
-		H.force_unwielded -= bonus_value * 0.2
 		H.force_wielded -= bonus_value * 0.2
+		AddComponent(/datum/component/two_handed, force_wielded = H.force_wielded, force_unwielded = H.force)
 		H.detonation_damage -= bonus_value * 0.8
 
 /obj/item/crusher_trophy/demon_claws/on_melee_hit(mob/living/target, mob/living/user)

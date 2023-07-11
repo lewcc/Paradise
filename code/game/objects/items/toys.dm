@@ -204,8 +204,6 @@
 	throwforce = 0
 	throw_speed = 3
 	throw_range = 5
-	force_unwielded = 0
-	force_wielded = 0
 	origin_tech = null
 	attack_verb = list("attacked", "struck", "hit")
 	brightness_on = 0
@@ -214,7 +212,7 @@
 
 /obj/item/dualsaber/toy/Initialize(mapload)
 	. = ..()
-	AddComponent(/datum/component/two_handed, force_wielded=force_wielded, force_unwielded=force_unwielded)
+	AddComponent(/datum/component/two_handed)
 
 /obj/item/dualsaber/toy/hit_reaction(mob/living/carbon/human/owner, atom/movable/hitby, attack_text = "the attack", final_block_chance = 0, damage = 0, attack_type = MELEE_ATTACK)
 	return 0
