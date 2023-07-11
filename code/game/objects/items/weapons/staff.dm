@@ -27,8 +27,7 @@
 	. = ..()
 	AddComponent(/datum/component/two_handed, \
 		force_wielded=5, \
-		force_unwielded=3
-	)
+		force_unwielded=3)
 
 
 /obj/item/staff/broom/attack_self(mob/user as mob)
