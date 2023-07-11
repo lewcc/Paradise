@@ -53968,8 +53968,8 @@
 /area/crew_quarters/fitness)
 "jRi" = (
 /obj/structure/table,
-/obj/item/twohanded/rcl/pre_loaded,
-/obj/item/twohanded/rcl/pre_loaded,
+/obj/item/rcl/pre_loaded,
+/obj/item/rcl/pre_loaded,
 /obj/item/flashlight,
 /turf/simulated/floor/plasteel{
 	icon_state = "dark"
