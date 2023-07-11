@@ -485,7 +485,8 @@
 #define COMSIG_CARBON_FLASH_EYES "carbon_flash_eyes"
 /// From /mob/living/carbon/update_handcuffed()
 #define COMSIG_CARBON_UPDATE_HANDCUFFED "carbon_update_handcuff"
-/// Sent from things that are generally wielded to unwield
+/// From /mob/living/carbon/regenerate_icons()
+#define COMSIG_CARBON_REGENERATE_ICONS "carbon_regen_icons"
 
 
 // /mob/living/simple_animal/hostile signals
@@ -702,6 +703,8 @@
 #define COMSIG_HUMAN_CHANGE_HEAD_ACCESSORY "human_change_head_accessory"
 //sent from living mobs when they parry
 #define COMSIG_HUMAN_PARRY "human_parry"
+///From mob/living/carbon/human/do_suicide()
+#define COMSIG_HUMAN_SUICIDE_ACT "human_suicide_act"
 
 // /datum/species signals
 
