@@ -291,7 +291,7 @@
 /obj/item/shockpaddles/Initialize(mapload, mainunit)
 	. = ..()
 	AddComponent(/datum/component/two_handed)
-	if(check_defib_exists(mainunit, src))
+	if(check_defib_exists(mainunit, null, src))
 		defib = mainunit
 		loc = defib
 		update_icon(UPDATE_ICON_STATE)
@@ -368,7 +368,7 @@
 
 /obj/item/shockpaddles/proc/check_defib_exists(mainunit, mob/living/carbon/human/M, obj/O)
 	if(!mainunit || !istype(mainunit, /obj/item/defibrillator))	//To avoid weird issues from admin spawns
-		M.unEquip(O)
+		M?.unEquip(O)
 		qdel(O)
 		return FALSE
 	else
