@@ -10,7 +10,6 @@
 	force = 0 //You can't hit stuff unless wielded
 	w_class = WEIGHT_CLASS_BULKY
 	slot_flags = SLOT_BACK
-	force_unwielded = 0
 	throwforce = 5
 	throw_speed = 4
 	armour_penetration_flat = 10
@@ -70,8 +69,8 @@
 		to_chat(user, "<span class='warning'>There are no trophies on [src].</span>")
 
 /obj/item/kinetic_crusher/attack(mob/living/target, mob/living/carbon/user)
-	if(!wielded)
-		to_chat(user, "<span class='warning'>[src] is too heavy to use with one hand. You fumble and drop everything.")
+	if(!HAS_TRAIT(src, TRAIT_WIELDED))
+		to_chat(user, "<span class='warning'>[src] is too heavy to use with one hand. You fumble and drop everything.</span>")
 		user.drop_r_hand()
 		user.drop_l_hand()
 		return
@@ -98,7 +97,7 @@
 
 /obj/item/kinetic_crusher/afterattack(atom/target, mob/living/user, proximity_flag, clickparams)
 	. = ..()
-	if(!wielded)
+	if(!HAS_TRAIT(src, TRAIT_WIELDED))
 		return
 	if(user.has_status_effect(STATUS_EFFECT_DASH) && user.a_intent == INTENT_HELP)
 		if(user.throw_at(target, range = 3, speed = 3, spin = FALSE, diagonals_first = TRUE))
@@ -243,7 +242,7 @@
 	else
 		..()
 
-/obj/item/crusher_trophy/proc/add_to(obj/item/twohanded/kinetic_crusher/H, mob/living/user)
+/obj/item/crusher_trophy/proc/add_to(obj/item/kinetic_crusher/H, mob/living/user)
 	for(var/t in H.trophies)
 		var/obj/item/crusher_trophy/T = t
 		if(istype(T, denied_type) || istype(src, T.denied_type))
@@ -256,7 +255,7 @@
 	to_chat(user, "<span class='notice'>You attach [src] to [H].</span>")
 	return TRUE
 
-/obj/item/crusher_trophy/proc/remove_from(obj/item/twohanded/kinetic_crusher/H, mob/living/user)
+/obj/item/crusher_trophy/proc/remove_from(obj/item/kinetic_crusher/H, mob/living/user)
 	forceMove(get_turf(H))
 	H.trophies -= src
 	return TRUE
@@ -359,12 +358,12 @@
 /obj/item/crusher_trophy/legion_skull/effect_desc()
 	return "a kinetic crusher to recharge <b>[bonus_value*0.1]</b> second\s faster"
 
-/obj/item/crusher_trophy/legion_skull/add_to(obj/item/twohanded/kinetic_crusher/H, mob/living/user)
+/obj/item/crusher_trophy/legion_skull/add_to(obj/item/kinetic_crusher/H, mob/living/user)
 	. = ..()
 	if(.)
 		H.charge_time -= bonus_value
 
-/obj/item/crusher_trophy/legion_skull/remove_from(obj/item/twohanded/kinetic_crusher/H, mob/living/user)
+/obj/item/crusher_trophy/legion_skull/remove_from(obj/item/kinetic_crusher/H, mob/living/user)
 	. = ..()
 	if(.)
 		H.charge_time += bonus_value
@@ -431,7 +430,7 @@
 /obj/item/crusher_trophy/demon_claws/effect_desc()
 	return "melee hits to do <b>[bonus_value * 0.2]</b> more damage and heal you for <b>[bonus_value * 0.1]</b>, with <b>5X</b> effect on mark detonation"
 
-/obj/item/crusher_trophy/demon_claws/add_to(obj/item/twohanded/kinetic_crusher/H, mob/living/user)
+/obj/item/crusher_trophy/demon_claws/add_to(obj/item/kinetic_crusher/H, mob/living/user)
 	. = ..()
 	if(.)
 		H.force += bonus_value * 0.2
@@ -440,7 +439,7 @@
 		AddComponent(/datum/component/two_handed, force_wielded = H.force_wielded, force_unwielded = H.force)
 		H.detonation_damage += bonus_value * 0.8
 
-/obj/item/crusher_trophy/demon_claws/remove_from(obj/item/twohanded/kinetic_crusher/H, mob/living/user)
+/obj/item/crusher_trophy/demon_claws/remove_from(obj/item/kinetic_crusher/H, mob/living/user)
 	. = ..()
 	if(.)
 		H.force -= bonus_value * 0.2
@@ -511,12 +510,12 @@
 /obj/item/crusher_trophy/adaptive_intelligence_core/effect_desc()
 	return "melee hits deal <b>[bonus_value]</b> more damage per hit after hitting a target, up to <b>[bonus_value * 10]</b> extra damage to that target"
 
-/obj/item/crusher_trophy/adaptive_intelligence_core/add_to(obj/item/twohanded/kinetic_crusher/H, mob/living/user)
+/obj/item/crusher_trophy/adaptive_intelligence_core/add_to(obj/item/kinetic_crusher/H, mob/living/user)
 	. = ..()
 	if(.)
 		H.adaptive_damage_bonus += bonus_value
 
-/obj/item/crusher_trophy/adaptive_intelligence_core/remove_from(obj/item/twohanded/kinetic_crusher/H, mob/living/user)
+/obj/item/crusher_trophy/adaptive_intelligence_core/remove_from(obj/item/kinetic_crusher/H, mob/living/user)
 	. = ..()
 	if(.)
 		H.adaptive_damage_bonus -= bonus_value

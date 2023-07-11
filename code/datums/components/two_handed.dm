@@ -365,11 +365,15 @@
 /datum/component/two_handed/proc/on_handcuff_user(mob/user, handcuff_status)
 	SIGNAL_HANDLER  // COMSIG_CARBON_UPDATE_HANDCUFFED
 	if(handcuff_status)
-		if(require_twohands && user.unEquip(parent))
-			user.visible_message("<span class='notice'>[user] loses [user.p_their()] grip on [parent]!</span>")
+		if(require_twohands)
+			INVOKE_ASYNC(src, PROC_REF(try_drop_item), user)
 		else
 			user.visible_message("<span class='notice'>[user] unwields [parent] as the handcuffs make it too hard to hold properly.</span>")
 			INVOKE_ASYNC(src, PROC_REF(unwield), user)
+
+/datum/component/two_handed/proc/try_drop_item(mob/user)
+	if(user.unEquip(parent))
+		user.visible_message("<span class='notice'>[user] loses [user.p_their()] grip on [parent]!</span>")
 
 /**
  * The offhand dummy item for two handed items

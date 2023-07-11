@@ -388,7 +388,7 @@
 		return
 	switch(user.a_intent)
 		if(INTENT_DISARM)
-			if(!wielded)
+			if(!HAS_TRAIT(src, TRAIT_WIELDED))
 				return ..()
 			if(!ishuman(target))
 				return ..()

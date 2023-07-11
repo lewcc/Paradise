@@ -1099,27 +1099,24 @@
 /*
  * Rubber Chainsaw
  */
-/obj/item/twohanded/toy/chainsaw
+/obj/item/toy/chainsaw
 	name = "Toy Chainsaw"
 	desc = "A toy chainsaw with a rubber edge. Ages 8 and up"
 	icon_state = "chainsaw0"
+	base_icon_state = "chainsaw"
 	force = 0
 	throwforce = 0
 	throw_speed = 4
 	throw_range = 20
-	wieldsound = 'sound/weapons/chainsawstart.ogg'
 	attack_verb = list("sawed", "cut", "hacked", "carved", "cleaved", "butchered", "felled", "timbered")
 
 /obj/item/toy/chainsaw/Initialize(mapload)
 	. = ..()
-	AddComponent(/datum/component/two_handed)
+	AddComponent(/datum/component/two_handed, wieldsound='sound/weapons/chainsawstart.ogg', icon_wielded="[base_icon_state]1")
 
 
-/obj/item/twohanded/toy/chainsaw/update_icon_state()
-	if(wielded)
-		icon_state = "chainsaw1"
-	else
-		icon_state = "chainsaw0"
+/obj/item/toy/chainsaw/update_icon_state()
+	icon_state = "[base_icon_state]0"
 
 /*
  * Cat Toy
