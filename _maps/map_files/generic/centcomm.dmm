@@ -6650,10 +6650,10 @@
 /obj/structure/rack,
 /obj/item/clothing/suit/wizrobe/magusblue,
 /obj/item/clothing/head/wizard/magus,
-/obj/item/twohanded/staff,
+/obj/item/staff,
 /obj/item/clothing/suit/wizrobe/magusred,
 /obj/item/clothing/head/wizard/magus,
-/obj/item/twohanded/staff,
+/obj/item/staff,
 /turf/simulated/floor/carpet/black,
 /area/wizard_station)
 "xP" = (
@@ -7035,7 +7035,7 @@
 /obj/item/clothing/suit/wizrobe/marisa,
 /obj/item/clothing/shoes/sandal/marisa,
 /obj/item/clothing/head/wizard/marisa,
-/obj/item/twohanded/staff/broom,
+/obj/item/staff/broom,
 /turf/simulated/floor/carpet/black,
 /area/wizard_station)
 "Bb" = (
