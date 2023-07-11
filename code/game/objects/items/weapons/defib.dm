@@ -354,9 +354,6 @@
 /obj/item/shockpaddles/dropped(mob/user)
 	..()
 	if(user)
-		var/obj/item/twohanded/offhand/O = user.get_inactive_hand()
-		if(istype(O))
-			O.unwield()
 		to_chat(user, "<span class='notice'>The paddles snap back into the main unit.</span>")
 		defib.paddles_on_defib = TRUE
 		loc = defib
