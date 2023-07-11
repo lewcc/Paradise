@@ -26,7 +26,7 @@
 	var/icon_wielded = FALSE
 	/// Reference to the offhand created for the item
 	var/obj/item/offhand/offhand_item = null
-	 /// The amount of increase recived from sharpening the item
+	/// The amount of increase recived from sharpening the item
 	var/sharpened_increase = 0
 	/// A callback on the parent to be called when the item is wielded
 	var/datum/callback/wield_callback
