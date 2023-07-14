@@ -18,11 +18,22 @@
 	/// How fast we're currently moving.
 	var/current_speed = 0
 
+	var/turning = FALSE
+	var/turning_direction
 	/// If we're turning, how many steps are we into said turn?
 	var/steps_into_turn = 0
 
 	var/controls_fluff_name = "controls"
 
+	// todo convert these to traits
+	var/can_turn_in_place = FALSE
+	var/minimum_speed_for_in_place_turning = 0
+
+	var/minimum_break_out_of_turn_speed = 1
+
+
+	// Grip stuff
+	/// The current active grip
 	var/active_grip = VEHICLE_CONTROL_GRIP_NONE
 
 	/// If true, parts can only be removed if broken.
@@ -40,6 +51,12 @@
 /obj/vehicle/Initialize(mapload)
 	. = ..()
 	additional_components = list()
+	START_PROCESSING(SSfastprocess)
+
+/// it's inertia time babey
+/obj/vehicle/process()
+	. = ..()
+
 
 /obj/vehicle/Destroy()
 	. = ..()
@@ -49,11 +66,14 @@
 		QDEL_NULL(active_propulsion)
 		QDEL_NULL(active_engine)
 	additional_components.Cut()
+	STOP_PROCESSING(SSfastprocess)
 
 // These getters will get their values from the underlying components
 /obj/vehicle/proc/acceleration_rate()
 
 /obj/vehicle/proc/turning_radius()
+
+/obj/vehicle/proc/get_drag()
 
 /obj/vehicle/proc/get_low_speed()
 
@@ -62,6 +82,7 @@
 /obj/vehicle/proc/get_high_speed()
 
 /obj/vehicle/proc/max_speed()
+
 
 /obj/vehicle/proc/create_new_controls()
 	if(controls)
@@ -78,6 +99,84 @@
 /obj/vehicle/proc/on_grip_change(obj/item/grip, grip_level)
 	SIGNAL_HANDLER  // COMSIG_VEHICLE_GRIP_CHANGE
 	active_grip = grip_level
+
+// So that beepsky can't push the janicart
+/obj/vehicle/CanPass(atom/movable/mover, turf/target, height)
+	if(istype(mover) && mover.checkpass(PASSMOB))
+		return TRUE
+	else
+		return ..()
+
+/obj/vehicle/proc/accelerate(delta)
+	return
+
+/obj/vehicle/proc/process_turn(new_dir)
+	return
+
+
+/obj/vehicle/relaymove(mob/user, direction)
+	. = ..()
+	if(user.incapacitated())
+		unbuckle_mob(user)
+		return
+	var/next_direction
+	var/next_direction_set = FALSE
+	if(direction == dir)
+		accelerate(1)
+		return
+	if(!turning)
+		// behind us
+		if(turn(direction, 180) == dir || turn(direction, 235) == dir || turn(direction, 135) == dir)
+			if(current_speed <= minimum_speed_for_in_place_turning)
+				dir = direction
+			else
+				accelerate(-1)
+
+		else if(turn(direction, 90) == dir || turn(direction, -90) == dir)
+			turning_direction = direction
+			steps_into_turn = 0
+			turning = TRUE
+
+		else
+			accelerate(1)
+		return
+
+	else
+		if(current_speed > minimum_break_out_of_turn_speed)
+
+
+
+
+
+	//todo work out delays
+	// if(turning && direction == turning_direction)
+	// 	steps_into_turn++
+	// 	if(steps_into_turn > turning_radius())
+	// 		turning = FALSE
+	// 		dir = direction
+	// 		steps_into_turn = 0
+	// 		turning_direction = null
+	// 		next_direction = direction
+	// 		next_direction_set = TRUE
+	// 	else
+	// 		next_direction = turning_direction | direction  // keep turning diagonally
+	// 		next_direction_set = TRUE
+
+	// turning = FALSE
+	// steps_into_turn = 0
+	// turning_direction = null
+
+	// now, check the relative direction to decide what to do.
+
+
+
+
+
+
+
+
+
+
 
 /**
  * Pre-built vehicle. Spawns with a pre-assigned set of components.
