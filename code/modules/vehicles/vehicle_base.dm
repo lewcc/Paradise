@@ -1,9 +1,13 @@
+#define BASE_MOVE_DELAY 5
+
 /obj/vehicle
 	name = "vehicle"
 	density = TRUE
 	anchored = FALSE
 	can_buckle = TRUE
 	buckle_lying = FALSE
+	icon = 'icons/obj/vehicles.dmi'
+	icon_state = "docwagon2"
 
 	/// If true, components will be dropped on destroy.
 	// TODO implement this properly. Maybe only drop some, and make sure they're heavily damaged.
@@ -16,7 +20,15 @@
 	var/control_type = /obj/item/twohanded/vehicle_controls
 
 	/// How fast we're currently moving.
-	var/current_speed = 0
+	var/velocity = 0
+	/// The last time we stepped. Necessary for inertia management.
+	var/last_move_time = 0
+	/// The amount of acceleration pending application from the user.
+	var/pending_acceleration = 0
+	/// How many ticks to wait before moving a tile.
+	var/move_delay = 0
+	/// The last time we moved
+	var/last_vehicle_move = 0
 
 	var/turning = FALSE
 	var/turning_direction
@@ -51,11 +63,62 @@
 /obj/vehicle/Initialize(mapload)
 	. = ..()
 	additional_components = list()
-	START_PROCESSING(SSfastprocess)
+	START_PROCESSING(SSfastprocess, src)
+
+/obj/vehicle/proc/handle_movement()
+	// todo check grip
+	var/turf/next = get_step(src, dir)
+	if(!isturf(loc))
+		return
+
+	Move(next, dir, move_delay)
+
+/obj/vehicle/user_buckle_mob(mob/living/M, mob/user)
+	if(user.incapacitated())
+		return
+	for(var/atom/movable/A in get_turf(src))
+		if(A.density)
+			if(A != src && A != M)
+				return
+	M.forceMove(get_turf(src))
+	..()
+
+
+/obj/vehicle/proc/handle_grip()
 
 /// it's inertia time babey
 /obj/vehicle/process()
 	. = ..()
+
+	if(last_vehicle_move + move_delay > world.time)
+		return
+
+	var/acceleration = acceleration_rate()
+	move_delay -= acceleration
+
+	// we will move, but adjust our move delay
+	handle_movement()
+
+	last_vehicle_move = world.time
+
+	// // todo sort out the exact logic later with acceleration
+	// var/acceleration = acceleration_rate() * pending_acceleration
+
+	// // todo convert any acceleration that takes us below 1 into fractional/tiles per tick
+	// move_delay -= acceleration
+
+	// move_delay
+
+	// TODO check grip
+
+	Move(get_step(src, dir))
+
+
+
+
+/obj/vehicle/Bump(atom/A, yes)
+	. = ..()
+	// TODO
 
 
 /obj/vehicle/Destroy()
@@ -66,14 +129,12 @@
 		QDEL_NULL(active_propulsion)
 		QDEL_NULL(active_engine)
 	additional_components.Cut()
-	STOP_PROCESSING(SSfastprocess)
+	STOP_PROCESSING(SSfastprocess, src)
 
 // These getters will get their values from the underlying components
 /obj/vehicle/proc/acceleration_rate()
 
 /obj/vehicle/proc/turning_radius()
-
-/obj/vehicle/proc/get_drag()
 
 /obj/vehicle/proc/get_low_speed()
 
@@ -127,7 +188,7 @@
 	if(!turning)
 		// behind us
 		if(turn(direction, 180) == dir || turn(direction, 235) == dir || turn(direction, 135) == dir)
-			if(current_speed <= minimum_speed_for_in_place_turning)
+			if(velocity <= minimum_speed_for_in_place_turning)
 				dir = direction
 			else
 				accelerate(-1)
@@ -142,8 +203,8 @@
 		return
 
 	else
-		if(current_speed > minimum_break_out_of_turn_speed)
-
+		if(velocity > minimum_break_out_of_turn_speed)
+			var/dummy = 3 +  1
 
 
 

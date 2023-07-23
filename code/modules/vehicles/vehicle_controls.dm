@@ -16,8 +16,11 @@
 	. = ..()
 	connected_vehicle = controlling
 	name = "[connected_vehicle]'s [connected_vehicle.controls_fluff_name]"
-	RegisterSignal(connected_vehicle, COMSIG_PARENT_QDELETING, PROC_REF(Destroy))
-	RegisterSignal(src, COMSIG_MOVABLE_MOVED, PROC_REF(on_move))
+	RegisterSignal(connected_vehicle, COMSIG_PARENT_QDELETING, PROC_REF(on_parent_delete))
+
+/obj/item/twohanded/vehicle_controls/proc/on_parent_delete()
+	SIGNAL_HANDLER
+	qdel(src)
 
 /obj/item/twohanded/vehicle_controls/Destroy()
 	. = ..()
