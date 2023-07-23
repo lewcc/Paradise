@@ -1,4 +1,14 @@
 #define BASE_MOVE_DELAY 5
+/// Highest possible move delay, the "low" mark for velocity.
+#define MAX_MOVE_DELAY 8
+/// Time between accelerations, so you don't accidentally go faster than you mean to.
+#define ACCELERATION_COOLDOWN (0.5 SECONDS)
+
+#define MIN_THROW_VELOCITY 5
+#define MIN_THROW_VELOCITY_ONEHAND 6
+#define MIN_THROW_VELOCITY_TWOHAND 7
+
+#define MIN_WINDOW_SMASH_VELOCITY 4
 
 /obj/vehicle
 	name = "vehicle"
@@ -25,10 +35,13 @@
 	var/last_move_time = 0
 	/// The amount of acceleration pending application from the user.
 	var/pending_acceleration = 0
-	/// How many ticks to wait before moving a tile.
-	var/move_delay = 0
+	/// When we should be making our next move.
+	var/next_move_time = 0
 	/// The last time we moved
 	var/last_vehicle_move = 0
+
+	/// The last time we accelerated with the direction button
+	var/last_acceleration_time = 0
 
 	var/turning = FALSE
 	var/turning_direction
@@ -37,11 +50,13 @@
 
 	var/controls_fluff_name = "controls"
 
+	var/datum/action/innate/toggle_vehicle_controls/control_toggle
+
 	// todo convert these to traits
 	var/can_turn_in_place = FALSE
 	var/minimum_speed_for_in_place_turning = 0
 
-	var/minimum_break_out_of_turn_speed = 1
+	var/minimum_break_out_of_turn_speed = 2
 
 
 	// Grip stuff
@@ -63,15 +78,46 @@
 /obj/vehicle/Initialize(mapload)
 	. = ..()
 	additional_components = list()
-	START_PROCESSING(SSfastprocess, src)
+	control_toggle = new(src)
+	// START_PROCESSING(SSvehicle, src)
+	handle_vehicle_layer()
+
+/obj/vehicle/proc/handle_vehicle_layer()
+	if(dir != NORTH)
+		layer = MOB_LAYER+0.1
+	else
+		layer = OBJ_LAYER
+
 
 /obj/vehicle/proc/handle_movement()
+	if(velocity <= 0)
+		return TRUE
+	var/move_delay_from_velocity = MAX_MOVE_DELAY - velocity
+	next_move_time = move_delay_from_velocity
 	// todo check grip
-	var/turf/next = get_step(src, dir)
+
+	var/next_dir = dir
+
+	if(turning)
+		if(steps_into_turn < turning_radius())
+			next_dir = dir | turning_direction
+			steps_into_turn++
+		else
+			turning = FALSE
+			steps_into_turn = 0
+			dir = turning_direction
+			next_dir = turning_direction
+
+
+
+	var/turf/next = get_step(src, next_dir)
 	if(!isturf(loc))
 		return
 
-	Move(next, dir, move_delay)
+	handle_vehicle_layer()
+
+
+	Move(next, next_dir, round(move_delay_from_velocity, 2))
 
 /obj/vehicle/user_buckle_mob(mob/living/M, mob/user)
 	if(user.incapacitated())
@@ -82,22 +128,32 @@
 				return
 	M.forceMove(get_turf(src))
 	..()
+	START_PROCESSING(SSvehicle, src)
+	control_toggle.Grant(M)
 
+/obj/vehicle/unbuckle_mob(mob/living/buckled_mob, force)
+	. = ..()
+	STOP_PROCESSING(SSvehicle, src)
+	control_toggle.Remove(buckled_mob)
 
-/obj/vehicle/proc/handle_grip()
+// /obj/vehicle/proc/handle_grip()
 
 /// it's inertia time babey
 /obj/vehicle/process()
-	. = ..()
+	// if(buckled.incapacitated())
+	// 	unbuckle_mob(buckle_mob)
+	// 	return PROCESS_KILL
 
-	if(last_vehicle_move + move_delay > world.time)
+	if(next_move_time + last_vehicle_move > world.time)
 		return
 
-	var/acceleration = acceleration_rate()
-	move_delay -= acceleration
+	velocity += pending_acceleration
+	pending_acceleration = 0
+	to_chat(world, "[velocity]")
 
 	// we will move, but adjust our move delay
 	handle_movement()
+
 
 	last_vehicle_move = world.time
 
@@ -111,13 +167,45 @@
 
 	// TODO check grip
 
-	Move(get_step(src, dir))
+	// Move(get_step(src, dir))
 
 
 
-
+// TODO probably make this some kind of atom variable, like hit_by_vehicle
 /obj/vehicle/Bump(atom/A, yes)
 	. = ..()
+	var/throw_occupant = FALSE
+	var/stopped_by = FALSE
+	if(!A.density)
+		return
+	if(iswallturf(A))
+		throw_occupant = TRUE
+		stopped_by = TRUE
+	else if(iswallturf(A) || isstructure(A) || ismachinery(A) || ismecha(A))
+		throw_occupant = TRUE
+		stopped_by = TRUE
+	else if(ismovable(A))
+		var/atom/movable/M = A
+		if(M.density && (M.anchored || M.move_resist >= MOVE_FORCE_STRONG))
+			throw_occupant = TRUE
+			stopped_by = TRUE
+
+	else if(isliving(A))
+		var/mob/living/L = A
+		if(L.move_resist >= MOVE_FORCE_STRONG)
+			throw_occupant = TRUE
+			stopped_by = TRUE
+
+
+	if(throw_occupant)
+		if(velocity < MIN_THROW_VELOCITY || (active_grip == VEHICLE_CONTROL_GRIP_ONEHAND && velocity < MIN_THROW_VELOCITY_ONEHAND) || (active_grip == VEHICLE_CONTROL_GRIP_TWOHAND && velocity < MIN_THROW_VELOCITY_TWOHAND))
+			return
+		var/buckled_mobs_tmp = buckled_mobs
+		for(var/mob/living/buckled in buckled_mobs)
+			unbuckle_mob(buckled, TRUE)
+			buckled.throw_at(A, 5, velocity * 25)
+	if(stopped_by)
+		velocity = 0
 	// TODO
 
 
@@ -135,6 +223,7 @@
 /obj/vehicle/proc/acceleration_rate()
 
 /obj/vehicle/proc/turning_radius()
+	return 1
 
 /obj/vehicle/proc/get_low_speed()
 
@@ -153,8 +242,8 @@
 	RegisterSignal(controls, COMSIG_VEHICLE_GRIP_CHANGE, PROC_REF(on_grip_change))
 
 /obj/vehicle/proc/get_controls()
-	if(!controls)
-		controls = create_new_controls()
+	if(QDELETED(controls))
+		create_new_controls()
 	return controls
 
 /obj/vehicle/proc/on_grip_change(obj/item/grip, grip_level)
@@ -169,27 +258,32 @@
 		return ..()
 
 /obj/vehicle/proc/accelerate(delta)
-	return
+	to_chat(world, "Accelerating by [delta]")
+	pending_acceleration += delta
 
-/obj/vehicle/proc/process_turn(new_dir)
+/obj/vehicle/proc/process_turn()
 	return
 
 
 /obj/vehicle/relaymove(mob/user, direction)
 	. = ..()
-	if(user.incapacitated())
-		unbuckle_mob(user)
+	if(last_acceleration_time + ACCELERATION_COOLDOWN > world.time)
 		return
+	last_acceleration_time = world.time
 	var/next_direction
 	var/next_direction_set = FALSE
 	if(direction == dir)
 		accelerate(1)
+		return
+	if(velocity <= minimum_speed_for_in_place_turning && dir != direction)
+		dir = direction
 		return
 	if(!turning)
 		// behind us
 		if(turn(direction, 180) == dir || turn(direction, 235) == dir || turn(direction, 135) == dir)
 			if(velocity <= minimum_speed_for_in_place_turning)
 				dir = direction
+				handle_vehicle_layer()
 			else
 				accelerate(-1)
 
@@ -203,8 +297,20 @@
 		return
 
 	else
-		if(velocity > minimum_break_out_of_turn_speed)
-			var/dummy = 3 +  1
+		if(velocity > minimum_break_out_of_turn_speed || turning_direction == direction)
+			// you're not breaking out of the turn that easily
+			return  // don't accelerate through turns, that seems like it'd be really obnoxious
+
+		if(velocity < minimum_break_out_of_turn_speed && \
+			turn(direction, 45) == turning_direction || turn(direction, -45) == turning_direction || \
+			turn(direction, 90) == turning_direction || turn(direction, -90) == turning_direction)
+
+			turning = FALSE
+			steps_into_turn = 0
+			return
+
+
+
 
 
 
@@ -250,9 +356,9 @@
 	desc = "Click to toggle vehicle controls (such as a steering wheel)."
 	var/obj/vehicle/source_vehicle
 
-/datum/action/innate/toggle_vehicle_controls/New(Target, source_vehicle)
+/datum/action/innate/toggle_vehicle_controls/New(Target)
 	. = ..()
-	src.source_vehicle = source_vehicle
+	source_vehicle = target
 
 
 /datum/action/innate/toggle_vehicle_controls/Activate()
@@ -264,7 +370,7 @@
 		to_chat(owner, "<span class='warning'>You don't have any hands with which to hold [source_vehicle]'s controls!</span>")
 		return
 
-	if(ismob(source_vehicle.controls.loc))
+	if(ismob(source_vehicle.controls?.loc))
 		if(owner.l_hand == source_vehicle.controls || owner.r_hand == source_vehicle.controls)
 			qdel(source_vehicle.controls)
 			to_chat(owner, "<span class='notice'>You release [source_vehicle]'s controls.</span>")

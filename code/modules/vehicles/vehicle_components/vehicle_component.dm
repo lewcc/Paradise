@@ -12,3 +12,4 @@
 
 /obj/vehicle_part/Initialize(mapload)
 	. = ..()
+
