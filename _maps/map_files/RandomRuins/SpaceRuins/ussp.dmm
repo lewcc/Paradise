@@ -7550,7 +7550,7 @@
 	},
 /area/ruin/space/derelict/hallway/primary)
 "um" = (
-/obj/item/twohanded/required/kirbyplants,
+/obj/item/kirbyplants,
 /turf/simulated/floor/plasteel{
 	icon_state = "darkblue"
 	},
@@ -7560,7 +7560,7 @@
 	dir = 1
 	},
 /obj/effect/decal/cleanable/dirt,
-/obj/item/twohanded/required/kirbyplants,
+/obj/item/kirbyplants,
 /turf/simulated/floor/plasteel{
 	dir = 5;
 	icon_state = "darkblue"
@@ -7606,11 +7606,11 @@
 	},
 /area/ruin/space/derelict/arrival)
 "vQ" = (
-/obj/item/twohanded/required/kirbyplants,
+/obj/item/kirbyplants,
 /turf/simulated/floor/wood,
 /area/ruin/space/derelict/crew_quarters)
 "Dm" = (
-/obj/item/twohanded/required/kirbyplants,
+/obj/item/kirbyplants,
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plasteel{
 	dir = 6;
@@ -7625,14 +7625,14 @@
 /turf/simulated/floor/plasteel/dark,
 /area/ruin/space/derelict/crew_quarters)
 "HL" = (
-/obj/item/twohanded/required/kirbyplants,
+/obj/item/kirbyplants,
 /turf/simulated/floor/plasteel{
 	dir = 5;
 	icon_state = "brown"
 	},
 /area/ruin/space/derelict/arrival)
 "Iw" = (
-/obj/item/twohanded/required/kirbyplants,
+/obj/item/kirbyplants,
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plasteel{
 	dir = 9;
@@ -7640,11 +7640,11 @@
 	},
 /area/ruin/space/derelict/arrival)
 "IL" = (
-/obj/item/twohanded/required/kirbyplants,
+/obj/item/kirbyplants,
 /turf/simulated/floor/wood,
 /area/ruin/space/derelict/bridge)
 "LV" = (
-/obj/item/twohanded/required/kirbyplants,
+/obj/item/kirbyplants,
 /turf/simulated/floor/plasteel{
 	icon_state = "redfull"
 	},
@@ -7669,7 +7669,7 @@
 	},
 /area/ruin/space/derelict/crew_quarters)
 "PL" = (
-/obj/item/twohanded/required/kirbyplants,
+/obj/item/kirbyplants,
 /turf/simulated/floor/plasteel{
 	dir = 10;
 	icon_state = "darkred"
