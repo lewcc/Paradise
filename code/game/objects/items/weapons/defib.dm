@@ -313,7 +313,6 @@
 	if(!HAS_TRAIT(src, TRAIT_WIELDED))
 		to_chat(user, "<span class='boldnotice'>You need to wield the paddles in both hands before you can use them on someone!</span>")
 		return COMPONENT_BLOCK_DEFIB_MISC
-
 	if(!defib.powered)
 		return COMPONENT_BLOCK_DEFIB_DEAD
 

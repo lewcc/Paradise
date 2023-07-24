@@ -263,17 +263,6 @@
 /obj/machinery/atmospherics/binary/valve,
 /turf/simulated/floor/plating,
 /area/ruin/unpowered/syndicate_space_base/engineering)
-"cH" = (
-/obj/machinery/door/window/eastright{
-	name = "Animal Storage";
-	req_access_txt = "150";
-	req_one_access_txt = "150"
-	},
-/obj/structure/window/basic{
-	dir = 1
-	},
-/turf/simulated/floor/grass,
-/area/ruin/unpowered/syndicate_space_base/bar)
 "cJ" = (
 /obj/machinery/light{
 	dir = 8
@@ -3284,14 +3273,6 @@
 	icon_state = "whitebluefull"
 	},
 /area/ruin/unpowered/syndicate_space_base/medbay)
-"Ji" = (
-/obj/item/kirbyplants{
-	icon_state = "plant-22"
-	},
-/turf/simulated/floor/plasteel{
-	icon_state = "dark"
-	},
-/area/ruin/unpowered/syndicate_space_base/bar)
 "Jk" = (
 /obj/machinery/tcomms/relay/ruskie{
 	network_id = "SYNDIE-RELAY"
@@ -3364,23 +3345,6 @@
 	icon_state = "dark"
 	},
 /area/ruin/unpowered/syndicate_space_base/main)
-"Ki" = (
-/obj/item/kirbyplants{
-	icon_state = "plant-22"
-	},
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
-/obj/machinery/power/apc/syndicate{
-	dir = 1;
-	name = "Bar APC";
-	pixel_y = 24
-	},
-/turf/simulated/floor/plasteel{
-	icon_state = "grimy"
-	},
-/area/ruin/unpowered/syndicate_space_base/bar)
 "Kj" = (
 /obj/machinery/light{
 	dir = 4
@@ -3568,6 +3532,18 @@
 	},
 /turf/simulated/floor/plating,
 /area/ruin/unpowered/syndicate_space_base/engineering)
+"LE" = (
+/obj/machinery/door/window/classic/reversed{
+	name = "Animal Storage";
+	req_access_txt = "150";
+	req_one_access_txt = "150";
+	dir = 4
+	},
+/obj/structure/window/basic{
+	dir = 1
+	},
+/turf/simulated/floor/grass,
+/area/ruin/unpowered/syndicate_space_base/bar)
 "LI" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -3777,6 +3753,23 @@
 	},
 /turf/simulated/floor/engine/vacuum,
 /area/ruin/unpowered/syndicate_space_base/engineering)
+"NM" = (
+/obj/item/kirbyplants{
+	icon_state = "plant-22"
+	},
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/machinery/power/apc/syndicate{
+	dir = 1;
+	name = "Bar APC";
+	pixel_y = 24
+	},
+/turf/simulated/floor/plasteel{
+	icon_state = "grimy"
+	},
+/area/ruin/unpowered/syndicate_space_base/bar)
 "NN" = (
 /obj/structure/bookcase/random,
 /obj/machinery/light{
@@ -4412,6 +4405,14 @@
 	},
 /turf/simulated/floor/plating,
 /area/ruin/unpowered/syndicate_space_base/engineering)
+"VG" = (
+/obj/item/kirbyplants{
+	icon_state = "plant-22"
+	},
+/turf/simulated/floor/plasteel{
+	icon_state = "dark"
+	},
+/area/ruin/unpowered/syndicate_space_base/bar)
 "VH" = (
 /obj/effect/turf_decal/stripes/line{
 	dir = 8
@@ -5723,7 +5724,7 @@ Dy
 zj
 ku
 oW
-cH
+LE
 SX
 HZ
 tv
@@ -5776,7 +5777,7 @@ hR
 uX
 kE
 nj
-Ji
+VG
 GK
 Zl
 rw
@@ -5786,7 +5787,7 @@ lr
 Am
 Il
 Tw
-Ji
+VG
 HZ
 ZB
 yz
@@ -5962,7 +5963,7 @@ fF
 Op
 Es
 HZ
-Ki
+NM
 di
 Jq
 jO

@@ -220,10 +220,6 @@
 /obj/structure/sign/nuke,
 /turf/simulated/wall/mineral/titanium/nodecon/nodiagonal,
 /area/ruin/space/derelict/bridge)
-"aF" = (
-/obj/item/kirbyplants,
-/turf/simulated/floor/wood,
-/area/ruin/space/derelict/bridge)
 "aG" = (
 /obj/structure/safe/floor,
 /obj/item/paper/djstation{
@@ -773,12 +769,6 @@
 	icon_state = "darkblue"
 	},
 /area/ruin/space/derelict/bridge)
-"bZ" = (
-/obj/item/kirbyplants,
-/turf/simulated/floor/plasteel{
-	icon_state = "darkblue"
-	},
-/area/ruin/space/derelict/bridge)
 "ca" = (
 /obj/structure/coatrack,
 /turf/simulated/floor/plasteel{
@@ -1096,27 +1086,6 @@
 /obj/effect/decal/cleanable/blood/tracks,
 /turf/simulated/floor/plasteel/dark,
 /area/ruin/space/derelict/arrival)
-"cO" = (
-/obj/structure/curtain/open/shower,
-/obj/machinery/shower{
-	dir = 4;
-	pixel_x = 5
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/machinery/door/window{
-	name = "electrically operated shower door"
-	},
-/obj/effect/decal/remains/human{
-	desc = "This guy seemed to have died in terrible way! Half his remains are dust.";
-	name = "Human remains"
-	},
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plasteel{
-	icon_state = "showroomfloor"
-	},
-/area/ruin/space/derelict/bridge)
 "cP" = (
 /obj/machinery/light/small,
 /turf/simulated/floor/wood,
@@ -1164,14 +1133,6 @@
 	icon_state = "darkblue"
 	},
 /area/ruin/space/derelict/bridge)
-"cW" = (
-/obj/item/kirbyplants,
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plasteel{
-	dir = 6;
-	icon_state = "darkblue"
-	},
-/area/ruin/space/derelict/bridge)
 "cX" = (
 /obj/item/bedsheet/blue,
 /obj/structure/bed,
@@ -1214,25 +1175,10 @@
 	icon_state = "blue"
 	},
 /area/ruin/space/derelict/crew_quarters)
-"dd" = (
-/obj/item/kirbyplants,
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plasteel{
-	dir = 9;
-	icon_state = "darkred"
-	},
-/area/ruin/space/derelict/arrival)
 "de" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plasteel{
 	dir = 1;
-	icon_state = "darkred"
-	},
-/area/ruin/space/derelict/arrival)
-"df" = (
-/obj/machinery/door/window/westleft,
-/turf/simulated/floor/plasteel{
-	dir = 5;
 	icon_state = "darkred"
 	},
 /area/ruin/space/derelict/arrival)
@@ -1401,21 +1347,6 @@
 /obj/item/grenade/empgrenade,
 /turf/simulated/floor/plasteel{
 	dir = 4;
-	icon_state = "darkred"
-	},
-/area/ruin/space/derelict/arrival)
-"dC" = (
-/obj/structure/table/reinforced,
-/obj/machinery/door/window/southright,
-/obj/item/folder{
-	pixel_x = 31;
-	pixel_y = 1
-	},
-/obj/item/paper/djstation{
-	info = "<b>Recommended Party</b> Comrade Blyatski<br><b>Signing Officer:</b> Mikail Gogochev<hr><small>Captain,<br><br>I recognize the nature of this request my seem strange, but please, hear me out. Comrade Blyatski, though he is but a wee bot, is like iron fist of Commissar Grigor himself! Just the other day he chased that useless bastard Totstoi clean out of brig, you should have seen the way that drunkard whimpered! Like a dog with his tail between his legs.<br><br>Anyways, I digress! If any one is worth of recognition, it is our ever-vigilant and beloved Blyatski, true champion of USSP.<br><br>If you wish to, perhaps, see his vigilance and dedication in person, well! You need only come to inspect armoury.<br><br>Comrade Blyatski awaits your decision.";
-	name = "recommendation for commendation"
-	},
-/turf/simulated/floor/plasteel{
 	icon_state = "darkred"
 	},
 /area/ruin/space/derelict/arrival)
@@ -1681,17 +1612,6 @@
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plasteel/dark,
 /area/ruin/space/derelict/hallway/primary)
-"ej" = (
-/obj/machinery/light/spot{
-	dir = 1
-	},
-/obj/effect/decal/cleanable/dirt,
-/obj/item/kirbyplants,
-/turf/simulated/floor/plasteel{
-	dir = 5;
-	icon_state = "darkblue"
-	},
-/area/ruin/space/derelict/hallway/primary)
 "ek" = (
 /obj/machinery/door/airlock/titanium{
 	name = "Dormitories"
@@ -1731,19 +1651,6 @@
 	},
 /area/ruin/space/derelict/arrival)
 "eo" = (
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plasteel{
-	icon_state = "darkred"
-	},
-/area/ruin/space/derelict/arrival)
-"ep" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/machinery/door/window/westleft,
-/obj/structure/sign/poster/contraband/red_rum{
-	pixel_y = -32
-	},
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plasteel{
 	icon_state = "darkred"
@@ -2523,16 +2430,6 @@
 	icon_state = "purplecorner"
 	},
 /area/ruin/space/derelict/hallway/primary)
-"gb" = (
-/obj/machinery/door/window/eastleft{
-	locked = 1
-	},
-/obj/effect/decal/cleanable/blood/splatter,
-/turf/simulated/floor/plasteel{
-	dir = 4;
-	icon_state = "purple"
-	},
-/area/ruin/space/derelict/hallway/primary)
 "gc" = (
 /obj/structure/rack,
 /obj/item/clothing/gloves/color/latex/nitrile,
@@ -2911,13 +2808,6 @@
 	icon_state = "solarpanel"
 	},
 /area/ruin/space/derelict/solar_control)
-"ha" = (
-/obj/item/kirbyplants,
-/turf/simulated/floor/plasteel{
-	dir = 10;
-	icon_state = "darkred"
-	},
-/area/ruin/space/derelict/arrival)
 "hb" = (
 /obj/machinery/light/spot,
 /turf/simulated/floor/plasteel/dark,
@@ -3003,10 +2893,6 @@
 	icon_state = "caution"
 	},
 /area/ruin/space/derelict/hallway/primary)
-"hm" = (
-/obj/item/kirbyplants,
-/turf/simulated/floor/wood,
-/area/ruin/space/derelict/crew_quarters)
 "hn" = (
 /obj/structure/table/reinforced,
 /obj/item/reagent_containers/food/drinks/drinkingglass/shotglass,
@@ -3804,13 +3690,6 @@
 	icon_state = "s-casing"
 	},
 /turf/simulated/floor/plasteel,
-/area/ruin/space/derelict/arrival)
-"jr" = (
-/obj/item/kirbyplants,
-/turf/simulated/floor/plasteel{
-	dir = 5;
-	icon_state = "brown"
-	},
 /area/ruin/space/derelict/arrival)
 "js" = (
 /obj/effect/decal/cleanable/dirt,
@@ -5011,17 +4890,6 @@
 	icon_state = "bar"
 	},
 /area/ruin/space/derelict/hallway/primary)
-"lW" = (
-/obj/structure/closet/coffin,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/machinery/door/window/eastleft,
-/turf/simulated/floor/plasteel{
-	dir = 1;
-	icon_state = "chapel"
-	},
-/area/ruin/space/derelict/crew_quarters)
 "lX" = (
 /turf/simulated/floor/plasteel{
 	dir = 4;
@@ -5150,14 +5018,6 @@
 	icon_state = "bar"
 	},
 /area/ruin/space/derelict/hallway/primary)
-"mr" = (
-/obj/structure/closet/coffin,
-/obj/machinery/door/window/eastleft,
-/turf/simulated/floor/plasteel{
-	dir = 8;
-	icon_state = "chapel"
-	},
-/area/ruin/space/derelict/crew_quarters)
 "ms" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plasteel{
@@ -5223,11 +5083,6 @@
 /obj/item/shovel,
 /turf/template_noop,
 /area/ruin/space/derelict/hallway/primary)
-"mD" = (
-/obj/structure/closet/coffin,
-/obj/machinery/door/window/eastleft,
-/turf/simulated/floor/plasteel/dark,
-/area/ruin/space/derelict/crew_quarters)
 "mE" = (
 /obj/machinery/space_heater,
 /obj/effect/decal/cleanable/dirt,
@@ -5531,16 +5386,6 @@
 	},
 /obj/structure/curtain/open/shower,
 /obj/structure/window/reinforced,
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plasteel{
-	icon_state = "showroomfloor"
-	},
-/area/ruin/space/derelict/crew_quarters)
-"nt" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/machinery/door/window/southright,
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plasteel{
 	icon_state = "showroomfloor"
@@ -7132,12 +6977,6 @@
 	icon_state = "redfull"
 	},
 /area/ruin/space/derelict/arrival)
-"rw" = (
-/obj/item/kirbyplants,
-/turf/simulated/floor/plasteel{
-	icon_state = "redfull"
-	},
-/area/ruin/space/derelict/arrival)
 "rx" = (
 /turf/simulated/floor/plasteel{
 	dir = 10;
@@ -7699,9 +7538,158 @@
 	},
 /turf/simulated/wall/mineral/titanium/nodecon/nodiagonal,
 /area/ruin/space/derelict/arrival)
+"tB" = (
+/obj/machinery/door/window/classic/normal{
+	locked = 1;
+	dir = 4
+	},
+/obj/effect/decal/cleanable/blood/splatter,
+/turf/simulated/floor/plasteel{
+	dir = 4;
+	icon_state = "purple"
+	},
+/area/ruin/space/derelict/hallway/primary)
+"um" = (
+/obj/item/kirbyplants,
+/turf/simulated/floor/plasteel{
+	icon_state = "darkblue"
+	},
+/area/ruin/space/derelict/bridge)
+"vk" = (
+/obj/machinery/light/spot{
+	dir = 1
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/item/kirbyplants,
+/turf/simulated/floor/plasteel{
+	dir = 5;
+	icon_state = "darkblue"
+	},
+/area/ruin/space/derelict/hallway/primary)
+"vt" = (
+/obj/structure/curtain/open/shower,
+/obj/machinery/shower{
+	dir = 4;
+	pixel_x = 5
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/machinery/door/window{
+	name = "electrically operated shower door";
+	dir = 4
+	},
+/obj/effect/decal/remains/human{
+	desc = "This guy seemed to have died in terrible way! Half his remains are dust.";
+	name = "Human remains"
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plasteel{
+	icon_state = "showroomfloor"
+	},
+/area/ruin/space/derelict/bridge)
+"vv" = (
+/obj/structure/table/reinforced,
+/obj/machinery/door/window/classic/reversed{
+	dir = 2
+	},
+/obj/item/folder{
+	pixel_x = 31;
+	pixel_y = 1
+	},
+/obj/item/paper/djstation{
+	info = "<b>Recommended Party</b> Comrade Blyatski<br><b>Signing Officer:</b> Mikail Gogochev<hr><small>Captain,<br><br>I recognize the nature of this request my seem strange, but please, hear me out. Comrade Blyatski, though he is but a wee bot, is like iron fist of Commissar Grigor himself! Just the other day he chased that useless bastard Totstoi clean out of brig, you should have seen the way that drunkard whimpered! Like a dog with his tail between his legs.<br><br>Anyways, I digress! If any one is worth of recognition, it is our ever-vigilant and beloved Blyatski, true champion of USSP.<br><br>If you wish to, perhaps, see his vigilance and dedication in person, well! You need only come to inspect armoury.<br><br>Comrade Blyatski awaits your decision.";
+	name = "recommendation for commendation"
+	},
+/turf/simulated/floor/plasteel{
+	icon_state = "darkred"
+	},
+/area/ruin/space/derelict/arrival)
+"vQ" = (
+/obj/item/kirbyplants,
+/turf/simulated/floor/wood,
+/area/ruin/space/derelict/crew_quarters)
+"Dm" = (
+/obj/item/kirbyplants,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plasteel{
+	dir = 6;
+	icon_state = "darkblue"
+	},
+/area/ruin/space/derelict/bridge)
+"HK" = (
+/obj/structure/closet/coffin,
+/obj/machinery/door/window/classic/normal{
+	dir = 4
+	},
+/turf/simulated/floor/plasteel/dark,
+/area/ruin/space/derelict/crew_quarters)
+"HL" = (
+/obj/item/kirbyplants,
+/turf/simulated/floor/plasteel{
+	dir = 5;
+	icon_state = "brown"
+	},
+/area/ruin/space/derelict/arrival)
+"Iw" = (
+/obj/item/kirbyplants,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plasteel{
+	dir = 9;
+	icon_state = "darkred"
+	},
+/area/ruin/space/derelict/arrival)
+"IL" = (
+/obj/item/kirbyplants,
+/turf/simulated/floor/wood,
+/area/ruin/space/derelict/bridge)
+"LV" = (
+/obj/item/kirbyplants,
+/turf/simulated/floor/plasteel{
+	icon_state = "redfull"
+	},
+/area/ruin/space/derelict/arrival)
+"NO" = (
+/obj/machinery/door/window/classic/normal{
+	dir = 8
+	},
+/turf/simulated/floor/plasteel{
+	dir = 5;
+	icon_state = "darkred"
+	},
+/area/ruin/space/derelict/arrival)
+"PD" = (
+/obj/structure/closet/coffin,
+/obj/machinery/door/window/classic/normal{
+	dir = 4
+	},
+/turf/simulated/floor/plasteel{
+	dir = 8;
+	icon_state = "chapel"
+	},
+/area/ruin/space/derelict/crew_quarters)
+"PL" = (
+/obj/item/kirbyplants,
+/turf/simulated/floor/plasteel{
+	dir = 10;
+	icon_state = "darkred"
+	},
+/area/ruin/space/derelict/arrival)
 "QN" = (
 /turf/simulated/wall/mineral/titanium/nodecon/nosmooth,
 /area/ruin/space/derelict/arrival)
+"SN" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/machinery/door/window/classic/reversed{
+	dir = 2
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plasteel{
+	icon_state = "showroomfloor"
+	},
+/area/ruin/space/derelict/crew_quarters)
 "Xn" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -7713,6 +7701,34 @@
 	icon_state = "wood-broken"
 	},
 /area/ruin/space/derelict/crew_quarters)
+"Ya" = (
+/obj/structure/closet/coffin,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/machinery/door/window/classic/normal{
+	dir = 4
+	},
+/turf/simulated/floor/plasteel{
+	dir = 1;
+	icon_state = "chapel"
+	},
+/area/ruin/space/derelict/crew_quarters)
+"YG" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/machinery/door/window/classic/normal{
+	dir = 8
+	},
+/obj/structure/sign/poster/contraband/red_rum{
+	pixel_y = -32
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plasteel{
+	icon_state = "darkred"
+	},
+/area/ruin/space/derelict/arrival)
 
 (1,1,1) = {"
 ac
@@ -8580,7 +8596,7 @@ bn
 dO
 gq
 gK
-ha
+PL
 ht
 hJ
 hY
@@ -9046,7 +9062,7 @@ bn
 bn
 bn
 bn
-jr
+HL
 ka
 kT
 ly
@@ -9302,14 +9318,14 @@ ac
 ac
 aW
 bn
-dd
+Iw
 dn
 do
 do
 do
 do
 ee
-ep
+YG
 bn
 bn
 fG
@@ -9486,7 +9502,7 @@ aW
 bn
 bn
 bn
-df
+NO
 dp
 dB
 do
@@ -9580,7 +9596,7 @@ cz
 bn
 de
 dq
-dC
+vv
 do
 dR
 dO
@@ -10129,7 +10145,7 @@ bH
 bK
 am
 cD
-cO
+vt
 am
 al
 ag
@@ -10179,7 +10195,7 @@ ka
 hY
 ra
 qy
-rw
+LV
 bn
 ac
 ac
@@ -10398,7 +10414,7 @@ ac
 ac
 ac
 as
-aF
+IL
 ba
 br
 bK
@@ -10417,7 +10433,7 @@ ag
 dW
 eg
 fH
-gb
+tB
 gv
 fj
 fJ
@@ -11046,7 +11062,7 @@ aL
 be
 bw
 bi
-bZ
+um
 am
 am
 ac
@@ -11332,7 +11348,7 @@ cS
 cS
 cS
 dX
-ej
+vk
 ew
 eT
 fo
@@ -12337,7 +12353,7 @@ bQ
 ch
 bh
 cH
-cW
+Dm
 am
 al
 ag
@@ -13456,7 +13472,7 @@ fU
 gm
 gF
 eD
-hm
+vQ
 bm
 bm
 il
@@ -13558,12 +13574,12 @@ jd
 kB
 je
 je
-lW
-mr
-mD
+Ya
+PD
+HK
 bm
 nf
-nt
+SN
 ng
 nW
 db

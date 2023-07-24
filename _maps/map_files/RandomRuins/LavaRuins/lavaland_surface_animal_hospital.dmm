@@ -77,17 +77,6 @@
 	},
 /turf/simulated/floor/plasteel/white,
 /area/ruin/powered/animal_hospital)
-"al" = (
-/obj/structure/table/wood,
-/obj/item/toy/carpplushie,
-/obj/effect/turf_decal/tile/blue{
-	dir = 4
-	},
-/obj/effect/turf_decal/tile/blue{
-	dir = 8
-	},
-/turf/simulated/floor/plasteel/white,
-/area/ruin/powered/animal_hospital)
 "am" = (
 /obj/machinery/economy/vending/snack,
 /obj/effect/turf_decal/tile/blue{
@@ -533,10 +522,6 @@
 "bs" = (
 /obj/structure/table/reinforced,
 /obj/item/phone,
-/turf/simulated/floor/plasteel,
-/area/ruin/powered/animal_hospital)
-"bt" = (
-/obj/item/kirbyplants,
 /turf/simulated/floor/plasteel,
 /area/ruin/powered/animal_hospital)
 "bu" = (
@@ -1016,6 +1001,21 @@
 	},
 /turf/simulated/floor/plasteel/white,
 /area/ruin/powered/animal_hospital)
+"oI" = (
+/obj/item/kirbyplants,
+/turf/simulated/floor/plasteel,
+/area/ruin/powered/animal_hospital)
+"MX" = (
+/obj/structure/table/wood,
+/obj/item/toy/plushie/carpplushie,
+/obj/effect/turf_decal/tile/blue{
+	dir = 4
+	},
+/obj/effect/turf_decal/tile/blue{
+	dir = 8
+	},
+/turf/simulated/floor/plasteel/white,
+/area/ruin/powered/animal_hospital)
 
 (1,1,1) = {"
 aa
@@ -1335,7 +1335,7 @@ ae
 ae
 ae
 bl
-bt
+oI
 aE
 aK
 bW
@@ -1353,7 +1353,7 @@ bL
 bL
 ad
 af
-al
+MX
 au
 as
 ae

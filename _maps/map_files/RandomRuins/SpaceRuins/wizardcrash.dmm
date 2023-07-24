@@ -197,14 +197,6 @@
 /obj/structure/cult/pylon,
 /turf/simulated/floor/wood,
 /area/ruin/space/unpowered)
-"aK" = (
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/machinery/door/window/westleft,
-/turf/simulated/floor/plating,
-/area/ruin/space/unpowered)
 "aL" = (
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
@@ -322,10 +314,6 @@
 /obj/item/reagent_containers/food/snacks/meat/monkey,
 /turf/simulated/floor/plating,
 /area/ruin/space/unpowered)
-"bh" = (
-/obj/machinery/door/window,
-/turf/simulated/floor/wood,
-/area/ruin/space/unpowered)
 "bi" = (
 /turf/simulated/floor/plasteel{
 	dir = 8;
@@ -370,14 +358,6 @@
 	icon_state = "chapel"
 	},
 /area/ruin/space/unpowered)
-"bp" = (
-/obj/structure/rack,
-/obj/item/staff,
-/turf/simulated/floor/plasteel{
-	dir = 4;
-	icon_state = "chapel"
-	},
-/area/ruin/space/unpowered)
 "bq" = (
 /obj/effect/decal/remains/human,
 /turf/simulated/floor/plating,
@@ -391,13 +371,6 @@
 /obj/structure/showcase,
 /turf/simulated/floor/plasteel{
 	dir = 8;
-	icon_state = "chapel"
-	},
-/area/ruin/space/unpowered)
-"bu" = (
-/obj/structure/rack,
-/obj/item/staff/broom,
-/turf/simulated/floor/plasteel{
 	icon_state = "chapel"
 	},
 /area/ruin/space/unpowered)
@@ -514,6 +487,37 @@
 /obj/item/stack/sheet/mineral/plasma,
 /obj/structure/table,
 /turf/simulated/floor/plating,
+/area/ruin/space/unpowered)
+"uF" = (
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/machinery/door/window/classic/normal{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/ruin/space/unpowered)
+"Id" = (
+/obj/machinery/door/window{
+	dir = 4
+	},
+/turf/simulated/floor/wood,
+/area/ruin/space/unpowered)
+"Mx" = (
+/obj/structure/rack,
+/obj/item/staff/broom,
+/turf/simulated/floor/plasteel{
+	icon_state = "chapel"
+	},
+/area/ruin/space/unpowered)
+"QS" = (
+/obj/structure/rack,
+/obj/item/staff,
+/turf/simulated/floor/plasteel{
+	dir = 4;
+	icon_state = "chapel"
+	},
 /area/ruin/space/unpowered)
 
 (1,1,1) = {"
@@ -944,7 +948,7 @@ aC
 aC
 aW
 aU
-bh
+Id
 aU
 aU
 ae
@@ -976,7 +980,7 @@ as
 as
 aB
 aH
-aK
+uF
 aP
 aS
 aU
@@ -1093,8 +1097,8 @@ ae
 ae
 bC
 bk
-bp
-bu
+QS
+Mx
 ae
 bz
 bP

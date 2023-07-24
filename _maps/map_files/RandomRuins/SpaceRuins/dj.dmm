@@ -414,17 +414,6 @@
 	icon_state = "bar"
 	},
 /area/ruin/space/djstation)
-"bb" = (
-/obj/machinery/light_switch{
-	name = "north bump";
-	pixel_y = 24
-	},
-/obj/item/kirbyplants,
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plasteel{
-	icon_state = "bar"
-	},
-/area/ruin/space/djstation)
 "bc" = (
 /obj/effect/spawner/window/reinforced,
 /turf/simulated/floor/plating,
@@ -694,17 +683,6 @@
 	},
 /turf/simulated/floor/plasteel/dark,
 /area/ruin/space/djstation)
-"bN" = (
-/obj/machinery/atmospherics/unary/portables_connector{
-	dir = 8
-	},
-/obj/machinery/atmospherics/portable/canister/air,
-/obj/machinery/door/window/westleft,
-/turf/simulated/floor/plasteel{
-	dir = 1;
-	icon_state = "vault"
-	},
-/area/ruin/space/djstation)
 "bO" = (
 /obj/structure/lattice,
 /obj/structure/grille,
@@ -803,6 +781,30 @@
 	pixel_y = 35
 	},
 /turf/template_noop,
+/area/ruin/space/djstation)
+"oR" = (
+/obj/machinery/light_switch{
+	name = "north bump";
+	pixel_y = 24
+	},
+/obj/item/kirbyplants,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plasteel{
+	icon_state = "bar"
+	},
+/area/ruin/space/djstation)
+"Ho" = (
+/obj/machinery/atmospherics/unary/portables_connector{
+	dir = 8
+	},
+/obj/machinery/atmospherics/portable/canister/air,
+/obj/machinery/door/window/classic/normal{
+	dir = 8
+	},
+/turf/simulated/floor/plasteel{
+	dir = 1;
+	icon_state = "vault"
+	},
 /area/ruin/space/djstation)
 
 (1,1,1) = {"
@@ -1063,7 +1065,7 @@ ay
 ad
 ad
 ao
-bb
+oR
 bm
 bm
 bE
@@ -1277,7 +1279,7 @@ bc
 br
 bc
 aS
-bN
+Ho
 aS
 ao
 ao
