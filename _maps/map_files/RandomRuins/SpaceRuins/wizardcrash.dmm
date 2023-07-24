@@ -506,14 +506,14 @@
 /area/ruin/space/unpowered)
 "Mx" = (
 /obj/structure/rack,
-/obj/item/staff/broom,
+/obj/item/twohanded/staff/broom,
 /turf/simulated/floor/plasteel{
 	icon_state = "chapel"
 	},
 /area/ruin/space/unpowered)
 "QS" = (
 /obj/structure/rack,
-/obj/item/staff,
+/obj/item/twohanded/staff,
 /turf/simulated/floor/plasteel{
 	dir = 4;
 	icon_state = "chapel"

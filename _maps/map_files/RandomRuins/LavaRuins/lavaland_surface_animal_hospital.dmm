@@ -1002,7 +1002,7 @@
 /turf/simulated/floor/plasteel/white,
 /area/ruin/powered/animal_hospital)
 "oI" = (
-/obj/item/kirbyplants,
+/obj/item/twohanded/required/kirbyplants,
 /turf/simulated/floor/plasteel,
 /area/ruin/powered/animal_hospital)
 "MX" = (
