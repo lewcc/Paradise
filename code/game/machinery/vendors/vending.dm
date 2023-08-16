@@ -442,6 +442,10 @@
 		return
 
 	if(isliving(AM) && prob(25))
+		var/mob/living/L = AM
+		if(L.m_intent == MOVE_INTENT_WALK)
+			to_chat(L, "<span class='warning'>You hear an ominous noise from [src], but it doesn't seem to notice you!</span>")
+			return
 		AM.visible_message(
 			"<span class='danger'>[src] suddenly topples over onto [AM]!</span>",
 			"<span class='userdanger'>[src] topples over onto you without warning!</span>"
