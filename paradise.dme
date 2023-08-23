@@ -2647,6 +2647,7 @@
 #include "code\modules\simple_vehicle\vehicle.dm"
 #include "code\modules\vehicles\vehicle_base.dm"
 #include "code\modules\vehicles\vehicle_controls.dm"
+#include "code\modules\vehicles\vehicle_traits.dm"
 #include "code\modules\vehicles\vehicle_components\chassis_base.dm"
 #include "code\modules\vehicles\vehicle_components\engine_base.dm"
 #include "code\modules\vehicles\vehicle_components\propulsion_base.dm"

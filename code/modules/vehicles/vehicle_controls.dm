@@ -13,6 +13,7 @@
 	var/obj/vehicle/connected_vehicle
 
 /obj/item/twohanded/vehicle_controls/New(obj/vehicle/controlling)
+	// todo make this initialize it was just a pain in the ass to get working
 	..()
 	connected_vehicle = controlling
 	name = "[connected_vehicle]'s [connected_vehicle.controls_fluff_name]"

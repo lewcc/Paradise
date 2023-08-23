@@ -28,6 +28,11 @@
 
 	/// The type for the vehicle's controls
 	var/control_type = /obj/item/twohanded/vehicle_controls
+	/// How many people can be buckled to this vehicle.
+	var/max_bucklers = 0
+
+	/// Who's driving the thing
+	var/mob/living/carbon/driver
 
 	/// How fast we're currently moving.
 	var/velocity = 0
@@ -82,6 +87,13 @@
 	// START_PROCESSING(SSvehicle, src)
 	handle_vehicle_layer()
 
+/obj/vehicle/examine(mob/user, infix, suffix)
+	. = ..()
+	if(driver)
+		. += "<span class='notice'>It's currently being driven by [driver].</span>"
+		. += "<span class='notice'>[driver.p_they(TRUE)] [driver.p_have()] [active_grip] hand\s on the [controls_fluff_name].</span>"
+		. += "<span class='notice'>You could try to pull them off by clicking the vehicle with <b>grab</i> intent.</span>"
+
 /obj/vehicle/proc/handle_vehicle_layer()
 	if(dir != NORTH)
 		layer = MOB_LAYER+0.1
@@ -122,21 +134,69 @@
 /obj/vehicle/user_buckle_mob(mob/living/M, mob/user)
 	if(user.incapacitated())
 		return
+	if(max_bucklers >= length(buckled_mobs))
+		to_chat(user, "<span class='warning'>There's not enough space on [src]!</span>")
+		return FALSE
 	for(var/atom/movable/A in get_turf(src))
 		if(A.density)
 			if(A != src && A != M)
 				return
 	M.forceMove(get_turf(src))
-	..()
-	START_PROCESSING(SSvehicle, src)
-	control_toggle.Grant(M)
+	. = ..()
+	if(!.)
+		return .
+	SEND_SIGNAL(src, COMSIG_VEHICLE_ADD_RIDER, M, isnull(driver))
+	if(isnull(driver))  // just added a rider
+		driver = M
+		START_PROCESSING(SSvehicle, src)
+		control_toggle.Grant(M)
+
+/obj/vehicle/attack_hand(mob/living/user)
+	if(!isnull(driver))
+		if(driver.incapacitated())
+			return ..()  // free unbuckle
+
+		if(user.a_intent != INTENT_GRAB)
+			to_chat(user, "<span class='notice'>You can't open the panel while someone's driving it!</span>")
+			to_chat(user, "<span class='notice'>If you want to try pulling [driver] off of [src], try <i>grabbing</i> them.</span>")
+			return TRUE
+
+		var/do_after_time
+
+		switch(active_grip)
+			if(VEHICLE_CONTROL_GRIP_NONE)
+				do_after_time = 0
+			if(VEHICLE_CONTROL_GRIP_ONEHAND)
+				do_after_time = 2 SECONDS
+			if(VEHICLE_CONTROL_GRIP_TWOHAND)
+				do_after_time = 5 SECONDS
+			else
+				stack_trace("Someone tried to unbuckle someone else who had an invalid grip level of [active_grip]")
+
+		if(do_after_time > 0)
+			driver.visible_message(
+				"<span class='warning'>[user] tries to unbuckle [driver] from [src]!</span>",
+				"<span class='userdanger'>[user] is trying to unbuckle you from [src]!</span>"
+			)
+
+		if(do_after_time <= 0 || do_after(user, do_after_time, TRUE, src))
+			return ..()
+
+		driver.visible_message(
+			"<span class='warning'>[user] fails to unbuckle [driver] from [src]!</span>",
+			"<span class='userdanger'>[user] fails to unbuckle you from [src]!</span>"
+		)
+		return TRUE
+
+	return ..()
 
 /obj/vehicle/unbuckle_mob(mob/living/buckled_mob, force)
 	. = ..()
-	STOP_PROCESSING(SSvehicle, src)
-	control_toggle.Remove(buckled_mob)
-
-// /obj/vehicle/proc/handle_grip()
+	if(!.)
+		return .
+	if(buckled_mob == driver)
+		STOP_PROCESSING(SSvehicle, src)
+		control_toggle.Remove(buckled_mob)
 
 /// it's inertia time babey
 /obj/vehicle/process()
@@ -218,6 +278,7 @@
 		QDEL_NULL(active_engine)
 	additional_components.Cut()
 	STOP_PROCESSING(SSfastprocess, src)
+	driver = null
 
 // These getters will get their values from the underlying components
 /obj/vehicle/proc/acceleration_rate()

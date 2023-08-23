@@ -591,6 +591,14 @@
 	#define COMPONENT_BLOCK_VEHICLE_CONTROLS_INVALID (1<<1)
 /// Called when someone's grip on their controls changes
 #define COMSIG_VEHICLE_GRIP_CHANGE "vehicle_grip_change"
+/// Called when a new person enters the vehicle. (obj/vehicle/V, mob/living/new_rider, is_driver)
+#define COMSIG_VEHICLE_ADD_RIDER "vehicle_add_rider"
+/// Called when a person leaves the vehicle. (obj/vehicle/V, mob/living/former_rider, was_driver)
+#define COMSIG_VEHICLE_REMOVE_RIDER "vehicle_remove_rider"
+/// Called when propulsion gets restrained by something
+#define COMSIG_VEHICLE_PART_PROP_RESTRAINED "vehicle_part_prop_restrained"
+/// Called when a vehicle part gets destroyed
+#define COMSIG_VEHICLE_PART_DESTROYED "vehicle_part_destroyed"
 
 
 // /obj/item signals for economy
