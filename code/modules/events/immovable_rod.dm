@@ -88,6 +88,39 @@ In my current plan for it, 'solid' will be defined as anything with density == 1
 		if(clong.density || prob(10))
 			clong.ex_act(EXPLODE_HEAVY)
 
+/obj/effect/immovablerod/attack_hand(mob/living/user)
+	. = ..()
+	if(.)
+		return
+
+	if(!HAS_MIND_TRAIT(user, TRAIT_CAN_SUPLEX_ROD))
+		return
+
+	playsound(src, 'sound/effects/meteorimpact.ogg', 100, TRUE, 10000)  // everyone should hear this
+	for(var/mob/living/nearby_mob in urange(8, src))
+		if(nearby_mob.stat != CONSCIOUS)
+			continue
+		shake_camera(nearby_mob, 2, 3)
+
+	return suplex_rod(user)
+
+/**
+ * Called when someone manages to suplex the rod.
+ *
+ * Arguments
+ * * strongman - the suplexer of the rod.
+ */
+/obj/effect/immovablerod/proc/suplex_rod(mob/living/strongman)
+	strongman.visible_message(
+		"<span class='userdanger'>[strongman] suplexes [src] into the ground!</span>",
+		"<span class='userdanger'>You suplex [src] into the ground!</span>"
+	)
+	message_admins("[strongman] has suplexed [src] as research director.")
+	new /obj/effect/anomaly/flux(drop_location())
+	new /obj/
+	qdel(src)
+	return TRUE
+
 /obj/effect/immovablerod/event
 	// The base chance to "damage" the floor when passing. This is not guaranteed to cause a full on hull breach.
 	// Chance to expose the tile to space is like 60% of this value.

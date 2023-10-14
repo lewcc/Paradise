@@ -28,6 +28,7 @@
 
 	outfit = /datum/outfit/job/rd
 	important_information = "This role requires you to coordinate a department. You are required to be familiar with Standard Operating Procedure (Science), basic job duties, and act professionally (roleplay)."
+	job_traits = list(TRAIT_CAN_SUPLEX_ROD)
 
 /datum/outfit/job/rd
 	name = "Research Director"

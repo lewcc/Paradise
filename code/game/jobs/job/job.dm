@@ -70,6 +70,9 @@
 	/// Boolean detailing if this job has been banned because of a gamemode restriction i.e. The revolution has won, no more command
 	var/job_banned_gamemode = FALSE
 
+	/// Traits to apply to anyone with this job
+	var/job_traits = list()
+
 //Only override this proc
 /datum/job/proc/after_spawn(mob/living/carbon/human/H)
 
@@ -83,6 +86,10 @@
 
 	if(outfit)
 		H.equipOutfit(outfit, visualsOnly)
+
+	if(length(job_traits) && H.mind)
+		for(var/trait in job_traits)
+			ADD_TRAIT(H.mind, trait, "job_trait")
 
 	H.dna.species.after_equip_job(src, H, visualsOnly)
 
