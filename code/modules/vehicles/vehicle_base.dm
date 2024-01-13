@@ -18,6 +18,7 @@
 	buckle_lying = FALSE
 	icon = 'icons/obj/vehicles.dmi'
 	icon_state = "docwagon2"
+	max_buckled_mobs = 1
 
 	/// If true, components will be dropped on destroy.
 	// TODO implement this properly. Maybe only drop some, and make sure they're heavily damaged.
@@ -28,8 +29,6 @@
 
 	/// The type for the vehicle's controls
 	var/control_type = /obj/item/twohanded/vehicle_controls
-	/// How many people can be buckled to this vehicle.
-	var/max_bucklers = 0
 
 	/// Who's driving the thing
 	var/mob/living/carbon/driver
@@ -73,9 +72,9 @@
 	var/unbroken_parts_removable = FALSE
 
 	// The main parts that make up any vehicle.
-	var/obj/vehicle_part/chassis/active_chassis
-	var/obj/vehicle_part/propulsion/active_propulsion
-	var/obj/vehicle_part/engine/active_engine
+	var/obj/item/vehicle_part/chassis/active_chassis
+	var/obj/item/vehicle_part/propulsion/active_propulsion
+	var/obj/item/vehicle_part/engine/active_engine
 
 	/// Any extra components which are on the vehicle but not part of the standard three.
 	var/list/additional_components
@@ -86,6 +85,9 @@
 	control_toggle = new(src)
 	// START_PROCESSING(SSvehicle, src)
 	handle_vehicle_layer()
+
+/obj/vehicle/proc/all_components()
+	return list(active_chassis, active_propulsion, active_engine) + additional_components
 
 /obj/vehicle/examine(mob/user, infix, suffix)
 	. = ..()
@@ -134,7 +136,7 @@
 /obj/vehicle/user_buckle_mob(mob/living/M, mob/user)
 	if(user.incapacitated())
 		return
-	if(max_bucklers >= length(buckled_mobs))
+	if(max_buckled_mobs <= length(buckled_mobs))
 		to_chat(user, "<span class='warning'>There's not enough space on [src]!</span>")
 		return FALSE
 	for(var/atom/movable/A in get_turf(src))
@@ -153,6 +155,7 @@
 
 /obj/vehicle/attack_hand(mob/living/user)
 	if(!isnull(driver))
+		// todo this should be expanded to account for multiple people on it
 		if(driver.incapacitated())
 			return ..()  // free unbuckle
 
@@ -194,9 +197,11 @@
 	. = ..()
 	if(!.)
 		return .
+	SEND_SIGNAL(src, COMSIG_VEHICLE_REMOVE_RIDER, buckled_mob, isnull(driver))
 	if(buckled_mob == driver)
 		STOP_PROCESSING(SSvehicle, src)
 		control_toggle.Remove(buckled_mob)
+		driver = null
 
 /// it's inertia time babey
 /obj/vehicle/process()
@@ -328,6 +333,13 @@
 
 /obj/vehicle/relaymove(mob/user, direction)
 	. = ..()
+	if(user != driver)
+		return
+
+	if(!active_propulsion)
+		// good luck going anywhere
+		return
+
 	if(last_acceleration_time + ACCELERATION_COOLDOWN > world.time)
 		return
 	last_acceleration_time = world.time
