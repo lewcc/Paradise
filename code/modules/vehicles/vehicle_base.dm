@@ -10,6 +10,8 @@
 
 #define MIN_WINDOW_SMASH_VELOCITY 4
 
+#define NO_DIRECTION_PRESSED (-1)
+
 /obj/vehicle
 	name = "vehicle"
 	density = TRUE
@@ -39,8 +41,12 @@
 	var/last_move_time = 0
 	/// The amount of acceleration pending application from the user.
 	var/pending_acceleration = 0
+	/// The dir from our current movement.
+	var/inertia_next_dir
 	/// When we should be making our next move.
 	var/next_move_time = 0
+	/// The direction that will be accounted for during our next acceleration process
+	var/desired_movement_direction = NO_DIRECTION_PRESSED
 	/// The last time we moved
 	var/last_vehicle_move = 0
 
@@ -58,8 +64,11 @@
 
 	// todo convert these to traits
 	var/can_turn_in_place = FALSE
+	/// How slow this vehicle needs to be going in order to be able to turn in place
 	var/minimum_speed_for_in_place_turning = 0
 
+	/// Minimum speed at which you can break out of a turn by just pressing another direction.
+	/// If you're over this value, you've committed to a turn.
 	var/minimum_break_out_of_turn_speed = 2
 
 
@@ -103,35 +112,6 @@
 		layer = OBJ_LAYER
 
 
-/obj/vehicle/proc/handle_movement()
-	if(velocity <= 0)
-		return TRUE
-	var/move_delay_from_velocity = MAX_MOVE_DELAY - velocity
-	next_move_time = move_delay_from_velocity
-	// todo check grip
-
-	var/next_dir = dir
-
-	if(turning)
-		if(steps_into_turn < turning_radius())
-			next_dir = dir | turning_direction
-			steps_into_turn++
-		else
-			turning = FALSE
-			steps_into_turn = 0
-			dir = turning_direction
-			next_dir = turning_direction
-
-
-
-	var/turf/next = get_step(src, next_dir)
-	if(!isturf(loc))
-		return
-
-	handle_vehicle_layer()
-
-
-	Move(next, next_dir, round(move_delay_from_velocity, 2))
 
 /obj/vehicle/user_buckle_mob(mob/living/M, mob/user)
 	if(user.incapacitated())
@@ -202,38 +182,6 @@
 		STOP_PROCESSING(SSvehicle, src)
 		control_toggle.Remove(buckled_mob)
 		driver = null
-
-/// it's inertia time babey
-/obj/vehicle/process()
-	// if(buckled.incapacitated())
-	// 	unbuckle_mob(buckle_mob)
-	// 	return PROCESS_KILL
-
-	if(next_move_time + last_vehicle_move > world.time)
-		return
-
-	velocity += pending_acceleration
-	pending_acceleration = 0
-	to_chat(world, "[velocity]")
-
-	// we will move, but adjust our move delay
-	handle_movement()
-
-
-	last_vehicle_move = world.time
-
-	// // todo sort out the exact logic later with acceleration
-	// var/acceleration = acceleration_rate() * pending_acceleration
-
-	// // todo convert any acceleration that takes us below 1 into fractional/tiles per tick
-	// move_delay -= acceleration
-
-	// move_delay
-
-	// TODO check grip
-
-	// Move(get_step(src, dir))
-
 
 
 // TODO probably make this some kind of atom variable, like hit_by_vehicle
@@ -336,15 +284,23 @@
 	if(user != driver)
 		return
 
-	if(!active_propulsion)
-		// good luck going anywhere
+	// if(!active_propulsion)
+	// 	// good luck going anywhere
+	// 	return
+
+	desired_movement_direction = direction
+
+	return
+
+/**
+ * Based on the user's inputs and our current state, set our next target direction/acceleration
+ */
+/obj/vehicle/proc/handle_movement(direction)
+
+	if(direction == NO_DIRECTION_PRESSED)
+		// pure inertia, continue in the direction we're heading
 		return
 
-	if(last_acceleration_time + ACCELERATION_COOLDOWN > world.time)
-		return
-	last_acceleration_time = world.time
-	var/next_direction
-	var/next_direction_set = FALSE
 	if(direction == dir)
 		accelerate(1)
 		return
@@ -352,36 +308,116 @@
 		dir = direction
 		return
 	if(!turning)
-		// behind us
-		if(turn(direction, 180) == dir || turn(direction, 235) == dir || turn(direction, 135) == dir)
-			if(velocity <= minimum_speed_for_in_place_turning)
-				dir = direction
-				handle_vehicle_layer()
-			else
-				accelerate(-1)
+		// we aren't in a turn, so we'll either accelerate, decelerate, or enter a turn.
+		if(turn(direction, 180) == dir || turn(direction, 225) == dir || turn(direction, 135) == dir)
+			// this direction is somewhere behind where we're heading -- apply the brakes
+			// if(velocity <= minimum_speed_for_in_place_turning)
+			// 	dir = direction
+			// 	handle_vehicle_layer()
+			// else
+			accelerate(-1)
 
+		// not in a turn, let's start a new one
 		else if(turn(direction, 90) == dir || turn(direction, -90) == dir)
 			turning_direction = direction
 			steps_into_turn = 0
 			turning = TRUE
 
+		// guess it's ahead
 		else
 			accelerate(1)
 		return
 
-	else
-		if(velocity > minimum_break_out_of_turn_speed || turning_direction == direction)
-			// you're not breaking out of the turn that easily
-			return  // don't accelerate through turns, that seems like it'd be really obnoxious
+	// we're currently in a turn
 
-		if(velocity < minimum_break_out_of_turn_speed && \
-			turn(direction, 45) == turning_direction || turn(direction, -45) == turning_direction || \
-			turn(direction, 90) == turning_direction || turn(direction, -90) == turning_direction)
+	if(velocity > minimum_break_out_of_turn_speed || turning_direction == direction)
+		// you're not breaking out of the turn that easily
+		return  // don't accelerate through turns
 
+	// we're in a turn, but we're going slow enough
+	if(velocity < minimum_break_out_of_turn_speed && \
+		turn(direction, 45) == turning_direction || turn(direction, -45) == turning_direction || \
+		turn(direction, 90) == turning_direction || turn(direction, -90) == turning_direction)
+
+		turning = FALSE
+		steps_into_turn = 0
+		return
+
+	// at this point, we're actively in the process of a turn.
+	// probably don't want to accelerate into a turn...
+
+	// if(turning)
+	// 	if(steps_into_turn < turning_radius())
+	// 		next_dir = dir | turning_direction
+	// 		steps_into_turn++
+	// 	else
+	// 		turning = FALSE
+	// 		steps_into_turn = 0
+	// 		dir = turning_direction
+	// 		next_dir = turning_direction
+	// else
+	// 	next_dir = inertia_next_dir
+	// TODO figure out what we need to do here?
+/**
+ * With acceleration and direction out of the way, decide how we will actually behave.
+ */
+/obj/vehicle/proc/handle_inertia()
+	velocity += pending_acceleration
+	pending_acceleration = 0
+	to_chat(world, "[velocity]")
+	var/next_dir
+
+	if(!isturf(loc))
+		return
+
+	if(turning)
+		if(steps_into_turn < turning_radius())
+			next_dir = dir | turning_direction
+			steps_into_turn++
+		else
 			turning = FALSE
 			steps_into_turn = 0
-			return
+			dir = turning_direction
+			next_dir = turning_direction
+	else
+		next_dir = inertia_next_dir
 
+	dir = next_dir
+	if(velocity > 10)  // todo make this not a magic number
+		return
+
+	// TODO need to work out how to best handle velocity changes
+	// for simplicity's sake let's assume that 10 velocity lets you move a tile
+	var/temp_velocity = velocity
+	var/turf/next = get_turf(src)
+	while(temp_velocity > 10)
+		next = get_step(next, next_dir)
+
+	handle_vehicle_layer()
+
+
+	Move(next, next_dir, round(SSvehicle.wait, 2))
+
+	inertia_next_dir = NO_DIRECTION_PRESSED
+
+
+/// it's inertia time babey
+/obj/vehicle/process()
+	// if(buckled.incapacitated())
+	// 	unbuckle_mob(buckle_mob)
+	// 	return PROCESS_KILL
+
+	// on each process, if we have a new direction inputted, do something new with
+	var/direction = desired_movement_direction
+	log_world("[direction] registered as pressed")
+	desired_movement_direction = NO_DIRECTION_PRESSED
+
+
+
+
+	// we will move, but adjust our move delay
+	handle_movement(direction)
+	handle_inertia()
 
 
 
@@ -423,6 +459,10 @@
  */
 /obj/vehicle/prebuilt
 
+/obj/vehicle/prebuilt/Initialize(mapload)
+	. = ..()
+	active_propulsion = new /obj/item/vehicle_part/propulsion/wheelbase(src)
+
 
 /datum/action/innate/toggle_vehicle_controls
 	name = "Toggle Vehicle Controls"
@@ -454,3 +494,5 @@
 		to_chat(owner, "<span class='warning'>You aren't able to get a grip on [source_vehicle]'s controls!</span>")
 	else
 		owner.visible_message("<span class='notice'>[owner] takes [source_vehicle]'s controls!</span>")
+
+#undef NO_DIRECTION_PRESSED
