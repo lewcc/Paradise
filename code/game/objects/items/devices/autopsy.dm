@@ -76,12 +76,12 @@
 	if(!is_pen(P))
 		return ..()
 
-	var/dead_name = tgui_input_text(user, "Insert name of deceased individual", default=target_name, title="Coroner's Report", max_length=60)
-	var/rank = tgui_input_text(user, "Insert rank of deceased individual", default=target_rank, title="Coroner's Report", max_length=60)
-	var/tod = tgui_input_text(user, "Insert time of death", default=station_time_timestamp("hh:mm", timeofdeath), title="Coroner's Report", max_length=60)
-	var/cause = tgui_input_text(user, "Insert cause of death", title="Coroner's Report", max_length=60)
-	var/chems = tgui_input_text(user, "Insert any chemical traces", multiline=TRUE, title="Coroner's Report")
-	var/notes = tgui_input_text(user, "Insert any relevant notes", multiline=TRUE, title="Coroner's Report")
+	var/dead_name = tgui_input_text(user, "Insert name of deceased individual", default = target_name, title = "Coroner's Report", max_length = 60)
+	var/rank = tgui_input_text(user, "Insert rank of deceased individual", default = target_rank, title = "Coroner's Report", max_length = 60)
+	var/tod = tgui_input_text(user, "Insert time of death", default = station_time_timestamp("hh:mm", timeofdeath), title = "Coroner's Report", max_length = 60)
+	var/cause = tgui_input_text(user, "Insert cause of death", title = "Coroner's Report", max_length = 60)
+	var/chems = tgui_input_text(user, "Insert any chemical traces", multiline = TRUE, title = "Coroner's Report")
+	var/notes = tgui_input_text(user, "Insert any relevant notes", multiline = TRUE, title = "Coroner's Report")
 	// make sure multi-line actually spans multiple lines
 	chems = replacetext_char(chems, "\n", "<br>")
 	notes = replacetext_char(notes, "\n", "<br>")
