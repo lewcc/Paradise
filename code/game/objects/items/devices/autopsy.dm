@@ -82,6 +82,9 @@
 	var/cause = tgui_input_text(user, "Insert cause of death", title="Coroner's Report", max_length=60)
 	var/chems = tgui_input_text(user, "Insert any chemical traces", multiline=TRUE, title="Coroner's Report")
 	var/notes = tgui_input_text(user, "Insert any relevant notes", multiline=TRUE, title="Coroner's Report")
+	// make sure multi-line actually spans multiple lines
+	chems = replacetext_char(chems, "\n", "<br>")
+	notes = replacetext_char(notes, "\n", "<br>")
 	var/obj/item/paper/R = new(user.loc)
 	R.name = "Official Coroner's Report - [dead_name]"
 	R.info = "<b><center>[station_name()] - Coroner's Report</b></center><br><br><b>Name of Deceased:</b> [dead_name]</br><br><b>Rank of Deceased:</b> [rank]<br><br><b>Time of Death:</b> [tod]<br><br><b>Cause of Death:</b> [cause]<br><br><b>Trace Chemicals:</b> [chems]<br><br><b>Additional Coroner's Notes:</b> [notes]<br><br><b>Coroner's Signature:</b> <span class=\"paper_field\">"
