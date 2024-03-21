@@ -254,18 +254,10 @@
 	. = ..()
 	QDEL_NULL(vert_landing)
 	if(owner)
-		owner.floating_action_groups.Remove(UID())
+		owner.floating_action_groups.Remove(src)
 		owner = null
 	if(main_action)
 		main_action = null
-
-/datum/action_group/floating/generate_landing()
-	. = ..()
-	if(vert_landing)
-		return
-	vert_landing = new()
-	vert_landing.set_owner(src)
-	refresh_actions()
 
 /datum/action_group/floating/generate_landing()
 	. = ..()
@@ -287,8 +279,6 @@
 
 /datum/action_group/floating/refresh_actions()
 	var/button_number = ..()
-	// if(vertical)
-	// 	var/button_number =
 	if(vert_landing)
 		var/postion = ButtonNumberToScreenCoords(button_number++, landing = TRUE, vertical = TRUE) // Need a good way to count buttons off screen, but allow this to display in the right place if it's being placed with no concern for dropdown
 		vert_landing.screen_loc = postion
