@@ -22,6 +22,8 @@
 	var/location
 	/// Our landing screen object
 	var/atom/movable/screen/action_landing/landing
+	/// Our initial screen position in (x, y), used for adjusting offsets
+	var/initial_screen_loc = list(0, 0)
 
 /datum/action_group/New(datum/hud/owner)
 	..()
@@ -67,8 +69,11 @@
 		landing.screen_loc = postion
 		button_number++
 
+	return button_number
+
 /// Accepts a number represeting our position in the group, indexes at 0 to make the math nicer
-/datum/action_group/proc/ButtonNumberToScreenCoords(number, landing = FALSE)
+/// If vertical is true, we'll still do the math as if we're stacking vertically, swapping the coordinates and moving down/right
+/datum/action_group/proc/ButtonNumberToScreenCoords(number, landing = FALSE, vertical = FALSE)
 	var/row = round(number / column_max)
 	row -= row_offset // If you're less then 0, you don't get to render, this lets us "scroll" rows ya feel?
 	if(row < 0)
@@ -92,7 +97,10 @@
 	var/coord_col = "+[visual_column]"
 	var/coord_col_offset = 4 + 2 * (visual_column + 1)
 	var/coord_row_offset = pixel_north_offset + 2 * (1 * visual_row)
-	return "WEST[coord_col]:[coord_col_offset],NORTH[coord_row]:-[coord_row_offset]"
+	if(!vertical)
+		return "WEST[coord_col]:[coord_col_offset + initial_screen_loc[1]],NORTH[coord_row]:-[coord_row_offset + initial_screen_loc[2]]"
+	else
+		return "WEST[coord_row]:[coord_row_offset + initial_screen_loc[2]],NORTH[coord_col]:-[coord_col_offset + initial_screen_loc[1]]"
 
 /datum/action_group/proc/check_against_view()
 	var/owner_view = owner?.mymob?.client?.view
@@ -221,3 +229,80 @@
 /datum/action_group/listed/refresh_actions()
 	. = ..()
 	owner?.palette_actions.refresh_actions() // We effect them, so we gotta refresh em
+
+
+/// An action group representing a disjointed, floating action group.
+/// This can be stacked either vertically, or horizontally, though we won't know until someone tries to add a button to us, which freezes us in place.
+/datum/action_group/floating
+	location = SCRN_OBJ_IN_FLOATING_GROUP
+	column_max = INFINITY
+	/// A vertical landing, for placing things underneath this action button
+	var/atom/movable/screen/action_landing/vert_landing
+	/// If true, we will stack vertically, swapping rows and columns
+	var/vertical = FALSE
+	/// The action that formed this group. If it gets removed, we'll have to figure out what to do.
+	var/atom/movable/screen/main_action
+
+/datum/action_group/floating/New(datum/hud/owner, atom/movable/screen/action)
+	. = ..()
+	main_action = action
+	initial_screen_loc = screen_loc_to_offset(main_action.screen_loc)
+	insert_action(action)
+
+
+/datum/action_group/floating/Destroy()
+	. = ..()
+	QDEL_NULL(vert_landing)
+	if(owner)
+		owner.floating_action_groups.Remove(UID())
+		owner = null
+	if(main_action)
+		main_action = null
+
+/datum/action_group/floating/generate_landing()
+	. = ..()
+	if(vert_landing)
+		return
+	vert_landing = new()
+	vert_landing.set_owner(src)
+	refresh_actions()
+
+/datum/action_group/floating/generate_landing()
+	. = ..()
+	if(vert_landing)
+		return
+	vert_landing = new()
+	vert_landing.set_owner(src)
+	refresh_actions()
+
+/datum/action_group/floating/clear_landing()
+	. = ..()
+	QDEL_NULL(vert_landing)
+
+/datum/action_group/floating/update_landing()
+	. = ..()
+	if(vert_landing)
+		vert_landing.refresh_owner()
+
+
+/datum/action_group/floating/refresh_actions()
+	var/button_number = ..()
+	// if(vertical)
+	// 	var/button_number =
+	if(vert_landing)
+		var/postion = ButtonNumberToScreenCoords(button_number++, landing = TRUE, vertical = TRUE) // Need a good way to count buttons off screen, but allow this to display in the right place if it's being placed with no concern for dropdown
+		vert_landing.screen_loc = postion
+
+	return button_number
+
+/datum/action_group/floating/remove_action(atom/movable/screen/action)
+	if(!(action in actions))
+		return
+	. = ..()
+	if(action == main_action && length(actions) > 1)
+		main_action = actions[1]
+	// todo figure out what to do if an action gets pulled out of the middle, maybe that's already handled tho?
+
+	if(!length(actions))
+		qdel(src)
+

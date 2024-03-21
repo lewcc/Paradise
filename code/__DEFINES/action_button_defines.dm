@@ -26,3 +26,5 @@
 #define SCRN_OBJ_IN_LIST "list"
 /// In the collapseable palette
 #define SCRN_OBJ_IN_PALETTE "palette"
+/// Floating somewhere on the HUD, but representing a given action group.
+#define SCRN_OBJ_IN_FLOATING_GROUP "floating_group"

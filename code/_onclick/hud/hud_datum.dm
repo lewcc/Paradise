@@ -43,6 +43,8 @@
 	var/datum/action_group/listed/listed_actions
 	/// A list of action buttons which aren't owned by any action group, and are just floating somewhere on the hud.
 	var/list/floating_actions
+	/// A list of floating action groups, which represent individually floating action buttons.
+	var/list/datum/action_group/floating_action_groups = list()
 
 	// the screen objects which are static
 	var/list/static_inventory = list()
@@ -77,6 +79,8 @@
 	var/list/all_action_buttons = list()
 	all_action_buttons += palette_actions.actions
 	all_action_buttons += listed_actions.actions
+	for(var/datum/action_group/group in floating_action_groups)
+		all_action_buttons += group.actions
 	return all_action_buttons
 
 /datum/hud/New(mob/owner)
@@ -111,6 +115,7 @@
 	QDEL_NULL(palette_actions)
 	QDEL_NULL(listed_actions)
 	QDEL_LIST_CONTENTS(floating_actions)
+	QDEL_LIST_CONTENTS(floating_action_groups)
 
 	QDEL_NULL(module_store_icon)
 	QDEL_LIST_CONTENTS(static_inventory)

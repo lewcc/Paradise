@@ -464,9 +464,16 @@ GLOBAL_LIST_INIT(palette_removed_matrix, list(1.4,0,0,0, 0.7,0.4,0,0, 0.4,0,0.6,
 /// Reacts to having a button dropped on it
 /atom/movable/screen/action_landing/proc/hit_by(atom/movable/screen/movable/action_button/button)
 	var/datum/hud/our_hud = owner.owner
-	our_hud.position_action(button, owner.location)
+	our_hud.position_action(button, owner.location, owner)
 
-/datum/hud/proc/position_action(atom/movable/screen/movable/action_button/button, position)
+/**
+ * Position an action on a hud.
+ * Arguments:
+ * * button - The button being positioned on the hud.
+ * * position - Either a SCRN_OBJ_* define, or a screen_loc compatible position.
+ * * identifier - If passed, identifies the specific element that this should be attached to, usually in context of the position value.
+ */
+/datum/hud/proc/position_action(atom/movable/screen/movable/action_button/button, position, datum/action_group/group)
 	if(button.location != SCRN_OBJ_DEFAULT)
 		hide_action(button)
 	switch(position)
@@ -477,10 +484,19 @@ GLOBAL_LIST_INIT(palette_removed_matrix, list(1.4,0,0,0, 0.7,0.4,0,0, 0.4,0,0.6,
 			listed_actions.insert_action(button)
 		if(SCRN_OBJ_IN_PALETTE)
 			palette_actions.insert_action(button)
+		if(SCRN_OBJ_IN_FLOATING_GROUP)
+			if(!(group in floating_action_groups))
+				CRASH("Group doesn't seem to belong to our hud for some reason")
+			if(isnull(group))
+				CRASH("Floating action button wasn't attached to a true gruop!")
+			group.insert_action(button)
 		else // If we don't have it as a define, this is a screen_loc, and we should be floating
-			floating_actions += button
+			// floating_actions += button
 			button.screen_loc = position
-			position = SCRN_OBJ_FLOATING
+			var/datum/action_group/floating/new_group = new(src, button)
+			floating_action_groups += new_group
+			position = SCRN_OBJ_IN_FLOATING_GROUP
+			to_chat(world, "new action group created")
 
 	button.location = position
 
@@ -520,11 +536,15 @@ GLOBAL_LIST_INIT(palette_removed_matrix, list(1.4,0,0,0, 0.7,0.4,0,0, 0.4,0,0.6,
 /datum/hud/proc/generate_landings(atom/movable/screen/movable/action_button/button)
 	listed_actions.generate_landing()
 	palette_actions.generate_landing()
+	for(var/datum/action_group/group in floating_action_groups)
+		group.generate_landing()
 
 /// Clears all currently visible landings
 /datum/hud/proc/hide_landings()
 	listed_actions.clear_landing()
 	palette_actions.clear_landing()
+	for(var/datum/action_group/group in floating_action_groups)
+		group.clear_landing()
 
 // Updates any existing "owned" visuals, ensures they continue to be visible
 /datum/hud/proc/update_our_owner()
@@ -533,6 +553,8 @@ GLOBAL_LIST_INIT(palette_removed_matrix, list(1.4,0,0,0, 0.7,0.4,0,0, 0.4,0,0.6,
 	palette_up.refresh_owner()
 	listed_actions.update_landing()
 	palette_actions.update_landing()
+	for(var/datum/action_group/group in floating_action_groups)
+		group.update_landing()
 
 /// Ensures all of our buttons are properly within the bounds of our client's view, moves them if they're not
 /datum/hud/proc/view_audit_buttons()
@@ -541,6 +563,8 @@ GLOBAL_LIST_INIT(palette_removed_matrix, list(1.4,0,0,0, 0.7,0.4,0,0, 0.4,0,0.6,
 		return
 	listed_actions.check_against_view()
 	palette_actions.check_against_view()
+	for(var/datum/action_group/group in floating_action_groups)
+		group.check_against_view()
 	for(var/atom/movable/screen/movable/action_button/floating_button as anything in floating_actions)
 		var/list/current_offsets = screen_loc_to_offset(floating_button.screen_loc)
 		// We set the view arg here, so the output will be properly hemm'd in by our new view
@@ -551,6 +575,7 @@ GLOBAL_LIST_INIT(palette_removed_matrix, list(1.4,0,0,0, 0.7,0.4,0,0, 0.4,0,0.6,
 	listed_actions = new(src)
 	palette_actions = new(src)
 	floating_actions = list()
+	floating_action_groups = list()
 	for(var/datum/action/action as anything in mymob.actions)
 		var/atom/movable/screen/movable/action_button/button = action.viewers[src]
 		if(!button)
