@@ -152,6 +152,7 @@
 		AM.forceMove(T)
 		if(isliving(AM))
 			var/mob/living/L = AM
+			L.emote("gasp")
 			L.Weaken(10 SECONDS)
 			L.adjustBruteLoss(30)
 	falling_atoms -= AM
@@ -195,6 +196,7 @@
 	into the enveloping dark.</span>")
 	if(isliving(AM))
 		var/mob/living/L = AM
+		L.emote("gasp")
 		L.notransform = TRUE
 		L.Weaken(20 SECONDS)
 	var/oldtransform = AM.transform
