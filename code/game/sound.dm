@@ -23,6 +23,100 @@
 	)
 	environment = SOUND_ENVIRONMENT_NONE //Default to none so sounds without overrides dont get reverb
 
+#define ECHO_FLAG_SOUND_DIRECT 1
+#define ECHO_FLAG_SOUND_ROOM 2
+#define ECHO_FLAG_SOUND_ROOM_HF 4
+
+/datum/echo_settings
+	/// Direct path level (at low and mid frequencies)
+	var/direct = 0
+	/// Relative direct path level at high frequencies
+	var/direct_HF = 0
+	/// room effect level (at low and mid frequencies)
+	var/room = -10000
+	/// relative room effect level at high frequencies
+	var/room_HF
+	/// main obstruction control (attenuation at high frequencies)
+	var/obstruction
+	/// main occlusion control (attenuation at high frequencies)
+	var/obstruction_lf_ratio
+	/// occlusion low-frequency level re. main control
+	var/occlusion
+	/// relative occlusion control for room effect
+	var/occlusion_lf_ratio
+	/// Relative occlusion control for room effect
+	var/occlusion_room_ratio
+	/// Relative occlusion control for direct path
+	var/occlusion_direct_ratio
+	/// Main exclusion control (attenuation at high frequencies)
+	var/exclusion
+	/// Exclusion low-frequency level regarding main control.
+	var/exclusion_lf_ratio
+	/// Outside sound cone level at high frequencies.
+	var/outside_volume_hf
+	/// Like DS3D flDopplerFactor but per source (???)
+	var/doppler_factor
+	/// like DS3D flRolloffFactor but per source
+	var/rolloff_factor
+	/// like DS3D flRolloffFactor but for room effect
+	var/room_rolloff_factor
+	/// multiplies AirAbsorptionHF member of environment reverb properties.
+	var/air_absorbtion_factor
+	/// Flags that modify the behavior of properties based on how far the sound is from the listener.
+	var/flags = ECHO_FLAG_SOUND_DIRECT | ECHO_FLAG_SOUND_ROOM | ECHO_FLAG_SOUND_ROOM_HF
+
+/datum/echo_settings/proc/to_list()
+	return list(
+		direct,
+		direct_HF,
+		room,
+		room_HF,
+		obstruction,
+		obstruction_lf_ratio,
+		occlusion,
+		occlusion_lf_ratio,
+		occlusion_room_ratio,
+		occlusion_direct_ratio,
+		exclusion,
+		exclusion_lf_ratio,
+		outside_volume_hf,
+		doppler_factor,
+		rolloff_factor,
+		room_rolloff_factor,
+		air_absorbtion_factor,
+		flags
+	)
+
+/// Changes the environmental reverb for all 3D sounds until another environment is specified. Only 3D sounds react to the environment.
+/datum/sound_environment
+	/// Environment size in meters
+	var/env_size = 7.5
+	/// Environmental diffusion
+	var/env_diffusion = 1.0
+	/// Room effect level (at mid frequencies)
+	var/room
+	/// Relative room effect at high frequencies
+	var/room_hf
+
+	var/room_lf
+	var/decay_time
+	var/decay_HF_ratio
+	var/decay_LF_ratio
+	var/reflections
+	var/reflections_delay
+	var/reverb
+	var/reverb_delay
+	var/echo_time
+	var/modulation_time
+	var/modulation_depth
+	var/air_absorbtion_hf,
+	var/hf_reference,
+	var/lf_reference
+	var/room_rolloff_factor
+	var/diffusion
+	var/density
+	var/flags
+
 /*! playsound
 
 playsound is a proc used to play a 3D sound in a specific range. This uses SOUND_RANGE + extra_range to determine that.
