@@ -22,8 +22,15 @@
 	. = ..()
 	reconnect_database()
 
-/obj/machinery/economy/slot_machine/attack_hand(mob/user as mob)
+/obj/machinery/economy/slot_machine/attack_hand(mob/user)
 	ui_interact(user)
+
+/obj/machinery/economy/slot_machine/attackby(obj/item/O, mob/user, params)
+
+	if(isspacecash(I))
+		insert_cash(I, user)
+		return TRUE
+	return ..()
 
 /obj/machinery/economy/slot_machine/proc/set_user_account(datum/money_account/account)
 	if(user_account)
@@ -54,7 +61,7 @@
 
 	// Send data
 	data["working"] = working
-	data["money"] = user_account?.credit_balance
+	data["money"] = user_account?.credit_balance + cash_stored
 	data["plays"] = plays
 	data["result"] = result
 	data["resultlvl"] = resultlvl
@@ -65,14 +72,21 @@
 		return
 	add_fingerprint(ui.user)
 
+	var/spin_cost = 10
+
 	if(action == "spin")
 		if(working)
 			return
-		if(!user_account || user_account.credit_balance < 10)
+		// if we're running from cash, we need a user account if we can't cover it.
+		if(cash_stored < spin_cost && !user_account)
 			return
-		if(!account_database.charge_account(user_account, 10, "Slot Machine Charge", "DonkBook Betting", FALSE, TRUE))
+		var/cash_remaining = cash_stored - user_account.credit_balance
+		if(cash_remaining < 0)
+		if(user_account.credit_balance < spin_cost)
+			return
+		if(!account_database.charge_account(user_account, spin_cost, "Slot Machine Charge", "DonkBook Betting", FALSE, TRUE))
 			return //we want to surpress transaction logs here in-case someone uses the slot machine 100+ times
-		account_database.credit_account(account_database.vendor_account, 10, "Slot Machine Charge", "DonkBook Betting", TRUE)
+		account_database.credit_account(account_database.vendor_account, spin_cost, "Slot Machine Charge", "DonkBook Betting", TRUE)
 		plays++
 		working = TRUE
 		icon_state = "slots-on"
