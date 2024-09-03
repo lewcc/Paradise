@@ -138,6 +138,18 @@
 	icon_state = "snap3"
 	render_target = "*snap[id]"
 
+/obj/effect/testing_filter
+	icon = 'icons/effects/filters.dmi'
+	icon_state = "nothing"
+	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
+	plane = FLOOR_PLANE
+
+/obj/effect/testing_filter/Initialize(mapload, id)
+	. = ..()
+	icon_state = "testing"
+	render_target = "testing[id]"
+
+
 /obj/effect/frosty_breath
 	icon = 'icons/effects/effects.dmi'
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT

@@ -42,6 +42,10 @@
 	QDEL_IN(src, 0)
 	return TRUE
 
+/mob/living/carbon/human/proc/filter_test()
+	var/obj/effect/testing_filter/dust_effect = new(loc, UID())
+	filters += filter(type = "displace", size = 256, render_source = "testing[UID()]")
+
 /mob/living/carbon/human/dust()
 	if(!IS_HORIZONTAL(src))
 		// keep us upright so the animation fits.
