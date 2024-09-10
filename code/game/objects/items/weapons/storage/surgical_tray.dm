@@ -41,3 +41,8 @@
 		icon_state = "surgical_tray_e"
 	else
 		icon_state = "surgical_tray"
+
+/obj/item/storage/surgical_tray/clean_blood(radiation_clean)
+	. = ..()
+	for(var/obj/item/I in contents)
+		I.clean_blood(radiation_clean)
