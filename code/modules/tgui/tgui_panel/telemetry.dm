@@ -69,9 +69,10 @@
 		// Check for a malformed history object
 		if(!row || length(row) < 3 || (!row["ckey"] || !row["address"] || !row["computer_id"]))
 			return
+		if(row["address"] == "127.0.0.1")
+			// ignore guest accounts
+			continue
 		if(world.IsBanned(row["ckey"], row["address"], row["computer_id"], FALSE, FALSE, FALSE, FALSE, FALSE))
-			if(row["address"] == "127.0.0.1")
-				continue
 			found = row
 			break
 		CHECK_TICK
